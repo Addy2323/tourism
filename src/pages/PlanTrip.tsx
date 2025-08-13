@@ -49,9 +49,10 @@ const PlanTrip: React.FC = () => {
 
   const destinations = [
     { name: 'Serengeti National Park', image: 'https://images.pexels.com/photos/1670732/pexels-photo-1670732.jpeg?auto=compress&cs=tinysrgb&w=400' },
-    { name: 'Mount Kilimanjaro', image: 'https://images.pexels.com/photos/2161467/pexels-photo-2161467.jpeg?auto=compress&cs=tinysrgb&w=400' },
-    { name: 'Zanzibar Islands', image: 'https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=400' },
-    { name: 'Ngorongoro Crater', image: 'https://images.pexels.com/photos/1670766/pexels-photo-1670766.jpeg?auto=compress&cs=tinysrgb&w=400' }
+    { name: 'Mount Kilimanjaro', image: 'https://media.istockphoto.com/id/2111967560/photo/masai-giraffe-in-front-of-kilimanjaro-mountain-in-amboseli-national-park-kenya.webp?a=1&b=1&s=612x612&w=0&k=20&c=8eNpVCWqfus9_Gv8otkUk1yRqDoyUBnwocauJ3JJ6OE=' },
+    { name: 'Zanzibar Islands', image: 'https://media.istockphoto.com/id/1139657851/photo/coatline-of-zanzibar-at-the-indian-ocean.webp?a=1&b=1&s=612x612&w=0&k=20&c=IR1M11mtumVcLYxmjJWdMOI4FCLt5rivLu7TU_emyrQ=' },
+    { name: 'Lake Manyara National Park', image: 'https://images.unsplash.com/photo-1623952625109-6c47a93f675c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fG1hc2FpJTIwbWFyYXxlbnwwfHwwfHx8MA%3D%3D' }
+    
   ];
 
   const interests = [

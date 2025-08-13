@@ -7,6 +7,7 @@ import LoadingScreen from './components/LoadingScreen';
 const Home = lazy(() => import('./pages/Home'));
 const Destinations = lazy(() => import('./pages/Destinations'));
 const ExperiencesPage = lazy(() => import('./pages/ExperiencesPage'));
+const BookingPage = lazy(() => import('./pages/bookingpage'));
 const PlanTrip = lazy(() => import('./pages/PlanTrip'));
 const About = lazy(() => import('./pages/About'));
 const Blog = lazy(() => import('./pages/Blog'));
@@ -37,6 +38,8 @@ function App() {
             <Route path="/experiences" element={<ExperiencesPage />} />
             <Route path="/plan-your-trip" element={<PlanTrip />} />
             <Route path="/impact" element={<CommunityImpact />} />
+            <Route path="/" element={<ExperiencesPage />} />
+            <Route path="/booking" element={<BookingPage />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
