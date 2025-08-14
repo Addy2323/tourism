@@ -77,8 +77,8 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-emerald-900">
-      <style jsx>{`
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-800 via-emerald-600 to-green-700">
+      <style >{`
         .loading-title {
           font-size: 2.5rem;
           margin-bottom: 50px;

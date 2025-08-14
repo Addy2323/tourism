@@ -1,7 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Camera, Mountain, Waves, Utensils, Users, ArrowRight } from 'lucide-react';
 
 const Experiences: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleExploreClick = () => {
+    navigate('/experiences');
+  };
+
   const experiences = [
     {
       id: 1,
@@ -101,7 +108,10 @@ const Experiences: React.FC = () => {
                       </span>
                     </div>
                     
-                    <button className="w-full bg-white/20 backdrop-blur-sm border border-white/30 text-white py-3 rounded-xl hover:bg-white hover:text-gray-900 transition-all duration-300 flex items-center justify-center space-x-2 group">
+                    <button 
+                      onClick={handleExploreClick}
+                      className="w-full bg-white/20 backdrop-blur-sm border border-white/30 text-white py-3 rounded-xl hover:bg-white hover:text-gray-900 transition-all duration-300 flex items-center justify-center space-x-2 group"
+                    >
                       <span className="font-semibold">Explore Experiences</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                     </button>
@@ -122,10 +132,16 @@ const Experiences: React.FC = () => {
               Let our local experts craft the perfect itinerary tailored to your interests and travel style.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-emerald-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+              <button 
+                onClick={() => navigate('/plan-your-trip')}
+                className="bg-white text-emerald-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
+              >
                 Plan Your Trip
               </button>
-              <button className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-emerald-600 transition-all duration-300 transform hover:scale-105">
+              <button 
+                onClick={() => navigate('/contact')}
+                className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-emerald-600 transition-all duration-300 transform hover:scale-105"
+              >
                 Talk to an Expert
               </button>
             </div>

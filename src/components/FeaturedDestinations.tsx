@@ -13,7 +13,8 @@ const FeaturedDestinations: React.FC = () => {
       duration: '3-7 days',
       rating: 4.9,
       price: 'From $450/day',
-      highlights: ['Great Migration', 'Big Five', 'Hot Air Balloons']
+      highlights: ['Great Migration', 'Big Five', 'Hot Air Balloons'],
+      route: '/destinations/serengeti'
     },
     {
       id: 2,
@@ -23,7 +24,8 @@ const FeaturedDestinations: React.FC = () => {
       duration: '5-9 days',
       rating: 4.8,
       price: 'From $1,200',
-      highlights: ['Uhuru Peak', 'Multiple Routes', 'Glaciers']
+      highlights: ['Uhuru Peak', 'Multiple Routes', 'Glaciers'],
+      route: '/destinations/kilimanjaro'
     },
     {
       id: 3,
@@ -33,7 +35,8 @@ const FeaturedDestinations: React.FC = () => {
       duration: '3-10 days',
       rating: 4.7,
       price: 'From $180/day',
-      highlights: ['Stone Town', 'Spice Tours', 'Pristine Beaches']
+      highlights: ['Stone Town', 'Spice Tours', 'Pristine Beaches'],
+      route: '/destinations/zanzibar'
     },
     {
       id: 4,
@@ -43,7 +46,8 @@ const FeaturedDestinations: React.FC = () => {
       duration: '1-3 days',
       rating: 4.9,
       price: 'From $380/day',
-      highlights: ['Crater Floor', 'Black Rhinos', 'Maasai Culture']
+      highlights: ['Crater Floor', 'Black Rhinos', 'Maasai Culture'],
+      route: '/destinations/ngorongoro'
     }
   ];
 
@@ -112,7 +116,10 @@ const FeaturedDestinations: React.FC = () => {
                   ))}
                 </div>
 
-                <button className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-amber-600 transition-all duration-300 flex items-center justify-center space-x-2 group">
+                <button 
+                  onClick={() => navigate(destination.route)}
+                  className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-amber-600 transition-all duration-300 flex items-center justify-center space-x-2 group"
+                >
                   <span>Explore Destination</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>

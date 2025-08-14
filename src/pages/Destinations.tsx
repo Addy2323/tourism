@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Clock, Star, Camera, Mountain, Waves, TreePine } from 'lucide-react';
 
 const Destinations: React.FC = () => {
+  const navigate = useNavigate();
+
   const destinations = [
     {
       id: 1,
@@ -13,7 +16,8 @@ const Destinations: React.FC = () => {
       price: 'From $450/day',
       bestTime: 'June - October',
       highlights: ['Great Migration', 'Big Five', 'Hot Air Balloons', 'Endless Plains'],
-      activities: ['Game Drives', 'Photography', 'Cultural Tours', 'Balloon Safaris']
+      activities: ['Game Drives', 'Photography', 'Cultural Tours', 'Balloon Safaris'],
+      route: '/destinations/serengeti'
     },
     {
       id: 2,
@@ -25,7 +29,8 @@ const Destinations: React.FC = () => {
       price: 'From $1,200',
       bestTime: 'January - March, June - October',
       highlights: ['Uhuru Peak', 'Multiple Routes', 'Glaciers', 'Sunrise Views'],
-      activities: ['Trekking', 'Photography', 'Camping', 'Wildlife Viewing']
+      activities: ['Trekking', 'Photography', 'Camping', 'Wildlife Viewing'],
+      route: '/destinations/kilimanjaro'
     },
     {
       id: 3,
@@ -37,7 +42,8 @@ const Destinations: React.FC = () => {
       price: 'From $180/day',
       bestTime: 'June - September, December - February',
       highlights: ['Stone Town', 'Spice Tours', 'Pristine Beaches', 'Dhow Cruises'],
-      activities: ['Beach Relaxation', 'Snorkeling', 'Cultural Tours', 'Water Sports']
+      activities: ['Beach Relaxation', 'Snorkeling', 'Cultural Tours', 'Water Sports'],
+      route: '/destinations/zanzibar'
     },
     {
       id: 4,
@@ -49,7 +55,8 @@ const Destinations: React.FC = () => {
       price: 'From $380/day',
       bestTime: 'Year-round',
       highlights: ['Crater Floor', 'Black Rhinos', 'Maasai Culture', 'Dense Wildlife'],
-      activities: ['Game Drives', 'Cultural Visits', 'Photography', 'Crater Walks']
+      activities: ['Game Drives', 'Cultural Visits', 'Photography', 'Crater Walks'],
+      route: '/destinations/ngorongoro'
     },
     {
       id: 5,
@@ -61,7 +68,8 @@ const Destinations: React.FC = () => {
       price: 'From $320/day',
       bestTime: 'June - October',
       highlights: ['Elephant Herds', 'Baobab Trees', 'Bird Watching', 'River Views'],
-      activities: ['Game Drives', 'Walking Safaris', 'Bird Watching', 'Photography']
+      activities: ['Game Drives', 'Walking Safaris', 'Bird Watching', 'Photography'],
+      route: '/destinations/tarangire'
     },
     {
       id: 6,
@@ -73,7 +81,8 @@ const Destinations: React.FC = () => {
       price: 'From $280/day',
       bestTime: 'Year-round',
       highlights: ['Tree-climbing Lions', 'Flamingos', 'Forest Walks', 'Hot Springs'],
-      activities: ['Game Drives', 'Canoeing', 'Forest Walks', 'Bird Watching']
+      activities: ['Game Drives', 'Canoeing', 'Forest Walks', 'Bird Watching'],
+      route: '/destinations/lake-manyara'
     }
   ];
 
@@ -165,10 +174,16 @@ const Destinations: React.FC = () => {
                   </div>
 
                   <div className="flex space-x-3">
-                    <button className="flex-1 bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 transition-all duration-300 font-semibold">
+                    <button 
+                      onClick={() => navigate(destination.route)}
+                      className="flex-1 bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 transition-all duration-300 font-semibold"
+                    >
                       Book Now
                     </button>
-                    <button className="flex-1 border-2 border-emerald-600 text-emerald-600 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition-all duration-300 font-semibold">
+                    <button 
+                      onClick={() => navigate(destination.route)}
+                      className="flex-1 border-2 border-emerald-600 text-emerald-600 py-3 rounded-xl hover:bg-emerald-600 hover:text-white transition-all duration-300 font-semibold"
+                    >
                       Learn More
                     </button>
                   </div>

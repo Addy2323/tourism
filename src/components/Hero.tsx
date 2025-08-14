@@ -3,7 +3,7 @@ import { Search, MapPin, Calendar, Users } from "lucide-react";
 
 const backgroundImages = [
   "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-  "https://images.unsplash.com/photo-1566296524462-e0a341bf65e6?w=1920&auto=format&fit=crop&q=80",
+
   "https://images.pexels.com/photos/572897/pexels-photo-572897.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
   "https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
   "https://images.unsplash.com/photo-1589177900326-900782f88a55?w=1920&auto=format&fit=crop&q=80",

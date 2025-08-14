@@ -1,7 +1,15 @@
-import React from 'react';
-import { Calendar, User, Clock, ArrowRight, Search, Tag } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, User, Clock, ArrowRight, Search, Tag, CheckCircle, AlertCircle, X } from 'lucide-react';
 
 const Blog: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [filteredPosts, setFilteredPosts] = useState<any[]>([]);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [flashMessage, setFlashMessage] = useState<{type: 'success' | 'error' | 'info', message: string} | null>(null);
+  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
+  const [isLoading, setIsLoading] = useState(false);
+
   const featuredPost = {
     id: 1,
     title: "The Ultimate Guide to Witnessing the Great Migration",
@@ -78,6 +86,126 @@ const Blog: React.FC = () => {
 
   const categories = ["All", "Wildlife", "Adventure", "Culture", "Travel Tips", "Photography", "Conservation"];
 
+  // Flash message handler
+  const showFlashMessage = (type: 'success' | 'error' | 'info', message: string) => {
+    setFlashMessage({ type, message });
+    setTimeout(() => setFlashMessage(null), 5000);
+  };
+
+  // Search and filter functionality
+  useEffect(() => {
+    let filtered = blogPosts;
+
+    // Filter by search term
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(post => 
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by category
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter(post => post.category === selectedCategory);
+    }
+
+    setFilteredPosts(filtered);
+
+    // Show search results feedback
+    if (searchTerm.trim() && filtered.length === 0) {
+      showFlashMessage('info', `🔍 No articles found for "${searchTerm}". Try different keywords or browse our categories!`);
+    } else if (searchTerm.trim() && filtered.length > 0) {
+      showFlashMessage('success', `✨ Found ${filtered.length} article${filtered.length === 1 ? '' : 's'} matching "${searchTerm}"!`);
+    }
+  }, [searchTerm, selectedCategory]);
+
+  // Initialize filtered posts
+  useEffect(() => {
+    setFilteredPosts(blogPosts);
+  }, []);
+
+  // Handle search input
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    
+    // Clear search-related errors
+    if (formErrors.search) {
+      setFormErrors(prev => ({ ...prev, search: '' }));
+    }
+  };
+
+  // Handle category selection
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    
+    if (category === 'All') {
+      showFlashMessage('info', '📚 Showing all articles - explore our complete collection of travel stories!');
+    } else {
+      const categoryCount = blogPosts.filter(post => post.category === category).length;
+      showFlashMessage('success', `🎯 Filtered to ${category} - found ${categoryCount} amazing article${categoryCount === 1 ? '' : 's'}!`);
+    }
+  };
+
+  // Newsletter validation
+  const validateNewsletterEmail = (email: string) => {
+    const errors: {[key: string]: string} = {};
+    
+    if (!email.trim()) {
+      errors.newsletter = '📧 Please enter your email to stay updated with our latest travel stories!';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.newsletter = '📧 Please enter a valid email address (e.g., traveler@example.com)';
+    } else if (email.length > 100) {
+      errors.newsletter = '📧 Email address is too long. Please use a shorter email address.';
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Handle newsletter signup
+  const handleNewsletterSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (validateNewsletterEmail(newsletterEmail)) {
+      setIsLoading(true);
+      
+      // Simulate API call
+      setTimeout(() => {
+        setIsLoading(false);
+        showFlashMessage('success', `🎉 Welcome aboard, fellow traveler! You're now subscribed to our newsletter with ${newsletterEmail}. Get ready for amazing travel insights!`);
+        setNewsletterEmail('');
+      }, 1500);
+    } else {
+      showFlashMessage('error', '⚠️ Please enter a valid email address to join our travel community!');
+    }
+  };
+
+  // Handle newsletter email change
+  const handleNewsletterEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setNewsletterEmail(value);
+    
+    // Clear errors as user types
+    if (formErrors.newsletter) {
+      setFormErrors(prev => ({ ...prev, newsletter: '' }));
+    }
+  };
+
+  // Handle load more articles
+  const handleLoadMore = () => {
+    setIsLoading(true);
+    showFlashMessage('info', '📖 Loading more amazing travel stories for you...');
+    
+    // Simulate loading
+    setTimeout(() => {
+      setIsLoading(false);
+      showFlashMessage('success', '✨ More incredible travel stories loaded! Keep exploring our adventures!');
+    }, 2000);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 ">
       {/* Hero Section */}
@@ -91,6 +219,28 @@ const Blog: React.FC = () => {
         </div>
       </section>
 
+      {/* Flash Message */}
+      {flashMessage && (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <div className={`p-4 rounded-lg flex items-center space-x-3 ${
+            flashMessage.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
+            flashMessage.type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' :
+            'bg-blue-100 text-blue-800 border border-blue-200'
+          }`}>
+            {flashMessage.type === 'success' ? <CheckCircle className="w-5 h-5" /> : 
+             flashMessage.type === 'error' ? <AlertCircle className="w-5 h-5" /> : 
+             <AlertCircle className="w-5 h-5" />}
+            <span className="font-medium flex-1">{flashMessage.message}</span>
+            <button 
+              onClick={() => setFlashMessage(null)}
+              className="text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Search and Filter */}
       <section className="py-8 bg-white shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,14 +250,24 @@ const Blog: React.FC = () => {
               <input
                 type="text"
                 placeholder="Search articles..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
               />
+              {formErrors.search && (
+                <div className="text-red-600 text-sm mt-2">{formErrors.search}</div>
+              )}
             </div>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <button
                   key={category}
-                  className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition-all duration-200"
+                  onClick={() => handleCategorySelect(category)}
+                  className={`px-4 py-2 rounded-full border transition-all duration-200 ${
+                    selectedCategory === category
+                      ? 'bg-emerald-500 text-white border-emerald-500'
+                      : 'border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700'
+                  }`}
                 >
                   {category}
                 </button>
@@ -173,56 +333,79 @@ const Blog: React.FC = () => {
       {/* Blog Posts Grid */}
       <section className="py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
-              <article
-                key={post.id}
-                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                style={{ animationDelay: `${index * 100}ms` }}
+          {filteredPosts.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">No Articles Found</h3>
+              <p className="text-gray-600 mb-6">
+                {searchTerm ? `No articles match "${searchTerm}"` : `No articles in ${selectedCategory} category`}
+              </p>
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedCategory('All');
+                  showFlashMessage('info', '🔄 Filters cleared! Showing all our amazing travel stories again.');
+                }}
+                className="bg-emerald-600 text-white px-6 py-3 rounded-full hover:bg-emerald-700 transition-colors duration-200"
               >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
-                      {post.category}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 hover:text-emerald-600 transition-colors duration-300 line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-                    {post.excerpt}
-                  </p>
-
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                    <div className="flex items-center space-x-1">
-                      <User className="w-4 h-4" />
-                      <span>{post.author}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{post.readTime}</span>
+                Clear Filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredPosts.map((post, index) => (
+                <article
+                  key={post.id}
+                  className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+                        {post.category}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">{post.date}</span>
-                    <button className="flex items-center space-x-1 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors duration-200">
-                      <span>Read</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 hover:text-emerald-600 transition-colors duration-300 line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                      {post.excerpt}
+                    </p>
+
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                      <div className="flex items-center space-x-1">
+                        <User className="w-4 h-4" />
+                        <span>{post.author}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Clock className="w-4 h-4" />
+                        <span>{post.readTime}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">{post.date}</span>
+                      <button 
+                        onClick={() => showFlashMessage('info', `📖 Opening "${post.title}" - get ready for an amazing read!`)}
+                        className="flex items-center space-x-1 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors duration-200"
+                      >
+                        <span>Read</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -235,26 +418,50 @@ const Blog: React.FC = () => {
           <p className="text-xl text-white/90 mb-8">
             Get the latest travel tips, destination guides, and exclusive offers delivered to your inbox
           </p>
-          <div className="max-w-md mx-auto">
+          <form onSubmit={handleNewsletterSignup} className="max-w-md mx-auto">
             <div className="flex">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-white/50"
+                value={newsletterEmail}
+                onChange={handleNewsletterEmailChange}
+                className="flex-1 px-4 py-3 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200"
+                disabled={isLoading}
               />
-              <button className="bg-amber-500 text-white px-6 py-3 rounded-r-xl hover:bg-amber-600 transition-colors duration-200 font-semibold">
-                Subscribe
+              <button 
+                type="submit"
+                disabled={isLoading}
+                className={`px-6 py-3 rounded-r-xl font-semibold transition-all duration-200 ${
+                  isLoading 
+                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+                    : 'bg-amber-500 text-white hover:bg-amber-600 transform hover:scale-105'
+                }`}
+              >
+                {isLoading ? 'Subscribing...' : 'Subscribe'}
               </button>
             </div>
-          </div>
+            {formErrors.newsletter && (
+              <div className="text-red-200 text-sm mt-2 bg-red-500/20 p-2 rounded-lg">
+                {formErrors.newsletter}
+              </div>
+            )}
+          </form>
         </div>
       </section>
 
       {/* Load More */}
       <section className="py-12">
         <div className="text-center">
-          <button className="bg-emerald-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105">
-            Load More Articles
+          <button 
+            onClick={handleLoadMore}
+            disabled={isLoading}
+            className={`px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
+              isLoading
+                ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                : 'bg-emerald-600 text-white hover:bg-emerald-700 transform hover:scale-105'
+            }`}
+          >
+            {isLoading ? 'Loading More...' : 'Load More Articles'}
           </button>
         </div>
       </section>

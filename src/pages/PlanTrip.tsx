@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Users, Clock, Plane, Hotel, Camera, DollarSign, CheckCircle, Send, PartyPopper } from 'lucide-react';
+import { Calendar, MapPin, Users, Clock, Plane, Hotel, Camera, DollarSign, CheckCircle, Send, PartyPopper, AlertCircle, X } from 'lucide-react';
 import FlightBookingModal from './FlightBookingModal';
 import AccommodationModal from './AccommodationModal';
 import ConsultationModal from './ConsultationModal';
@@ -8,12 +8,14 @@ const PlanTrip: React.FC = () => {
   const [selectedStep, setSelectedStep] = useState(1);
   const [view, setView] = useState('planner'); // 'planner', 'form', 'submitted'
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [flashMessage, setFlashMessage] = useState<{type: 'success' | 'error' | 'info', message: string} | null>(null);
+  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
   const [tripData, setTripData] = useState({
     destination: '',
     duration: '',
     travelers: '',
     budget: '',
-    interests: [],
+    interests: [] as string[],
     accommodation: '',
     startDate: ''
   });
@@ -25,17 +27,201 @@ const PlanTrip: React.FC = () => {
     notes: ''
   });
 
+  // Flash message handler
+  const showFlashMessage = (type: 'success' | 'error' | 'info', message: string) => {
+    setFlashMessage({ type, message });
+    setTimeout(() => setFlashMessage(null), 4000);
+  };
+
+  // Step validation function
+  const validateStep = (step: number) => {
+    const errors: {[key: string]: string} = {};
+    
+    switch (step) {
+      case 1:
+        if (!tripData.destination.trim()) {
+          errors.destination = '🗺️ Please select your dream destination to continue';
+        }
+        break;
+      
+      case 2:
+        if (!tripData.duration.trim()) {
+          errors.duration = '⏰ Please select your trip duration';
+        }
+        if (!tripData.startDate.trim()) {
+          errors.startDate = '📅 Please select your preferred start date';
+        } else {
+          const startDate = new Date(tripData.startDate);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (startDate < today) {
+            errors.startDate = '📅 Start date cannot be in the past';
+          }
+          
+          // Check if start date is too far in the future (2 years)
+          const twoYearsFromNow = new Date();
+          twoYearsFromNow.setFullYear(twoYearsFromNow.getFullYear() + 2);
+          if (startDate > twoYearsFromNow) {
+            errors.startDate = '📅 Please select a date within the next 2 years';
+          }
+        }
+        break;
+      
+      case 3:
+        if (!tripData.travelers.trim()) {
+          errors.travelers = '👥 Please select the number of travelers';
+        }
+        break;
+      
+      case 4:
+        if (tripData.interests.length === 0) {
+          errors.interests = '🎯 Please select at least one interest to personalize your trip';
+        }
+        break;
+      
+      case 5:
+        if (!tripData.budget.trim()) {
+          errors.budget = '💰 Please select your budget range to help us plan accordingly';
+        }
+        break;
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Contact form validation
+  const validateContactForm = () => {
+    const errors: {[key: string]: string} = {};
+    
+    if (!formData.fullName.trim()) {
+      errors.fullName = '👤 Full name is required to send your itinerary';
+    } else if (formData.fullName.trim().length < 2) {
+      errors.fullName = '👤 Please enter your full name (at least 2 characters)';
+    }
+    
+    if (!formData.email.trim()) {
+      errors.email = '📧 Email address is required to send your custom itinerary';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = '📧 Please enter a valid email address (e.g., john@example.com)';
+    }
+    
+    if (formData.phone.trim() && !/^\+?[\d\s-()]{10,}$/.test(formData.phone)) {
+      errors.phone = '📱 Please enter a valid phone number (minimum 10 digits)';
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Enhanced step navigation with validation
+  const goToNextStep = () => {
+    if (validateStep(selectedStep)) {
+      const nextStep = Math.min(steps.length, selectedStep + 1);
+      setSelectedStep(nextStep);
+      
+      // Personalized success messages for each step
+      switch (selectedStep) {
+        case 1:
+          showFlashMessage('success', `🎉 Excellent choice! ${tripData.destination} is absolutely stunning! Let's plan your perfect duration...`);
+          break;
+        case 2:
+          const durationText = tripData.duration;
+          const startDate = new Date(tripData.startDate).toLocaleDateString();
+          showFlashMessage('success', `✨ Perfect! ${durationText} starting ${startDate} sounds amazing! Now, how many adventurers are joining?`);
+          break;
+        case 3:
+          showFlashMessage('success', `👥 Great! ${tripData.travelers} - we'll create the perfect experience for your group! What interests you most?`);
+          break;
+        case 4:
+          const interestCount = tripData.interests.length;
+          const interestText = interestCount === 1 ? 'interest' : 'interests';
+          showFlashMessage('success', `🎯 Fantastic! ${interestCount} ${interestText} selected - we'll craft experiences around ${tripData.interests.slice(0, 2).join(' and ')}${interestCount > 2 ? ' and more' : ''}! Let's discuss budget...`);
+          break;
+        case 5:
+          showFlashMessage('success', `💰 Perfect! ${tripData.budget} budget selected - we'll create amazing value for your ${tripData.destination} adventure! Let's review everything...`);
+          break;
+        case 6:
+          showFlashMessage('success', `🌟 Your trip plan looks incredible! Ready to get your personalized itinerary?`);
+          break;
+      }
+    } else {
+      // Enhanced error messages based on step
+      switch (selectedStep) {
+        case 1:
+          showFlashMessage('error', '🗺️ Please select your dream destination first - Tanzania has so many amazing places to explore!');
+          break;
+        case 2:
+          showFlashMessage('error', '⏰ Please complete your trip timing details - duration and start date are essential for planning!');
+          break;
+        case 3:
+          showFlashMessage('error', '👥 Please let us know how many travelers - this helps us plan the perfect group experience!');
+          break;
+        case 4:
+          showFlashMessage('error', '🎯 Please select at least one interest - this helps us personalize your amazing adventure!');
+          break;
+        case 5:
+          showFlashMessage('error', '💰 Please select your budget range - this ensures we create the perfect value experience for you!');
+          break;
+      }
+    }
+  };
+
+  const goToPreviousStep = () => {
+    setSelectedStep(Math.max(1, selectedStep - 1));
+    showFlashMessage('info', '⬅️ Going back to make changes - no problem! Take your time to perfect your trip.');
+  };
+
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear errors as user types
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to a server
-    console.log('Trip Data:', tripData);
-    console.log('Contact Info:', formData);
-    setView('submitted');
+    
+    if (validateContactForm()) {
+      // Here you would typically send the data to a server
+      console.log('Trip Data:', tripData);
+      console.log('Contact Info:', formData);
+      
+      showFlashMessage('success', `🎉 Amazing! Your custom ${tripData.destination} itinerary request has been submitted! Our travel experts are already excited to create your perfect adventure!`);
+      
+      setTimeout(() => {
+        setView('submitted');
+      }, 3000);
+    } else {
+      showFlashMessage('error', '⚠️ Please complete all required contact details so we can send your amazing custom itinerary!');
+    }
+  };
+
+  const handleInterestToggle = (interestName: string) => {
+    setTripData(prev => ({
+      ...prev,
+      interests: prev.interests.includes(interestName)
+        ? prev.interests.filter(interest => interest !== interestName)
+        : [...prev.interests, interestName]
+    }));
+    
+    // Clear interest errors when user makes selection
+    if (formErrors.interests) {
+      setFormErrors(prev => ({ ...prev, interests: '' }));
+    }
+  };
+
+  // Enhanced trip data handlers with error clearing
+  const handleTripDataChange = (field: string, value: string) => {
+    setTripData(prev => ({ ...prev, [field]: value }));
+    
+    // Clear errors when user makes selection
+    if (formErrors[field]) {
+      setFormErrors(prev => ({ ...prev, [field]: '' }));
+    }
   };
 
   const steps = [
@@ -66,8 +252,6 @@ const PlanTrip: React.FC = () => {
     { name: 'Wellness & Spa', icon: '🧘' }
   ];
 
-
-
   const renderStepContent = () => {
     switch (selectedStep) {
       case 1:
@@ -81,7 +265,7 @@ const PlanTrip: React.FC = () => {
                   className={`relative cursor-pointer rounded-xl overflow-hidden transition-all duration-300 transform hover:scale-105 ${
                     tripData.destination === dest.name ? 'ring-4 ring-emerald-500' : ''
                   }`}
-                  onClick={() => setTripData(prev => ({ ...prev, destination: dest.name }))}
+                  onClick={() => handleTripDataChange('destination', dest.name)}
                 >
                   <img src={dest.image} alt={dest.name} className="w-full h-48 object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
@@ -95,6 +279,9 @@ const PlanTrip: React.FC = () => {
                 </div>
               ))}
             </div>
+            {formErrors.destination && (
+              <div className="text-red-600 text-sm mt-2">{formErrors.destination}</div>
+            )}
           </div>
         );
 
@@ -111,7 +298,7 @@ const PlanTrip: React.FC = () => {
                       ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
                       : 'border-gray-200 hover:border-emerald-300'
                   }`}
-                  onClick={() => setTripData(prev => ({ ...prev, duration }))}
+                  onClick={() => handleTripDataChange('duration', duration)}
                 >
                   <Clock className="w-6 h-6 mx-auto mb-2" />
                   <span className="font-semibold">{duration}</span>
@@ -124,9 +311,12 @@ const PlanTrip: React.FC = () => {
                 type="date"
                 className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 value={tripData.startDate}
-                onChange={(e) => setTripData(prev => ({ ...prev, startDate: e.target.value }))}
+                onChange={(e) => handleTripDataChange('startDate', e.target.value)}
               />
             </div>
+            {formErrors.startDate && (
+              <div className="text-red-600 text-sm mt-2">{formErrors.startDate}</div>
+            )}
           </div>
         );
 
@@ -143,13 +333,16 @@ const PlanTrip: React.FC = () => {
                       ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
                       : 'border-gray-200 hover:border-emerald-300'
                   }`}
-                  onClick={() => setTripData(prev => ({ ...prev, travelers }))}
+                  onClick={() => handleTripDataChange('travelers', travelers)}
                 >
                   <Users className="w-6 h-6 mx-auto mb-2" />
                   <span className="font-semibold">{travelers}</span>
                 </button>
               ))}
             </div>
+            {formErrors.travelers && (
+              <div className="text-red-600 text-sm mt-2">{formErrors.travelers}</div>
+            )}
           </div>
         );
 
@@ -174,6 +367,9 @@ const PlanTrip: React.FC = () => {
                 </button>
               ))}
             </div>
+            {formErrors.interests && (
+              <div className="text-red-600 text-sm mt-2">{formErrors.interests}</div>
+            )}
           </div>
         );
 
@@ -194,7 +390,7 @@ const PlanTrip: React.FC = () => {
                       ? 'border-emerald-500 bg-emerald-50'
                       : 'border-gray-200 hover:border-emerald-300'
                   }`}
-                  onClick={() => setTripData(prev => ({ ...prev, budget: budget.name }))}
+                  onClick={() => handleTripDataChange('budget', budget.name)}
                 >
                   <h4 className="font-bold text-lg mb-2">{budget.name}</h4>
                   <p className="text-emerald-600 font-semibold mb-4">{budget.range}</p>
@@ -209,6 +405,9 @@ const PlanTrip: React.FC = () => {
                 </div>
               ))}
             </div>
+            {formErrors.budget && (
+              <div className="text-red-600 text-sm mt-2">{formErrors.budget}</div>
+            )}
           </div>
         );
 
@@ -269,14 +468,23 @@ const PlanTrip: React.FC = () => {
         <div>
           <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
           <input type="text" name="fullName" id="fullName" required className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500" onChange={handleFormChange} value={formData.fullName} />
+          {formErrors.fullName && (
+            <div className="text-red-600 text-sm mt-2">{formErrors.fullName}</div>
+          )}
         </div>
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
           <input type="email" name="email" id="email" required className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500" onChange={handleFormChange} value={formData.email} />
+          {formErrors.email && (
+            <div className="text-red-600 text-sm mt-2">{formErrors.email}</div>
+          )}
         </div>
         <div>
           <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number (Optional)</label>
           <input type="tel" name="phone" id="phone" className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500" onChange={handleFormChange} value={formData.phone} />
+          {formErrors.phone && (
+            <div className="text-red-600 text-sm mt-2">{formErrors.phone}</div>
+          )}
         </div>
         <div>
           <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">Additional Notes or Requests</label>
@@ -316,6 +524,26 @@ const PlanTrip: React.FC = () => {
       {/* Trip Planner */}
       <section className="py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Flash Message */}
+          {flashMessage && (
+            <div className={`mb-6 p-4 rounded-lg flex items-center space-x-3 ${
+              flashMessage.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
+              flashMessage.type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' :
+              'bg-blue-100 text-blue-800 border border-blue-200'
+            }`}>
+              {flashMessage.type === 'success' ? <CheckCircle className="w-5 h-5" /> : 
+               flashMessage.type === 'error' ? <AlertCircle className="w-5 h-5" /> : 
+               <AlertCircle className="w-5 h-5" />}
+              <span className="font-medium">{flashMessage.message}</span>
+              <button 
+                onClick={() => setFlashMessage(null)}
+                className="ml-auto text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
           {view === 'planner' && (
             <>
               {/* Progress Steps */}
@@ -361,7 +589,7 @@ const PlanTrip: React.FC = () => {
                       ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                       : 'bg-gray-600 text-white hover:bg-gray-700'
                   }`}
-                  onClick={() => setSelectedStep(Math.max(1, selectedStep - 1))}
+                  onClick={goToPreviousStep}
                   disabled={selectedStep === 1}
                 >
                   Previous
@@ -372,7 +600,7 @@ const PlanTrip: React.FC = () => {
                       ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                       : 'bg-emerald-600 text-white hover:bg-emerald-700'
                   }`}
-                  onClick={() => setSelectedStep(Math.min(steps.length, selectedStep + 1))}
+                  onClick={goToNextStep}
                   disabled={selectedStep === steps.length}
                 >
                   {selectedStep === steps.length ? 'Complete' : 'Next'}
