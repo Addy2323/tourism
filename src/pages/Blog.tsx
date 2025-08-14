@@ -18,7 +18,7 @@ const Blog: React.FC = () => {
       id: 2,
       title: "Climbing Kilimanjaro: A Beginner's Complete Guide",
       excerpt: "From choosing the right route to packing essentials, here's everything first-time climbers need to know.",
-      image: "https://images.pexels.com/photos/2161467/pexels-photo-2161467.jpeg?auto=compress&cs=tinysrgb&w=600",
+      image: "https://media.istockphoto.com/id/2165088270/photo/young-african-elephant-in-front-of-kilimanjaro-mountain-in-amboseli-national-park-kenya.webp?a=1&b=1&s=612x612&w=0&k=20&c=H9QholIkG3QBt8HcSvj8V0LVZbnZTLHXZJDdZ9s15HM=",
       author: "James Mollel",
       date: "March 10, 2024",
       readTime: "12 min read",
@@ -38,7 +38,7 @@ const Blog: React.FC = () => {
       id: 4,
       title: "Best Time to Visit Tanzania: A Month-by-Month Guide",
       excerpt: "Plan your perfect trip with our comprehensive guide to Tanzania's seasons and weather patterns.",
-      image: "https://images.pexels.com/photos/1670766/pexels-photo-1670766.jpeg?auto=compress&cs=tinysrgb&w=600",
+      image: "https://media.gettyimages.com/id/1186537386/photo/paradise-of-ngorongoro-crater.jpg?s=612x612&w=0&k=20&c=Hwz0QCuaxTC0SYB6dtB1f5utCV8cAfnpXFJCqEHUrBg=",
       author: "Sarah Kimani",
       date: "March 5, 2024",
       readTime: "10 min read",
@@ -79,12 +79,12 @@ const Blog: React.FC = () => {
   const categories = ["All", "Wildlife", "Adventure", "Culture", "Travel Tips", "Photography", "Conservation"];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
+    <div className="min-h-screen bg-gray-50 ">
       {/* Hero Section */}
-      <section className="relative h-64 bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center">
-        <div className="absolute inset-0 bg-black/40"></div>
+      <section className="relative h-96 bg-gradient-to-r from-emerald-600 to-emerald-800 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="relative z-10 text-center text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-5xl font-bold mb-4">
             Travel <span className="text-amber-400">Stories & Tips</span>
           </h1>
           <p className="text-xl">Insights, guides, and inspiration for your Tanzania adventure</p>

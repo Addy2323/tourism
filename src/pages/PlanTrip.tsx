@@ -66,14 +66,7 @@ const PlanTrip: React.FC = () => {
     { name: 'Wellness & Spa', icon: '🧘' }
   ];
 
-  const handleInterestToggle = (interest: string) => {
-    setTripData(prev => ({
-      ...prev,
-      interests: prev.interests.includes(interest)
-        ? prev.interests.filter(i => i !== interest)
-        : [...prev.interests, interest]
-    }));
-  };
+
 
   const renderStepContent = () => {
     switch (selectedStep) {
@@ -308,12 +301,12 @@ const PlanTrip: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative h-64 bg-gradient-to-r from-emerald-600 to-blue-600 flex items-center justify-center">
-        <div className="absolute inset-0 bg-black/40"></div>
+      <section className="relative h-96 bg-gradient-to-r from-emerald-600 to-emerald-800 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="relative z-10 text-center text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-5xl font-bold mb-4">
             Plan Your <span className="text-amber-400">Perfect Trip</span>
           </h1>
           <p className="text-xl">Let us create a personalized Tanzania adventure just for you</p>

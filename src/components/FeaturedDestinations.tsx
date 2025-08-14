@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, MapPin, Clock, Star } from 'lucide-react';
 
 const FeaturedDestinations: React.FC = () => {
+  const navigate = useNavigate();
   const destinations = [
     {
       id: 1,
@@ -17,7 +19,7 @@ const FeaturedDestinations: React.FC = () => {
       id: 2,
       name: 'Mount Kilimanjaro',
       description: 'Conquer Africa\'s highest peak and roof of the continent',
-      image: 'https://images.pexels.com/photos/2161467/pexels-photo-2161467.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://plus.unsplash.com/premium_photo-1664304370557-233bccc0ac85?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8a2lsaW1hbmphcm98ZW58MHx8MHx8fDA%3D',
       duration: '5-9 days',
       rating: 4.8,
       price: 'From $1,200',
@@ -37,7 +39,7 @@ const FeaturedDestinations: React.FC = () => {
       id: 4,
       name: 'Ngorongoro Crater',
       description: 'The world\'s largest intact volcanic caldera and wildlife haven',
-      image: 'https://images.pexels.com/photos/1670766/pexels-photo-1670766.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://plus.unsplash.com/premium_photo-1697729506473-f0f7e3a5407c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bmdvcm9uZ29ybyUyMGNyYXRlcnxlbnwwfHwwfHx8MA%3D%3D',
       duration: '1-3 days',
       rating: 4.9,
       price: 'From $380/day',
@@ -110,7 +112,7 @@ const FeaturedDestinations: React.FC = () => {
                   ))}
                 </div>
 
-                <button className="w-full bg-gray-900 text-white py-3 rounded-xl hover:bg-amber-600 transition-all duration-300 flex items-center justify-center space-x-2 group">
+                <button className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-amber-600 transition-all duration-300 flex items-center justify-center space-x-2 group">
                   <span>Explore Destination</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
@@ -120,7 +122,11 @@ const FeaturedDestinations: React.FC = () => {
         </div>
 
         <div className="text-center mt-12">
-          <button className="bg-amber-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-amber-700 transition-all duration-300 transform hover:scale-105">
+          <button 
+            type="button"
+            onClick={() => navigate('/destinations')}
+            className="bg-amber-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-amber-700 transition-all duration-300 transform hover:scale-105"
+          >
             View All Destinations
           </button>
         </div>

@@ -29,14 +29,11 @@ const Contact: React.FC = () => {
   ];
 
   return (
-    <div className="bg-gray-50 pt-16">
+    <div className="bg-gray-50 ">
       {/* Hero Section */}
-      <section 
-        className="relative bg-cover bg-center text-white text-center py-24"
-        style={{ backgroundImage: "url('/images/contact.png')" }}
-      >
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative z-10">
+      <section className="relative h-96 bg-gradient-to-r from-emerald-600 to-emerald-800 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black opacity-20"></div>
+        <div className="relative z-10 text-center text-white">
           <h1 className="text-5xl font-bold">Contact Us</h1>
           <p className="text-xl mt-4 max-w-2xl mx-auto">
             Have questions or ready to plan your adventure? We're here to help!
@@ -88,11 +85,7 @@ const Contact: React.FC = () => {
                 </div>
               </div>
               <div className="mt-8 rounded-lg overflow-hidden">
-                <img 
-                  src="/images/contact.png" 
-                  alt="Happy travelers at the Arusha Cultural Heritage Centre"
-                  className="w-full h-64 object-cover"
-                />
+             
               </div>
             </div>
 

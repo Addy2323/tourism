@@ -1,94 +1,72 @@
-import React from 'react';
-import { Search, MapPin, Calendar, Users } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Search, MapPin, Calendar, Users } from "lucide-react";
+
+const backgroundImages = [
+  "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+  "https://images.unsplash.com/photo-1566296524462-e0a341bf65e6?w=1920&auto=format&fit=crop&q=80",
+  "https://images.pexels.com/photos/572897/pexels-photo-572897.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+  "https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+  "https://images.unsplash.com/photo-1589177900326-900782f88a55?w=1920&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1575999080555-3f7a698dd8d9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHphbnppYmFyfGVufDB8fDB8fHww",
+  "https://plus.unsplash.com/premium_photo-1661831880989-bb3184c5dcc8?w=1920&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1549035092-33b2937b075a?w=1920&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1586347378036-7a8c24975a61?w=1920&auto=format&fit=crop&q=80",
+];
 
 const Hero: React.FC = () => {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % backgroundImages.length);
+    }, 5000); // change every 5s
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
-          alt="Tanzania Safari"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
+    <div className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Sliding Images */}
+      <div className="absolute inset-0 flex transition-transform duration-1000 ease-in-out"
+           style={{ transform: `translateX(-${currentImage * 100}%)` }}>
+        {backgroundImages.map((image, index) => (
+          <div
+            key={index}
+            className="w-full h-screen flex-shrink-0"
+            style={{
+              backgroundImage: `url(${image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "brightness(0.5)",
+            }}
+          />
+        ))}
       </div>
 
-      {/* Content */}
+      {/* Overlay Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="animate-fadeInUp">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Discover the
-            <span className="text-amber-400 block">Magic of Tanzania</span>
+        {/* Marquee Heading */}
+        <div className="overflow-hidden whitespace-nowrap mb-6">
+          <h1 className="inline-block text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight animate-marquee">
+            Discover the <span className="text-amber-400">Magic of Tanzania</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Experience authentic adventures, breathtaking wildlife, and rich culture 
-            while making a positive impact on local communities.
-          </p>
-          
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button className="bg-amber-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-amber-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
-              Start Your Journey
-            </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
-              Watch Our Story
-            </button>
-          </div>
+        </div>
 
-          {/* Quick Search Bar */}
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 max-w-4xl mx-auto shadow-2xl">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200">
-                <MapPin className="w-5 h-5 text-emerald-600" />
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Destination</label>
-                  <select className="w-full border-none bg-transparent text-gray-900 focus:outline-none">
-                    <option>Serengeti</option>
-                    <option>Kilimanjaro</option>
-                    <option>Zanzibar</option>
-                    <option>Ngorongoro</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200">
-                <Calendar className="w-5 h-5 text-emerald-600" />
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">When</label>
-                  <input type="date" className="w-full border-none bg-transparent text-gray-900 focus:outline-none" />
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200">
-                <Users className="w-5 h-5 text-emerald-600" />
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Travelers</label>
-                  <select className="w-full border-none bg-transparent text-gray-900 focus:outline-none">
-                    <option>2 Adults</option>
-                    <option>1 Adult</option>
-                    <option>Family (4+)</option>
-                    <option>Group (8+)</option>
-                  </select>
-                </div>
-              </div>
-              
-              <button className="bg-emerald-600 text-white p-4 rounded-xl hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
-                <Search className="w-5 h-5" />
-                <span className="ml-2 font-semibold">Search</span>
-              </button>
-            </div>
-          </div>
+        <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+          Experience authentic adventures, breathtaking wildlife, and rich culture 
+          while making a positive impact on local communities.
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <button className="bg-amber-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-amber-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+            Start Your Journey
+          </button>
+          <button className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+            Watch Our Story
+          </button>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
-        </div>
-      </div>
-    </section>
+    </div>
   );
 };
 

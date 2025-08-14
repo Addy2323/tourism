@@ -36,7 +36,7 @@ const About: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section 
         className="relative h-96 flex items-center justify-center bg-cover bg-center"

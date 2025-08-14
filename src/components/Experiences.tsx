@@ -8,7 +8,7 @@ const Experiences: React.FC = () => {
       title: 'Safaris & Wildlife',
       description: 'Get up close with the Big Five and witness nature\'s greatest spectacle',
       icon: Camera,
-      image: 'https://images.pexels.com/photos/1670766/pexels-photo-1670766.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: 'https://media.istockphoto.com/id/1005476954/photo/woman-photographing-elephants-in-safari-jeep-africa.jpg?s=612x612&w=0&k=20&c=tzmrQ7Illui-bTnRySXrY--oWQ9K6lmZnTKsYlgzU1A=',
       color: 'from-emerald-500 to-emerald-600',
       tours: '25+ Tours Available'
     },
@@ -17,7 +17,7 @@ const Experiences: React.FC = () => {
       title: 'Adventure Sports',
       description: 'Thrilling activities from mountain climbing to white-water rafting',
       icon: Mountain,
-      image: 'https://images.pexels.com/photos/2161467/pexels-photo-2161467.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: 'https://images.unsplash.com/photo-1628157003133-5a70219a2d30?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGFkdmVudHVyZSUyMHNwb3J0c3xlbnwwfHwwfHx8MA%3D%3D',
       color: 'from-orange-500 to-orange-600',
       tours: '15+ Adventures'
     },
@@ -35,7 +35,7 @@ const Experiences: React.FC = () => {
       title: 'Cultural Tours',
       description: 'Immerse yourself in local traditions and authentic community experiences',
       icon: Users,
-      image: 'https://images.pexels.com/photos/6492400/pexels-photo-6492400.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: 'https://media.istockphoto.com/id/507877508/photo/masai-unity.jpg?s=612x612&w=0&k=20&c=0QlmU5oKiYtiygWIxo5RlSzzBzACIFOACIucO5UOWe8=',
       color: 'from-purple-500 to-purple-600',
       tours: '18+ Cultural Experiences'
     },
