@@ -147,22 +147,6 @@ const Hero: React.FC = () => {
           <p className="text-white/70 text-xs mt-2 font-medium">Scroll to explore</p>
         </div>
       </div>
-
-      {/* Image Navigation Dots */}
-      <div className="absolute bottom-6 right-6 flex space-x-2 z-20">
-        {backgroundImages.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentImage(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentImage 
-                ? 'bg-amber-400 scale-125' 
-                : 'bg-white/40 hover:bg-white/60'
-            }`}
-            aria-label={`View image ${index + 1}`}
-          />
-        ))}
-      </div>
     </div>
   );
 };
