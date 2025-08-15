@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -10,18 +11,20 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    name: 'John Doe', // Default name for login simulation
     email: '',
     password: '',
     confirmPassword: ''
   });
 
+  const { login } = useAuth();
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle authentication logic here
-    console.log('Form submitted:', formData);
+    // Simulate a successful login
+    login({ name: formData.name, email: formData.email, role: 'user' });
     onClose();
   };
 

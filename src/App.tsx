@@ -4,6 +4,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import LoadingScreen from './components/LoadingScreen';
+import { AuthProvider } from './contexts/AuthContext';
+import AdminProtectedRoute from '@/components/AdminProtectedRoute';
 
 // Preload critical components immediately
 const Home = lazy(() => import('./pages/Home'));
@@ -15,6 +17,8 @@ const About = lazy(() => import('./pages/About'));
 const Blog = lazy(() => import('./pages/Blog'));
 const CommunityImpact = lazy(() => import('./components/CommunityImpact'));
 const Contact = lazy(() => import('./pages/Contact'));
+import UserDashboard from './pages/UserDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
 // Destination detail pages with prefetch hints
 const SerengetiDetail = lazy(() => 
@@ -88,38 +92,49 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-white">
-        <Header onAuthClick={() => setIsAuthModalOpen(true)} />
-        
-        <Suspense fallback={<PageLoader />}>
-          <RouteTransition>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/destinations" element={<Destinations />} />
-              <Route path="/destinations/serengeti" element={<SerengetiDetail />} />
-              <Route path="/destinations/zanzibar" element={<ZanzibarDetail />} />
-              <Route path="/destinations/lake-Manyara" element={<LakeManyaraDetail />} />  
-              <Route path="/destinations/Tarangire" element={<TarangireDetail />} />
-              <Route path="/destinations/kilimanjaro" element={<KilimanjaroDetail />} />
-              <Route path="/destinations/ngorongoro" element={<NgorongoroDetail />} />
-              <Route path="/experiences" element={<ExperiencesPage />} />
-              <Route path="/plan-your-trip" element={<PlanTrip />} />
-              <Route path="/impact" element={<CommunityImpact />} />
-              <Route path="/booking" element={<BookingPage />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </RouteTransition>
-        </Suspense>
-        
-        <Footer />
-        
-        <AuthModal 
-          isOpen={isAuthModalOpen} 
-          onClose={() => setIsAuthModalOpen(false)} 
-        />
-      </div>
+      <AuthProvider>
+        <div className="min-h-screen bg-white">
+          <Header onAuthClick={() => setIsAuthModalOpen(true)} />
+          
+          <Suspense fallback={<PageLoader />}>
+            <RouteTransition>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/destinations" element={<Destinations />} />
+                <Route path="/destinations/serengeti" element={<SerengetiDetail />} />
+                <Route path="/destinations/zanzibar" element={<ZanzibarDetail />} />
+                <Route path="/destinations/lake-Manyara" element={<LakeManyaraDetail />} />  
+                <Route path="/destinations/Tarangire" element={<TarangireDetail />} />
+                <Route path="/destinations/kilimanjaro" element={<KilimanjaroDetail />} />
+                <Route path="/destinations/ngorongoro" element={<NgorongoroDetail />} />
+                <Route path="/experiences" element={<ExperiencesPage />} />
+                <Route path="/plan-your-trip" element={<PlanTrip />} />
+                <Route path="/impact" element={<CommunityImpact />} />
+                <Route path="/booking" element={<BookingPage />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/dashboard" element={<UserDashboard />} />
+                <Route 
+                  path="/admin" 
+                  element={
+                    <AdminProtectedRoute>
+                      <AdminDashboard />
+                    </AdminProtectedRoute>
+                  } 
+                />
+              </Routes>
+            </RouteTransition>
+          </Suspense>
+          
+          <Footer />
+          
+          <AuthModal 
+            isOpen={isAuthModalOpen} 
+            onClose={() => setIsAuthModalOpen(false)} 
+          />
+        </div>
+      </AuthProvider>
     </Router>
   );
 }

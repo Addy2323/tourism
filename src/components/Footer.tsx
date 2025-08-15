@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, ArrowUp, Heart, Star, Award } from 'lucide-react';
 
 const Footer: React.FC = () => {
@@ -21,6 +21,23 @@ const Footer: React.FC = () => {
     { name: 'Ngorongoro Crater', href: '/destinations/ngorongoro' },
     { name: 'Zanzibar Island', href: '/destinations/zanzibar' }
   ];
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://widget.cxgenie.ai/widget.js';
+    script.async = true;
+    script.setAttribute('data-aid', 'd0e42a52-5172-4875-b1e9-7f11e81048e1');
+    script.setAttribute('data-lang', 'en');
+    document.body.appendChild(script);
+
+    return () => {
+      // Clean up the script when the component unmounts
+      const existingScript = document.querySelector(`script[src="${script.src}"]`);
+      if (existingScript) {
+        document.body.removeChild(existingScript);
+      }
+    };
+  }, []);
 
   return (
     <footer className="relative bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 text-white overflow-hidden">
@@ -214,8 +231,11 @@ const Footer: React.FC = () => {
             <ArrowUp className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" />
           </button>
         </div>
+       
       </div>
+
     </footer>
+    
   );
 };
 

@@ -2,14 +2,35 @@ import React, { useState, useEffect } from "react";
 import { Search, MapPin, Calendar, Users, Play, ArrowRight } from "lucide-react";
 
 const backgroundImages = [
-  "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-  "https://images.pexels.com/photos/572897/pexels-photo-572897.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-  "https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-  "https://images.unsplash.com/photo-1589177900326-900782f88a55?w=1920&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1575999080555-3f7a698dd8d9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHphbnppYmFyfGVufDB8fDB8fHww",
-  "https://plus.unsplash.com/premium_photo-1661831880989-bb3184c5dcc8?w=1920&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1549035092-33b2937b075a?w=1920&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1586347378036-7a8c24975a61?w=1920&auto=format&fit=crop&q=80",
+
+"https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.pexels.com/photos/572897/pexels-photo-572897.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.unsplash.com/photo-1589177900326-900782f88a55?w=1920&auto=format&fit=crop&q=80",
+"https://images.unsplash.com/photo-1575999080555-3f7a698dd8d9?w=1920&auto=format&fit=crop&q=80",
+"https://plus.unsplash.com/premium_photo-1661831880989-bb3184c5dcc8?w=1920&auto=format&fit=crop&q=80",
+"https://images.unsplash.com/photo-1549035092-33b2937b075a?w=1920&auto=format&fit=crop&q=80",
+"https://images.unsplash.com/photo-1586347378036-7a8c24975a61?w=1920&auto=format&fit=crop&q=80",
+"https://images.unsplash.com/photo-1589553416260-f586c8f1514f?w=1920&auto=format&fit=crop&q=80",
+"https://images.pexels.com/photos/11081448/pexels-photo-11081448.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.unsplash.com/photo-1605706177774-8b50d8457dfe?w=1920&auto=format&fit=crop&q=80",
+"https://images.pexels.com/photos/8828591/pexels-photo-8828591.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&auto=format&fit=crop&q=80",
+"https://images.pexels.com/photos/802112/pexels-photo-802112.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.unsplash.com/photo-1549366021-9f761d040ed2?w=1920&auto=format&fit=crop&q=80",
+"https://images.pexels.com/photos/3551227/pexels-photo-3551227.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.unsplash.com/photo-1563833717765-00460e0a9772?w=1920&auto=format&fit=crop&q=80",
+"https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&auto=format&fit=crop&q=80",
+"https://images.pexels.com/photos/6633919/pexels-photo-6633919.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.unsplash.com/photo-1589177736491-9d2c3e7b0c4e?w=1920&auto=format&fit=crop&q=80",
+"https://images.pexels.com/photos/3889871/pexels-photo-3889871.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1920&auto=format&fit=crop&q=80",
+"https://images.pexels.com/photos/3889727/pexels-photo-3889727.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+"https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&auto=format&fit=crop&q=80",
+"https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+
+
+
 ];
 
 const Hero: React.FC = () => {

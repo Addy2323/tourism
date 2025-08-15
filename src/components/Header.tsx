@@ -14,7 +14,10 @@ import {
   Info,
   Phone,
   ChevronRight,
+  LayoutDashboard,
+  LogOut,
 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 interface HeaderProps {
   onAuthClick: () => void;
@@ -24,6 +27,10 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, user, logout } = useAuth();
+
+  const isDashboardPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard');
+  const useDarkText = isScrolled && !isDashboardPage;
 
   const navItems = [
     { name: 'Home', href: '/', icon: Home },
@@ -34,6 +41,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
     { name: 'Blog', href: '/blog', icon: Book },
     { name: 'About', href: '/about', icon: Info },
     { name: 'Contact', href: '/contact', icon: Phone },
+    ...(isAuthenticated ? [{ name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }] : []),
   ];
 
   useEffect(() => {
@@ -62,7 +70,9 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled || isMenuOpen
+        isDashboardPage
+          ? 'bg-emerald-800 shadow-classic'
+          : isScrolled || isMenuOpen
           ? 'bg-white/95 shadow-classic backdrop-blur-md border-b border-gray-100'
           : 'bg-transparent'
       }`}
@@ -81,7 +91,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                 <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400/20 to-amber-400/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               <div className={`hidden sm:block transition-colors duration-300 ${
-                isScrolled ? 'text-gray-800' : 'text-white'
+                useDarkText ? 'text-gray-800' : 'text-white'
               }`}>
                 <h2 className="text-xl font-bold tracking-tight">Babblers Tours</h2>
                 <p className="text-xs opacity-75 font-medium">Authentic Tanzania</p>
@@ -96,17 +106,17 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                 key={item.name}
                 to={item.href}
                 className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 group ${
-                  isScrolled
+                  useDarkText
                     ? 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
                     : 'text-white/90 hover:text-white hover:bg-white/10'
                 } ${location.pathname === item.href ? 
-                  (isScrolled ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
+                  (useDarkText ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
                   : ''}`}
               >
                 <span className="relative z-10">{item.name}</span>
                 {location.pathname === item.href && (
                   <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
-                    isScrolled ? 'bg-emerald-600' : 'bg-amber-400'
+                    useDarkText ? 'bg-emerald-600' : 'bg-amber-400'
                   }`}></div>
                 )}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -118,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
           <div className="hidden lg:flex items-center space-x-3">
             <button
               className={`p-3 rounded-full transition-all duration-300 group ${
-                isScrolled
+                useDarkText
                   ? 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
                   : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}
@@ -127,12 +137,30 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
               <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
             </button>
             
-            <button
-              onClick={onAuthClick}
-              className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-full hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-classic hover:shadow-classic-lg transform hover:scale-110 group"
-            >
-              <User className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            </button>
+            {isAuthenticated ? (
+              <div className="relative group">
+                <button className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-full shadow-classic">
+                  <User className="w-5 h-5" />
+                </button>
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-classic-lg border border-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:translate-y-0 translate-y-2 z-10">
+                  <div className="p-2">
+                    <div className="px-3 py-2 border-b border-gray-100">
+                      <p className="font-semibold text-sm text-gray-800">{user?.name}</p>
+                      <p className="text-xs text-gray-500">{user?.email}</p>
+                    </div>
+                    <Link to="/dashboard" className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-emerald-600 rounded-md">Dashboard</Link>
+                    <button onClick={logout} className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-emerald-600 rounded-md">Logout</button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={onAuthClick}
+                className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-full hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-classic hover:shadow-classic-lg transform hover:scale-110 group"
+              >
+                <User className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              </button>
+            )}
           </div>
 
           {/* Enhanced Mobile Menu Button */}
@@ -140,7 +168,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className={`p-2 rounded-xl transition-all duration-300 ${
-                isScrolled
+                useDarkText
                   ? 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
                   : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
@@ -234,13 +262,23 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
             </button>
             
             {/* Auth Button */}
-            <button
-              onClick={onAuthClick}
-              className="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 px-4 rounded-xl font-medium transition-all duration-200 shadow-classic hover:shadow-classic-lg transform hover:scale-[1.02]"
-            >
-              <User className="w-5 h-5" />
-              <span>Sign In / Register</span>
-            </button>
+            {isAuthenticated ? (
+              <button
+                onClick={logout}
+                className="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-4 px-4 rounded-xl font-medium transition-all duration-200 shadow-classic hover:shadow-classic-lg transform hover:scale-[1.02]"
+              >
+                <LogOut className="w-5 h-5" />
+                <span>Logout</span>
+              </button>
+            ) : (
+              <button
+                onClick={onAuthClick}
+                className="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 px-4 rounded-xl font-medium transition-all duration-200 shadow-classic hover:shadow-classic-lg transform hover:scale-[1.02]"
+              >
+                <User className="w-5 h-5" />
+                <span>Sign In / Register</span>
+              </button>
+            )}
           </div>
         </nav>
       </div>
