@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, MapPin, Clock, Star } from 'lucide-react';
+import { ArrowRight, MapPin, Clock, Star, Sparkles } from 'lucide-react';
 
 const FeaturedDestinations: React.FC = () => {
   const navigate = useNavigate();
@@ -8,134 +8,189 @@ const FeaturedDestinations: React.FC = () => {
     {
       id: 1,
       name: 'Serengeti National Park',
-      description: 'Witness the Great Migration and endless plains teeming with wildlife',
+      description: 'Witness the Great Migration and endless plains teeming with wildlife in Africa\'s most famous safari destination',
       image: 'https://images.pexels.com/photos/1670732/pexels-photo-1670732.jpeg?auto=compress&cs=tinysrgb&w=800',
       duration: '3-7 days',
       rating: 4.9,
       price: 'From $450/day',
       highlights: ['Great Migration', 'Big Five', 'Hot Air Balloons'],
-      route: '/destinations/serengeti'
+      route: '/destinations/serengeti',
+      featured: true
     },
     {
       id: 2,
       name: 'Mount Kilimanjaro',
-      description: 'Conquer Africa\'s highest peak and roof of the continent',
+      description: 'Conquer Africa\'s highest peak and roof of the continent on this once-in-a-lifetime adventure',
       image: 'https://plus.unsplash.com/premium_photo-1664304370557-233bccc0ac85?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8a2lsaW1hbmphcm98ZW58MHx8MHx8fDA%3D',
       duration: '5-9 days',
       rating: 4.8,
       price: 'From $1,200',
       highlights: ['Uhuru Peak', 'Multiple Routes', 'Glaciers'],
-      route: '/destinations/kilimanjaro'
+      route: '/destinations/kilimanjaro',
+      featured: false
     },
     {
       id: 3,
       name: 'Zanzibar Islands',
-      description: 'Pristine beaches, spice tours, and rich Swahili culture',
+      description: 'Pristine beaches, spice tours, and rich Swahili culture await on these enchanting islands',
       image: 'https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=800',
       duration: '3-10 days',
       rating: 4.7,
       price: 'From $180/day',
       highlights: ['Stone Town', 'Spice Tours', 'Pristine Beaches'],
-      route: '/destinations/zanzibar'
+      route: '/destinations/zanzibar',
+      featured: false
     },
     {
       id: 4,
       name: 'Ngorongoro Crater',
-      description: 'The world\'s largest intact volcanic caldera and wildlife haven',
+      description: 'The world\'s largest intact volcanic caldera and wildlife haven with incredible biodiversity',
       image: 'https://plus.unsplash.com/premium_photo-1697729506473-f0f7e3a5407c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bmdvcm9uZ29ybyUyMGNyYXRlcnxlbnwwfHwwfHx8MA%3D%3D',
       duration: '1-3 days',
       rating: 4.9,
       price: 'From $380/day',
       highlights: ['Crater Floor', 'Black Rhinos', 'Maasai Culture'],
-      route: '/destinations/ngorongoro'
+      route: '/destinations/ngorongoro',
+      featured: true
     }
   ];
 
   return (
-    <section id="destinations" className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Featured <span className="text-amber-600">Destinations</span>
+    <section id="destinations" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
+      <div className="container-mobile">
+        {/* Enhanced Section Header */}
+        <div className="text-center mb-12 sm:mb-16 lg:mb-20">
+          <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-4 py-2 mb-6 animate-fade-in-up">
+            <Sparkles className="w-4 h-4 text-amber-600" />
+            <span className="text-amber-800 text-sm font-medium tracking-wide">
+              Handpicked Destinations
+            </span>
+          </div>
+          
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 animate-fade-in-up text-balance" style={{ animationDelay: '0.1s' }}>
+            Featured{" "}
+            <span className="relative">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-amber-700">
+                Destinations
+              </span>
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-400/20 to-amber-600/20 blur-lg -z-10"></div>
+            </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          
+          <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-amber-600 mx-auto rounded-full mb-6"></div>
+          
+          <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             Discover Tanzania's most iconic locations, each offering unique experiences 
-            and unforgettable memories that will last a lifetime.
+            and unforgettable memories that will last a lifetime through sustainable tourism.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Enhanced Destinations Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {destinations.map((destination, index) => (
             <div
               key={destination.id}
-              className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="group card-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up"
+              style={{ animationDelay: `${index * 100 + 300}ms` }}
             >
-              <div className="relative overflow-hidden">
+              {/* Enhanced Image Container */}
+              <div className="relative overflow-hidden rounded-t-xl">
                 <img
                   src={destination.image}
                   alt={destination.name}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
                 />
-                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <span className="text-sm font-semibold">{destination.rating}</span>
+                
+                {/* Enhanced Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                {/* Featured Badge */}
+                {destination.featured && (
+                  <div className="absolute top-4 left-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full px-3 py-1 flex items-center space-x-1 shadow-classic">
+                    <Sparkles className="w-3 h-3" />
+                    <span className="text-xs font-semibold">Featured</span>
+                  </div>
+                )}
+                
+                {/* Rating Badge */}
+                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1 shadow-classic">
+                  <Star className="w-4 h-4 text-amber-400 fill-current" />
+                  <span className="text-sm font-semibold text-gray-800">{destination.rating}</span>
                 </div>
-                <div className="absolute bottom-4 left-4 bg-emerald-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                
+                {/* Price Badge */}
+                <div className="absolute bottom-4 left-4 bg-emerald-600/95 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold shadow-classic">
                   {destination.price}
                 </div>
               </div>
 
+              {/* Enhanced Content */}
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-600 transition-colors duration-300 line-clamp-2">
                   {destination.name}
                 </h3>
-                <p className="text-gray-600 mb-4 line-clamp-2">
+                
+                <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed text-sm sm:text-base">
                   {destination.description}
                 </p>
 
-                <div className="flex items-center space-x-4 mb-4 text-sm text-gray-500">
+                {/* Enhanced Meta Info */}
+                <div className="flex items-center justify-between mb-4 text-sm text-gray-500">
                   <div className="flex items-center space-x-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{destination.duration}</span>
+                    <Clock className="w-4 h-4 text-emerald-600" />
+                    <span className="font-medium">{destination.duration}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <MapPin className="w-4 h-4" />
-                    <span>Tanzania</span>
+                    <MapPin className="w-4 h-4 text-emerald-600" />
+                    <span className="font-medium">Tanzania</span>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-4">
+                {/* Enhanced Highlights */}
+                <div className="flex flex-wrap gap-2 mb-6">
                   {destination.highlights.map((highlight, idx) => (
                     <span
                       key={idx}
-                      className="bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs font-medium"
+                      className="bg-amber-50 text-amber-800 border border-amber-200 px-3 py-1 rounded-full text-xs font-medium hover:bg-amber-100 transition-colors duration-200"
                     >
                       {highlight}
                     </span>
                   ))}
                 </div>
 
+                {/* Enhanced CTA Button */}
                 <button 
                   onClick={() => navigate(destination.route)}
-                  className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-amber-600 transition-all duration-300 flex items-center justify-center space-x-2 group"
+                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-3 px-4 rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 flex items-center justify-center space-x-2 group/btn shadow-classic hover:shadow-classic-lg transform hover:scale-[1.02] font-semibold"
                 >
                   <span>Explore Destination</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
                 </button>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <button 
-            type="button"
-            onClick={() => navigate('/destinations')}
-            className="bg-amber-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-amber-700 transition-all duration-300 transform hover:scale-105"
-          >
-            View All Destinations
-          </button>
+        {/* Enhanced CTA Section */}
+        <div className="text-center mt-12 sm:mt-16 lg:mt-20 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+          <div className="bg-gradient-to-r from-emerald-50 to-amber-50 border border-emerald-100 rounded-2xl p-8 sm:p-12 max-w-2xl mx-auto">
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+              Ready to Explore More?
+            </h3>
+            <p className="text-gray-600 mb-8 leading-relaxed">
+              Discover all our incredible destinations across Tanzania, from wildlife safaris to cultural experiences.
+            </p>
+            
+            <button 
+              type="button"
+              onClick={() => navigate('/destinations')}
+              className="btn-accent text-lg px-8 py-4 inline-flex items-center gap-3 group"
+            >
+              <span>View All Destinations</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
         </div>
       </div>
     </section>

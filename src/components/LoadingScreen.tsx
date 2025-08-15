@@ -22,11 +22,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
     const textInterval = setInterval(() => {
       const randomText = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
       setLoadingText(randomText);
-    }, 2000);
+    }, 400);
 
     const loadingTimer = setTimeout(() => {
       onLoadingComplete();
-    }, 4000);
+    }, 800);
 
     return () => {
       clearInterval(textInterval);
@@ -350,6 +350,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
         <div className="loading-text">{loadingText}</div>
 
         <div className="controls">
+          <button className="btn" onClick={onLoadingComplete}>
+            ⚡ Skip Loading
+          </button>
           <button className="btn" onClick={toggleAnimations}>
             {animationsPaused ? '▶️ Resume' : '⏸️ Pause'}
           </button>

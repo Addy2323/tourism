@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, Clock, MapPin, Eye, Shield, Users, TreePine, Phone, Mail, Award } from 'lucide-react';
+import { ArrowLeft, Star, Clock, MapPin, Users, Camera, Eye, Calendar, Phone, Mail, Globe, Award, Heart, Sparkles, Mountain, } from 'lucide-react';
 
 const NgorongoroDetail: React.FC = () => {
   const navigate = useNavigate();
@@ -8,270 +8,303 @@ const NgorongoroDetail: React.FC = () => {
 
   const packages = [
     {
-      name: "Day Safari",
-      duration: "1 Day",
-      price: "$380/day",
-      includes: ["Crater descent", "Game drive", "Lunch", "Park fees"],
-      description: "Perfect day trip to experience the crater floor"
-    },
-    {
       name: "Crater Explorer",
       duration: "2 Days",
-      price: "$420/day",
-      includes: ["Crater lodge", "Multiple game drives", "All meals", "Maasai village visit"],
-      description: "Extended exploration with cultural experience"
+      price: "$380/day",
+      includes: ["Crater descent", "Lodge accommodation", "All meals", "Game drives"],
+      description: "Essential Ngorongoro Crater experience",
+      popular: false
     },
     {
-      name: "Conservation Special",
-      duration: "3 Days",
+      name: "Conservation Safari",
+      duration: "4 Days",
       price: "$480/day",
-      includes: ["Premium lodge", "Conservation tour", "Research center visit", "Private guide"],
-      description: "Learn about conservation efforts and research"
+      includes: ["Crater tours", "Maasai village visit", "Conservation center", "Premium lodges"],
+      description: "Deep dive into conservation efforts and local culture",
+      popular: true
+    },
+    {
+      name: "Photography Workshop",
+      duration: "5 Days",
+      price: "$620/day",
+      includes: ["Photography guide", "Early morning shoots", "Equipment support", "Editing sessions"],
+      description: "Capture the crater's stunning wildlife and landscapes",
+      popular: false
     }
   ];
 
-  const wildlife = [
-    { icon: <Eye className="w-6 h-6" />, name: "Black Rhinos", description: "One of the best places to see endangered black rhinos" },
-    { icon: <Shield className="w-6 h-6" />, name: "Big Five", description: "All Big Five animals in a single location" },
-    { icon: <Users className="w-6 h-6" />, name: "Maasai Culture", description: "Traditional Maasai communities around the crater" },
-    { icon: <TreePine className="w-6 h-6" />, name: "Diverse Habitats", description: "Forest, grassland, swamps, and lakes" }
-  ];
-
-  const facts = [
-    { number: "610m", label: "Crater Depth" },
-    { number: "260km²", label: "Crater Floor Area" },
-    { number: "25,000+", label: "Large Animals" },
-    { number: "1979", label: "UNESCO World Heritage" }
+  const activities = [
+    { icon: <Eye className="w-6 h-6" />, name: "Crater Game Drives", description: "Explore the world's largest intact caldera", gradient: "from-emerald-500 to-emerald-600" },
+    { icon: <Mountain className="w-6 h-6" />, name: "Rim Walks", description: "Scenic walks along the crater rim", gradient: "from-blue-500 to-blue-600" },
+    { icon: <Users className="w-6 h-6" />, name: "Maasai Culture", description: "Visit traditional Maasai villages", gradient: "from-amber-500 to-amber-600" },
+    { icon: <Eye className="w-6 h-6" />, name: "Bird Watching", description: "Over 500 bird species including flamingos", gradient: "from-purple-500 to-purple-600" }
   ];
 
   const gallery = [
-    "https://plus.unsplash.com/premium_photo-1697729506473-f0f7e3a5407c?w=800&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=800&auto=format&fit=crop&q=80",
+    "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=800",
     "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&auto=format&fit=crop&q=80",
-    "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=800"
+    "https://images.pexels.com/photos/1670732/pexels-photo-1670732.jpeg?auto=compress&cs=tinysrgb&w=800"
   ];
 
+  const handleBookNow = () => {
+    const selectedPkg = packages[selectedPackage];
+    navigate('/booking', {
+      state: {
+        bookingData: {
+          destination: 'Ngorongoro Crater',
+          packageName: selectedPkg.name,
+          packagePrice: selectedPkg.price,
+          packageDuration: selectedPkg.duration,
+          packageIncludes: selectedPkg.includes,
+          packageDescription: selectedPkg.description
+        }
+      }
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="relative h-96 bg-gradient-to-r from-black/50 to-black/30">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-amber-50">
+      {/* Enhanced Hero Section */}
+      <div className="relative h-[70vh] sm:h-[80vh] lg:h-[90vh] overflow-hidden">
         <img
-          src="https://plus.unsplash.com/premium_photo-1697729506473-f0f7e3a5407c?w=1920&auto=format&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&auto=format&fit=crop&q=80"
           alt="Ngorongoro Crater"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
-          <div className="text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
+        
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 right-20 w-64 h-64 bg-emerald-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-amber-400 rounded-full blur-2xl"></div>
+        </div>
+
+        <div className="container-mobile relative z-10 h-full flex items-center">
+          <div className="text-white max-w-4xl">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center space-x-2 mb-4 text-white/80 hover:text-white transition-colors"
+              className="flex items-center space-x-2 mb-6 text-white/80 hover:text-white transition-all duration-300 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-white/20"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Back to Destinations</span>
+              <span className="text-sm font-medium">Back to Destinations</span>
             </button>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">Ngorongoro Crater</h1>
-            <p className="text-xl md:text-2xl mb-6 max-w-2xl">
-              The world's largest intact volcanic caldera and wildlife haven - Africa's Garden of Eden
+            
+            <div className="inline-flex items-center gap-2 bg-emerald-600/20 backdrop-blur-sm border border-emerald-400/30 rounded-full px-4 py-2 mb-6">
+              <Award className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-200 text-sm font-medium">UNESCO World Heritage Site</span>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up">
+              <span className="relative">
+                Ngorongoro Crater
+                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-400/20 to-amber-400/20 blur-2xl -z-10"></div>
+              </span>
+            </h1>
+            
+            <p className="text-lg sm:text-xl lg:text-2xl mb-8 max-w-3xl leading-relaxed text-white/90 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              Experience the world's largest intact volcanic caldera, home to an incredible concentration of wildlife
             </p>
-            <div className="flex items-center space-x-6 text-lg">
-              <div className="flex items-center space-x-2">
+            
+            <div className="flex flex-wrap items-center gap-6 text-base sm:text-lg animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                <span>4.9/5</span>
+                <span className="font-semibold">4.8/5</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-5 h-5" />
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <MapPin className="w-5 h-5 text-emerald-400" />
                 <span>Northern Tanzania</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Award className="w-5 h-5" />
-                <span>UNESCO World Heritage</span>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Clock className="w-5 h-5 text-amber-400" />
+                <span>2-5 Days</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Overview */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Overview</h2>
-              <div className="prose prose-lg text-gray-600">
-                <p>
-                  The Ngorongoro Crater is a breathtaking natural wonder and one of Africa's most incredible wildlife destinations. This massive volcanic caldera, formed over 2 million years ago, creates a unique ecosystem that supports an extraordinary concentration of wildlife. Often called "Africa's Garden of Eden," the crater floor is home to over 25,000 large animals.
+      {/* Main Content */}
+      <div className="container-mobile py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* Content Column */}
+          <div className="lg:col-span-2 space-y-12 sm:space-y-16">
+            
+            {/* Overview Section */}
+            <section className="animate-fade-in-up">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Crater Overview
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed">
+                <p className="mb-4">
+                  The Ngorongoro Crater is a breathtaking natural wonder, formed over 2 million years ago when a massive 
+                  volcano collapsed on itself. This UNESCO World Heritage Site spans 260 square kilometers and is often 
+                  called "Africa's Eden" due to its incredible concentration of wildlife within the crater walls.
                 </p>
                 <p>
-                  What makes Ngorongoro truly special is its self-contained ecosystem. The steep crater walls act as natural boundaries, creating a year-round water supply and permanent residence for many animals. This makes it one of the best places in Africa to see the Big Five, including the rare black rhinoceros, all in a single day.
+                  Home to over 25,000 large animals including the Big Five, the crater offers one of the highest 
+                  wildlife densities in Africa. The unique ecosystem supports everything from lions and elephants 
+                  to the rare black rhinoceros, making it a photographer's paradise and conservation success story.
                 </p>
               </div>
             </section>
 
-            {/* Key Facts */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Crater Facts</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {facts.map((fact, index) => (
-                  <div key={index} className="bg-white p-6 rounded-xl shadow-lg text-center">
-                    <div className="text-3xl font-bold text-emerald-600 mb-2">{fact.number}</div>
-                    <div className="text-gray-600 text-sm">{fact.label}</div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Wildlife & Experiences */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Wildlife & Experiences</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {wildlife.map((item, index) => (
-                  <div key={index} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                    <div className="flex items-start space-x-4">
-                      <div className="text-emerald-600">{item.icon}</div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.name}</h3>
-                        <p className="text-gray-600">{item.description}</p>
+            {/* Activities Section */}
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Activities & Experiences
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {activities.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="card-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 p-6 group"
+                    style={{ animationDelay: `${index * 100 + 400}ms` }}
+                  >
+                    <div className={`w-12 h-12 bg-gradient-to-r ${activity.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-classic`}>
+                      <div className="text-white">
+                        {activity.icon}
                       </div>
                     </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors duration-300">
+                      {activity.name}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {activity.description}
+                    </p>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* Gallery */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Photo Gallery</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {/* Gallery Section */}
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Photo Gallery
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {gallery.map((image, index) => (
-                  <div key={index} className="aspect-square overflow-hidden rounded-xl">
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden rounded-xl shadow-classic hover:shadow-classic-xl transition-all duration-500 aspect-square"
+                  >
                     <img
                       src={image}
-                      alt={`Ngorongoro ${index + 1}`}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                      alt={`Ngorongoro Gallery ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      loading="lazy"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 ))}
-              </div>
-            </section>
-
-            {/* Conservation */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Conservation & Research</h2>
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Conservation Efforts</h3>
-                    <ul className="space-y-2 text-gray-600 text-sm">
-                      <li>• Black rhino protection program</li>
-                      <li>• Anti-poaching initiatives</li>
-                      <li>• Habitat restoration projects</li>
-                      <li>• Community conservation programs</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Research Activities</h3>
-                    <ul className="space-y-2 text-gray-600 text-sm">
-                      <li>• Wildlife population monitoring</li>
-                      <li>• Ecological research studies</li>
-                      <li>• Climate change impact assessment</li>
-                      <li>• Human-wildlife conflict mitigation</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Maasai Culture */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Maasai Heritage</h2>
-              <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-xl border border-amber-200">
-                <p className="text-gray-700 mb-4">
-                  The Ngorongoro Conservation Area is unique as it allows the coexistence of wildlife and the indigenous Maasai people. The Maasai have lived in harmony with wildlife for centuries, practicing traditional pastoralism while respecting the natural environment.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                  <div className="bg-white p-4 rounded-lg">
-                    <h4 className="font-semibold text-amber-800 mb-2">Traditional Lifestyle</h4>
-                    <p className="text-gray-600">Cattle herding and traditional practices</p>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg">
-                    <h4 className="font-semibold text-amber-800 mb-2">Cultural Tours</h4>
-                    <p className="text-gray-600">Visit authentic Maasai villages</p>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg">
-                    <h4 className="font-semibold text-amber-800 mb-2">Conservation Partners</h4>
-                    <p className="text-gray-600">Working together to protect wildlife</p>
-                  </div>
-                </div>
               </div>
             </section>
 
             {/* Best Time to Visit */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Best Time to Visit</h2>
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-green-600 mb-2">Dry Season</h3>
-                    <p className="text-gray-600 mb-2">June - October</p>
-                    <p className="text-sm text-gray-500">Best wildlife viewing, clear skies</p>
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Best Time to Visit
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="card-classic p-6 border-l-4 border-emerald-500">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Calendar className="w-6 h-6 text-emerald-600" />
+                    <h3 className="text-lg font-semibold text-emerald-600">Dry Season</h3>
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-blue-600 mb-2">Calving Season</h3>
-                    <p className="text-gray-600 mb-2">December - March</p>
-                    <p className="text-sm text-gray-500">Newborn animals, lush scenery</p>
+                  <p className="text-gray-600 mb-2 font-medium">June - October</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Excellent wildlife viewing with animals concentrated around water sources
+                  </p>
+                </div>
+                <div className="card-classic p-6 border-l-4 border-blue-500">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Calendar className="w-6 h-6 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-blue-600">Green Season</h3>
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-amber-600 mb-2">Year-round</h3>
-                    <p className="text-gray-600 mb-2">All seasons</p>
-                    <p className="text-sm text-gray-500">Excellent wildlife viewing anytime</p>
-                  </div>
+                  <p className="text-gray-600 mb-2 font-medium">November - May</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Beautiful landscapes, flamingo season, and fewer visitors
+                  </p>
                 </div>
               </div>
             </section>
           </div>
 
-          {/* Sidebar */}
+          {/* Enhanced Sidebar */}
           <div className="lg:col-span-1">
             {/* Booking Card */}
-            <div className="bg-white p-6 rounded-xl shadow-lg sticky top-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Book Your Safari</h3>
+            <div className="card-classic p-6 sm:p-8 sticky top-6 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Book Your Safari</h3>
+                <div className="flex items-center space-x-1">
+                  <Heart className="w-5 h-5 text-red-500" />
+                  <span className="text-sm text-gray-500">Save</span>
+                </div>
+              </div>
               
               {/* Package Selection */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">Select Package</label>
-                <div className="space-y-3">
+              <div className="mb-8">
+                <label className="block text-sm font-semibold text-gray-700 mb-4">Select Package</label>
+                <div className="space-y-4">
                   {packages.map((pkg, index) => (
                     <div
                       key={index}
-                      className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                      className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                         selectedPackage === index
-                          ? 'border-emerald-600 bg-emerald-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-emerald-500 bg-emerald-50 shadow-classic'
+                          : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
                       }`}
                       onClick={() => setSelectedPackage(index)}
                     >
-                      <div className="flex justify-between items-start mb-2">
+                      {pkg.popular && (
+                        <div className="absolute -top-2 left-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full px-3 py-1 flex items-center space-x-1 text-xs font-semibold shadow-classic">
+                          <Sparkles className="w-3 h-3" />
+                          <span>Popular</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-start mb-3">
                         <h4 className="font-semibold text-gray-900">{pkg.name}</h4>
-                        <span className="text-emerald-600 font-bold">{pkg.price}</span>
+                        <span className="text-emerald-600 font-bold text-lg">{pkg.price}</span>
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">{pkg.description}</p>
-                      <p className="text-sm text-gray-500">{pkg.duration}</p>
+                      <p className="text-sm text-gray-600 mb-2 leading-relaxed">{pkg.description}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-gray-500 font-medium">{pkg.duration}</p>
+                        <div className={`w-4 h-4 rounded-full border-2 ${
+                          selectedPackage === index 
+                            ? 'border-emerald-500 bg-emerald-500' 
+                            : 'border-gray-300'
+                        }`}>
+                          {selectedPackage === index && (
+                            <div className="w-2 h-2 bg-white rounded-full m-0.5"></div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Includes */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Package Includes:</h4>
-                <ul className="space-y-2">
+              <div className="mb-8">
+                <h4 className="font-semibold text-gray-900 mb-4">Package Includes:</h4>
+                <ul className="space-y-3">
                   {packages[selectedPackage].includes.map((item, index) => (
-                    <li key={index} className="flex items-center space-x-2 text-sm text-gray-600">
-                      <div className="w-2 h-2 bg-emerald-600 rounded-full" />
+                    <li key={index} className="flex items-center space-x-3 text-sm text-gray-600">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -279,41 +312,37 @@ const NgorongoroDetail: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-3">
+              <div className="space-y-4 mb-8">
                 <button
-                  onClick={() => navigate('/booking', {
-                    state: {
-                      bookingData: {
-                        destination: 'Ngorongoro Crater',
-                        packageName: packages[selectedPackage].name,
-                        packagePrice: packages[selectedPackage].price,
-                        packageDuration: packages[selectedPackage].duration,
-                        packageIncludes: packages[selectedPackage].includes,
-                        packageDescription: packages[selectedPackage].description
-                      }
-                    }
-                  })}
-                  className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 transition-colors font-semibold"
+                  onClick={handleBookNow}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 rounded-xl transition-all duration-300 font-semibold shadow-classic hover:shadow-classic-lg transform hover:scale-105"
                 >
                   Book Now
                 </button>
-                <button className="w-full border-2 border-emerald-600 text-emerald-600 py-3 rounded-xl hover:bg-emerald-50 transition-colors font-semibold">
-                  Get Quote
+                <button className="w-full border-2 border-emerald-600 text-emerald-600 py-4 rounded-xl hover:bg-emerald-50 transition-all duration-300 font-semibold">
+                  Get Custom Quote
                 </button>
               </div>
 
               {/* Contact Info */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-3">Need Help?</h4>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <div className="flex items-center space-x-2">
-                   <Phone className="w-4 h-4" />
-                                       <span>+255 765 696 445</span>
-                                     </div>
-                                     <div className="flex items-center space-x-2">
-                                       <Mail className="w-4 h-4" />
-                                       <span>info@babblerstours.com</span>
-                  </div>
+              <div className="pt-6 border-t border-gray-200">
+                <h4 className="font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+                  <Phone className="w-4 h-4 text-emerald-600" />
+                  <span>Need Help?</span>
+                </h4>
+                <div className="space-y-3 text-sm">
+                  <a href="tel:+255765696445" className="flex items-center space-x-3 text-gray-600 hover:text-emerald-600 transition-colors duration-300">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                      <Phone className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <span>+255 765 696 445</span>
+                  </a>
+                  <a href="mailto:info@babblerstours.com" className="flex items-center space-x-3 text-gray-600 hover:text-emerald-600 transition-colors duration-300">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <span className="break-all">info@babblerstours.com</span>
+                  </a>
                 </div>
               </div>
             </div>

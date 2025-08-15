@@ -1,257 +1,311 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, Clock, MapPin, Mountain, Thermometer, Users, Calendar, Phone, Mail, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Star, Clock, MapPin, Users, Camera, Eye, Calendar, Phone, Mail, Globe, Award, Heart, Sparkles, Mountain, Thermometer } from 'lucide-react';
 
 const KilimanjaroDetail: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedRoute, setSelectedRoute] = useState(0);
+  const [selectedPackage, setSelectedPackage] = useState(0);
 
-  const routes = [
+  const packages = [
     {
       name: "Marangu Route",
       duration: "5 Days",
-      difficulty: "Moderate",
-      price: "$1,200",
-      success: "65%",
-      includes: ["Hut accommodation", "All meals", "Park fees", "Professional guide"],
-      description: "The 'Coca-Cola' route - most popular with hut accommodation"
+      price: "$1,200/person",
+      includes: ["Hut accommodation", "All meals", "Professional guide", "Park fees"],
+      description: "The 'Coca-Cola' route - most popular with hut accommodation",
+      popular: false
     },
     {
       name: "Machame Route",
       duration: "6 Days",
-      difficulty: "Challenging",
-      price: "$1,400",
-      success: "85%",
-      includes: ["Camping equipment", "All meals", "Park fees", "Experienced guide"],
-      description: "The 'Whiskey' route - scenic but more demanding"
+      price: "$1,400/person",
+      includes: ["Camping equipment", "All meals", "Expert guides", "Porter service"],
+      description: "The 'Whiskey' route - scenic and challenging",
+      popular: true
     },
     {
       name: "Lemosho Route",
       duration: "7 Days",
-      difficulty: "Moderate-Hard",
-      price: "$1,600",
-      success: "90%",
-      includes: ["Premium camping", "Gourmet meals", "Park fees", "Expert guide"],
-      description: "Best acclimatization and highest success rate"
+      price: "$1,650/person",
+      includes: ["Premium camping", "Gourmet meals", "Private guide", "Full support team"],
+      description: "Most scenic route with highest success rate",
+      popular: false
     }
   ];
 
-  const highlights = [
-    { icon: <Mountain className="w-6 h-6" />, name: "Uhuru Peak", description: "Reach Africa's highest point at 5,895m" },
-    { icon: <Thermometer className="w-6 h-6" />, name: "Climate Zones", description: "Experience 5 different climate zones" },
-    { icon: <Users className="w-6 h-6" />, name: "Expert Guides", description: "Professional mountain guides and porters" },
-    { icon: <Calendar className="w-6 h-6" />, name: "Year Round", description: "Climbing available throughout the year" }
+  const activities = [
+    { icon: <Mountain className="w-6 h-6" />, name: "Summit Climb", description: "Reach Uhuru Peak at 5,895m above sea level", gradient: "from-emerald-500 to-emerald-600" },
+    { icon: <Eye className="w-6 h-6" />, name: "Scenic Views", description: "Breathtaking views across East Africa", gradient: "from-blue-500 to-blue-600" },
+    { icon: <Camera className="w-6 h-6" />, name: "Photography", description: "Capture stunning landscapes and glaciers", gradient: "from-amber-500 to-amber-600" },
+    { icon: <Users className="w-6 h-6" />, name: "Cultural Experience", description: "Meet local Chagga communities", gradient: "from-purple-500 to-purple-600" }
   ];
 
   const gallery = [
-    "https://plus.unsplash.com/premium_photo-1664304370557-233bccc0ac85?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1589553416260-f586c8f1514f?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1609198092458-38a293c7ac4b?w=800&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=800&auto=format&fit=crop&q=80"
+    "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&auto=format&fit=crop&q=80"
   ];
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Moderate': return 'text-green-600 bg-green-100';
-      case 'Challenging': return 'text-orange-600 bg-orange-100';
-      case 'Moderate-Hard': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
+  const handleBookNow = () => {
+    const selectedPkg = packages[selectedPackage];
+    navigate('/booking', {
+      state: {
+        bookingData: {
+          destination: 'Mount Kilimanjaro',
+          packageName: selectedPkg.name,
+          packagePrice: selectedPkg.price,
+          packageDuration: selectedPkg.duration,
+          packageIncludes: selectedPkg.includes,
+          packageDescription: selectedPkg.description
+        }
+      }
+    });
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="relative h-96 bg-gradient-to-r from-black/50 to-black/30">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-amber-50">
+      {/* Enhanced Hero Section */}
+      <div className="relative h-[70vh] sm:h-[80vh] lg:h-[90vh] overflow-hidden">
         <img
-          src="https://plus.unsplash.com/premium_photo-1664304370557-233bccc0ac85?w=1920&auto=format&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1609198092458-38a293c7ac4b?w=1920&auto=format&fit=crop&q=80"
           alt="Mount Kilimanjaro"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
-          <div className="text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
+        
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 right-20 w-64 h-64 bg-emerald-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-amber-400 rounded-full blur-2xl"></div>
+        </div>
+
+        <div className="container-mobile relative z-10 h-full flex items-center">
+          <div className="text-white max-w-4xl">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center space-x-2 mb-4 text-white/80 hover:text-white transition-colors"
+              className="flex items-center space-x-2 mb-6 text-white/80 hover:text-white transition-all duration-300 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-white/20"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Back to Destinations</span>
+              <span className="text-sm font-medium">Back to Destinations</span>
             </button>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">Mount Kilimanjaro</h1>
-            <p className="text-xl md:text-2xl mb-6 max-w-2xl">
-              Conquer Africa's highest peak and roof of the continent at 5,895 meters above sea level
+            
+            <div className="inline-flex items-center gap-2 bg-emerald-600/20 backdrop-blur-sm border border-emerald-400/30 rounded-full px-4 py-2 mb-6">
+              <Award className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-200 text-sm font-medium">Africa's Highest Peak</span>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up">
+              <span className="relative">
+                Mount Kilimanjaro
+                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-400/20 to-amber-400/20 blur-2xl -z-10"></div>
+              </span>
+            </h1>
+            
+            <p className="text-lg sm:text-xl lg:text-2xl mb-8 max-w-3xl leading-relaxed text-white/90 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              Conquer Africa's highest peak and stand on the Roof of Africa at 5,895 meters above sea level
             </p>
-            <div className="flex items-center space-x-6 text-lg">
-              <div className="flex items-center space-x-2">
+            
+            <div className="flex flex-wrap items-center gap-6 text-base sm:text-lg animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                <span>4.8/5</span>
+                <span className="font-semibold">4.7/5</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-5 h-5" />
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <MapPin className="w-5 h-5 text-emerald-400" />
                 <span>Northern Tanzania</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Mountain className="w-5 h-5" />
-                <span>5,895m</span>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Clock className="w-5 h-5 text-amber-400" />
+                <span>5-9 Days</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Overview */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Overview</h2>
-              <div className="prose prose-lg text-gray-600">
-                <p>
-                  Mount Kilimanjaro is Africa's highest mountain and the world's tallest free-standing mountain, rising majestically from the African plains to 5,895 meters (19,341 feet). Located in Tanzania near the Kenyan border, this iconic stratovolcano consists of three volcanic cones: Kibo, Mawenzi, and Shira.
+      {/* Main Content */}
+      <div className="container-mobile py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* Content Column */}
+          <div className="lg:col-span-2 space-y-12 sm:space-y-16">
+            
+            {/* Overview Section */}
+            <section className="animate-fade-in-up">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Mountain Overview
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed">
+                <p className="mb-4">
+                  Mount Kilimanjaro is Africa's highest peak and the world's tallest free-standing mountain, rising 
+                  majestically from the African plains to 5,895 meters above sea level. This iconic stratovolcano 
+                  consists of three volcanic cones and offers one of the most accessible routes to a continental summit.
                 </p>
                 <p>
-                  What makes Kilimanjaro unique is that it's one of the few places on Earth where you can walk from tropical rainforest to arctic conditions in just a few days. The mountain offers several routes to the summit, each with its own character and challenges, making it accessible to climbers of various experience levels.
+                  What makes Kilimanjaro truly special is that it requires no technical climbing experience, making 
+                  it achievable for determined hikers. The mountain features five distinct climate zones, from tropical 
+                  rainforest at the base to arctic conditions at the summit, offering an incredible diversity of 
+                  landscapes and ecosystems in a single climb.
                 </p>
               </div>
             </section>
 
-            {/* Important Notice */}
-            <section className="mb-12">
-              <div className="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-xl">
-                <div className="flex items-start space-x-3">
-                  <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-amber-800 mb-2">Important Climbing Information</h3>
-                    <ul className="text-amber-700 space-y-1 text-sm">
-                      <li>• No technical climbing experience required, but good physical fitness essential</li>
-                      <li>• Altitude sickness is a real concern - proper acclimatization is crucial</li>
-                      <li>• Weather can change rapidly - proper gear is mandatory</li>
-                      <li>• Best climbing months: January-March and June-October</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Highlights */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Why Climb Kilimanjaro</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {highlights.map((highlight, index) => (
-                  <div key={index} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                    <div className="flex items-start space-x-4">
-                      <div className="text-emerald-600">{highlight.icon}</div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{highlight.name}</h3>
-                        <p className="text-gray-600">{highlight.description}</p>
+            {/* Activities Section */}
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Climbing Experience
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {activities.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="card-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 p-6 group"
+                    style={{ animationDelay: `${index * 100 + 400}ms` }}
+                  >
+                    <div className={`w-12 h-12 bg-gradient-to-r ${activity.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-classic`}>
+                      <div className="text-white">
+                        {activity.icon}
                       </div>
                     </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors duration-300">
+                      {activity.name}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {activity.description}
+                    </p>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* Gallery */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Photo Gallery</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {/* Gallery Section */}
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Photo Gallery
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {gallery.map((image, index) => (
-                  <div key={index} className="aspect-square overflow-hidden rounded-xl">
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden rounded-xl shadow-classic hover:shadow-classic-xl transition-all duration-500 aspect-square"
+                  >
                     <img
                       src={image}
-                      alt={`Kilimanjaro ${index + 1}`}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                      alt={`Kilimanjaro Gallery ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      loading="lazy"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* Climate Zones */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Climate Zones</h2>
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
-                    <div>
-                      <h3 className="font-semibold text-green-800">Rainforest Zone</h3>
-                      <p className="text-sm text-green-600">800-1,800m • Tropical climate</p>
-                    </div>
-                    <span className="text-green-600 font-bold">20-25°C</span>
+            {/* Best Time to Climb */}
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Best Time to Climb
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="card-classic p-6 border-l-4 border-emerald-500">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Thermometer className="w-6 h-6 text-emerald-600" />
+                    <h3 className="text-lg font-semibold text-emerald-600">Dry Seasons</h3>
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg">
-                    <div>
-                      <h3 className="font-semibold text-yellow-800">Heath & Moorland</h3>
-                      <p className="text-sm text-yellow-600">1,800-3,000m • Cooler temperatures</p>
-                    </div>
-                    <span className="text-yellow-600 font-bold">10-15°C</span>
+                  <p className="text-sm text-gray-500 font-medium">Jan-Mar & Jun-Oct</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Clear skies, minimal rainfall, and excellent summit visibility
+                  </p>
+                </div>
+                <div className="card-classic p-6 border-l-4 border-blue-500">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Calendar className="w-6 h-6 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-blue-600">Peak Season</h3>
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-orange-50 rounded-lg">
-                    <div>
-                      <h3 className="font-semibold text-orange-800">Alpine Desert</h3>
-                      <p className="text-sm text-orange-600">3,000-4,000m • Harsh conditions</p>
-                    </div>
-                    <span className="text-orange-600 font-bold">0-10°C</span>
-                  </div>
-                  <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
-                    <div>
-                      <h3 className="font-semibold text-blue-800">Arctic Zone</h3>
-                      <p className="text-sm text-blue-600">4,000m+ • Extreme cold</p>
-                    </div>
-                    <span className="text-blue-600 font-bold">-20 to 0°C</span>
-                  </div>
+                  <p className="text-gray-600 mb-2 font-medium">July - September</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Most popular climbing months with best weather conditions
+                  </p>
                 </div>
               </div>
             </section>
           </div>
 
-          {/* Sidebar */}
+          {/* Enhanced Sidebar */}
           <div className="lg:col-span-1">
             {/* Booking Card */}
-            <div className="bg-white p-6 rounded-xl shadow-lg sticky top-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Choose Your Route</h3>
+            <div className="card-classic p-6 sm:p-8 sticky top-6 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Book Your Climb</h3>
+                <div className="flex items-center space-x-1">
+                  <Heart className="w-5 h-5 text-red-500" />
+                  <span className="text-sm text-gray-500">Save</span>
+                </div>
+              </div>
               
-              {/* Route Selection */}
-              <div className="mb-6">
+              {/* Package Selection */}
+              <div className="mb-8">
+                <label className="block text-sm font-semibold text-gray-700 mb-4">Select Route</label>
                 <div className="space-y-4">
-                  {routes.map((route, index) => (
+                  {packages.map((pkg, index) => (
                     <div
                       key={index}
-                      className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                        selectedRoute === index
-                          ? 'border-emerald-600 bg-emerald-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                      className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                        selectedPackage === index
+                          ? 'border-emerald-500 bg-emerald-50 shadow-classic'
+                          : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
                       }`}
-                      onClick={() => setSelectedRoute(index)}
+                      onClick={() => setSelectedPackage(index)}
                     >
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-semibold text-gray-900">{route.name}</h4>
-                        <span className="text-emerald-600 font-bold">{route.price}</span>
+                      {pkg.popular && (
+                        <div className="absolute -top-2 left-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full px-3 py-1 flex items-center space-x-1 text-xs font-semibold shadow-classic">
+                          <Sparkles className="w-3 h-3" />
+                          <span>Popular</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-start mb-3">
+                        <h4 className="font-semibold text-gray-900">{pkg.name}</h4>
+                        <span className="text-emerald-600 font-bold text-lg">{pkg.price}</span>
                       </div>
-                      <div className="flex items-center space-x-4 mb-2">
-                        <span className="text-sm text-gray-600">{route.duration}</span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(route.difficulty)}`}>
-                          {route.difficulty}
-                        </span>
-                        <span className="text-sm text-emerald-600 font-medium">Success: {route.success}</span>
+                      <p className="text-sm text-gray-600 mb-2 leading-relaxed">{pkg.description}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-gray-500 font-medium">{pkg.duration}</p>
+                        <div className={`w-4 h-4 rounded-full border-2 ${
+                          selectedPackage === index 
+                            ? 'border-emerald-500 bg-emerald-500' 
+                            : 'border-gray-300'
+                        }`}>
+                          {selectedPackage === index && (
+                            <div className="w-2 h-2 bg-white rounded-full m-0.5"></div>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-600">{route.description}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Includes */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Package Includes:</h4>
-                <ul className="space-y-2">
-                  {routes[selectedRoute].includes.map((item, index) => (
-                    <li key={index} className="flex items-center space-x-2 text-sm text-gray-600">
-                      <div className="w-2 h-2 bg-emerald-600 rounded-full" />
+              <div className="mb-8">
+                <h4 className="font-semibold text-gray-900 mb-4">Package Includes:</h4>
+                <ul className="space-y-3">
+                  {packages[selectedPackage].includes.map((item, index) => (
+                    <li key={index} className="flex items-center space-x-3 text-sm text-gray-600">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -259,41 +313,37 @@ const KilimanjaroDetail: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-3">
+              <div className="space-y-4 mb-8">
                 <button
-                  onClick={() => navigate('/booking', {
-                    state: {
-                      bookingData: {
-                        destination: 'Mount Kilimanjaro',
-                        packageName: routes[selectedRoute].name,
-                        packagePrice: routes[selectedRoute].price,
-                        packageDuration: routes[selectedRoute].duration,
-                        packageIncludes: routes[selectedRoute].includes,
-                        packageDescription: routes[selectedRoute].description
-                      }
-                    }
-                  })}
-                  className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 transition-colors font-semibold"
+                  onClick={handleBookNow}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 rounded-xl transition-all duration-300 font-semibold shadow-classic hover:shadow-classic-lg transform hover:scale-105"
                 >
-                  Book Climb
+                  Book Now
                 </button>
-                <button className="w-full border-2 border-emerald-600 text-emerald-600 py-3 rounded-xl hover:bg-emerald-50 transition-colors font-semibold">
-                  Get Quote
+                <button className="w-full border-2 border-emerald-600 text-emerald-600 py-4 rounded-xl hover:bg-emerald-50 transition-all duration-300 font-semibold">
+                  Get Custom Quote
                 </button>
               </div>
 
               {/* Contact Info */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-3">Need Help?</h4>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <div className="flex items-center space-x-2">
-                   <Phone className="w-4 h-4" />
-                                       <span>+255 765 696 445</span>
-                                     </div>
-                                     <div className="flex items-center space-x-2">
-                                       <Mail className="w-4 h-4" />
-                                       <span>info@babblerstours.com</span>
-                  </div>
+              <div className="pt-6 border-t border-gray-200">
+                <h4 className="font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+                  <Phone className="w-4 h-4 text-emerald-600" />
+                  <span>Need Help?</span>
+                </h4>
+                <div className="space-y-3 text-sm">
+                  <a href="tel:+255765696445" className="flex items-center space-x-3 text-gray-600 hover:text-emerald-600 transition-colors duration-300">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                      <Phone className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <span>+255 765 696 445</span>
+                  </a>
+                  <a href="mailto:info@babblerstours.com" className="flex items-center space-x-3 text-gray-600 hover:text-emerald-600 transition-colors duration-300">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <span className="break-all">info@babblerstours.com</span>
+                  </a>
                 </div>
               </div>
             </div>

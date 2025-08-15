@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, Clock, MapPin, Users, Camera, Eye, Calendar, Phone, Mail, Globe } from 'lucide-react';
+import { ArrowLeft, Star, Clock, MapPin, Users, Camera, Eye, Calendar, Phone, Mail, Globe, Award, Heart, Sparkles } from 'lucide-react';
 
 const SerengetiDetail: React.FC = () => {
   const navigate = useNavigate();
@@ -12,29 +12,32 @@ const SerengetiDetail: React.FC = () => {
       duration: "3 Days",
       price: "$450/day",
       includes: ["Game drives", "Accommodation", "Meals", "Park fees"],
-      description: "Perfect introduction to Serengeti's wildlife"
+      description: "Perfect introduction to Serengeti's wildlife",
+      popular: false
     },
     {
       name: "Migration Special",
       duration: "5 Days",
       price: "$520/day",
       includes: ["Migration tracking", "Hot air balloon", "Premium lodges", "All meals"],
-      description: "Follow the Great Migration with expert guides"
+      description: "Follow the Great Migration with expert guides",
+      popular: true
     },
     {
       name: "Photography Safari",
       duration: "7 Days",
       price: "$680/day",
       includes: ["Photography guide", "Hide access", "Equipment rental", "Editing workshop"],
-      description: "Capture the perfect wildlife shots"
+      description: "Capture the perfect wildlife shots",
+      popular: false
     }
   ];
 
   const activities = [
-    { icon: <Eye className="w-6 h-6" />, name: "Game Drives", description: "Spot the Big Five in their natural habitat" },
-    { icon: <Camera className="w-6 h-6" />, name: "Hot Air Balloon", description: "Aerial views of the endless plains" },
-    { icon: <Users className="w-6 h-6" />, name: "Cultural Visits", description: "Meet local Maasai communities" },
-    { icon: <Globe className="w-6 h-6" />, name: "Migration Tracking", description: "Follow the wildebeest migration" }
+    { icon: <Eye className="w-6 h-6" />, name: "Game Drives", description: "Spot the Big Five in their natural habitat", gradient: "from-emerald-500 to-emerald-600" },
+    { icon: <Camera className="w-6 h-6" />, name: "Hot Air Balloon", description: "Aerial views of the endless plains", gradient: "from-blue-500 to-blue-600" },
+    { icon: <Users className="w-6 h-6" />, name: "Cultural Visits", description: "Meet local Maasai communities", gradient: "from-amber-500 to-amber-600" },
+    { icon: <Globe className="w-6 h-6" />, name: "Migration Tracking", description: "Follow the wildebeest migration", gradient: "from-purple-500 to-purple-600" }
   ];
 
   const gallery = [
@@ -46,40 +49,76 @@ const SerengetiDetail: React.FC = () => {
     "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&auto=format&fit=crop&q=80"
   ];
 
+  const handleBookNow = () => {
+    const selectedPkg = packages[selectedPackage];
+    navigate('/booking', {
+      state: {
+        bookingData: {
+          destination: 'Serengeti National Park',
+          packageName: selectedPkg.name,
+          packagePrice: selectedPkg.price,
+          packageDuration: selectedPkg.duration,
+          packageIncludes: selectedPkg.includes,
+          packageDescription: selectedPkg.description
+        }
+      }
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="relative h-96 bg-gradient-to-r from-black/50 to-black/30">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-amber-50">
+      {/* Enhanced Hero Section */}
+      <div className="relative h-[70vh] sm:h-[80vh] lg:h-[90vh] overflow-hidden">
         <img
           src="https://images.pexels.com/photos/1670732/pexels-photo-1670732.jpeg?auto=compress&cs=tinysrgb&w=1920"
           alt="Serengeti National Park"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
-          <div className="text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
+        
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 right-20 w-64 h-64 bg-emerald-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-amber-400 rounded-full blur-2xl"></div>
+        </div>
+
+        <div className="container-mobile relative z-10 h-full flex items-center">
+          <div className="text-white max-w-4xl">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center space-x-2 mb-4 text-white/80 hover:text-white transition-colors"
+              className="flex items-center space-x-2 mb-6 text-white/80 hover:text-white transition-all duration-300 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-white/20"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Back to Destinations</span>
+              <span className="text-sm font-medium">Back to Destinations</span>
             </button>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">Serengeti National Park</h1>
-            <p className="text-xl md:text-2xl mb-6 max-w-2xl">
+            
+            <div className="inline-flex items-center gap-2 bg-emerald-600/20 backdrop-blur-sm border border-emerald-400/30 rounded-full px-4 py-2 mb-6">
+              <Award className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-200 text-sm font-medium">UNESCO World Heritage Site</span>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up">
+              <span className="relative">
+                Serengeti National Park
+                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-400/20 to-amber-400/20 blur-2xl -z-10"></div>
+              </span>
+            </h1>
+            
+            <p className="text-lg sm:text-xl lg:text-2xl mb-8 max-w-3xl leading-relaxed text-white/90 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               Witness the Great Migration and endless plains teeming with wildlife in Tanzania's most famous national park
             </p>
-            <div className="flex items-center space-x-6 text-lg">
-              <div className="flex items-center space-x-2">
+            
+            <div className="flex flex-wrap items-center gap-6 text-base sm:text-lg animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                <span>4.9/5</span>
+                <span className="font-semibold">4.9/5</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-5 h-5" />
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <MapPin className="w-5 h-5 text-emerald-400" />
                 <span>Northern Tanzania</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="w-5 h-5" />
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Clock className="w-5 h-5 text-amber-400" />
                 <span>3-7 Days</span>
               </div>
             </div>
@@ -87,120 +126,187 @@ const SerengetiDetail: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Overview */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Overview</h2>
-              <div className="prose prose-lg text-gray-600">
-                <p>
-                  The Serengeti National Park is Tanzania's oldest and most popular national park, covering 14,750 square kilometers of grassland plains, savanna, riverine forest, and woodlands. The park is famous for the annual Great Migration, where over 1.5 million wildebeest and 200,000 zebras move in a clockwise direction through the ecosystem.
+      {/* Main Content */}
+      <div className="container-mobile py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* Content Column */}
+          <div className="lg:col-span-2 space-y-12 sm:space-y-16">
+            
+            {/* Overview Section */}
+            <section className="animate-fade-in-up">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Park Overview
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed">
+                <p className="mb-4">
+                  The Serengeti National Park is one of the most famous wildlife conservation areas in the world, 
+                  covering 14,750 square kilometers of grassland plains, savanna, riverine forest, and woodlands. 
+                  The park is home to the spectacular Great Migration, where over 1.5 million wildebeest and 
+                  hundreds of thousands of zebras and gazelles move in a continuous cycle.
                 </p>
                 <p>
-                  Home to the "Big Five" - lion, leopard, elephant, buffalo, and rhinoceros - the Serengeti offers some of the best wildlife viewing in Africa. The park's diverse landscapes support an incredible variety of wildlife, making it a photographer's paradise and a must-visit destination for any safari enthusiast.
+                  Beyond the migration, the Serengeti offers year-round wildlife viewing with large populations 
+                  of big cats, elephants, hippos, and over 500 bird species. The park's diverse ecosystems 
+                  support an incredible variety of wildlife, making it a photographer's paradise and a 
+                  must-visit destination for any safari enthusiast.
                 </p>
               </div>
             </section>
 
-            {/* Activities */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Activities & Experiences</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Activities Section */}
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Activities & Experiences
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {activities.map((activity, index) => (
-                  <div key={index} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                    <div className="flex items-start space-x-4">
-                      <div className="text-emerald-600">{activity.icon}</div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{activity.name}</h3>
-                        <p className="text-gray-600">{activity.description}</p>
+                  <div
+                    key={index}
+                    className="card-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 p-6 group"
+                    style={{ animationDelay: `${index * 100 + 400}ms` }}
+                  >
+                    <div className={`w-12 h-12 bg-gradient-to-r ${activity.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-classic`}>
+                      <div className="text-white">
+                        {activity.icon}
                       </div>
                     </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors duration-300">
+                      {activity.name}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {activity.description}
+                    </p>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* Gallery */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Photo Gallery</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {/* Gallery Section */}
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Photo Gallery
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {gallery.map((image, index) => (
-                  <div key={index} className="aspect-square overflow-hidden rounded-xl">
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden rounded-xl shadow-classic hover:shadow-classic-xl transition-all duration-500 aspect-square"
+                  >
                     <img
                       src={image}
-                      alt={`Serengeti ${index + 1}`}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                      alt={`Serengeti Gallery ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      loading="lazy"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 ))}
               </div>
             </section>
 
             {/* Best Time to Visit */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Best Time to Visit</h2>
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-emerald-600 mb-2">Dry Season</h3>
-                    <p className="text-gray-600 mb-2">June - October</p>
-                    <p className="text-sm text-gray-500">Best for wildlife viewing and migration</p>
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-700">
+                  Best Time to Visit
+                </span>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="card-classic p-6 border-l-4 border-emerald-500">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Calendar className="w-6 h-6 text-emerald-600" />
+                    <h3 className="text-lg font-semibold text-emerald-600">Dry Season</h3>
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-amber-600 mb-2">Calving Season</h3>
-                    <p className="text-gray-600 mb-2">January - March</p>
-                    <p className="text-sm text-gray-500">Witness newborn animals</p>
+                  <p className="text-gray-600 mb-2 font-medium">June - October</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Best wildlife viewing and Great Migration river crossings
+                  </p>
+                </div>
+                <div className="card-classic p-6 border-l-4 border-blue-500">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Calendar className="w-6 h-6 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-blue-600">Green Season</h3>
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-blue-600 mb-2">Green Season</h3>
-                    <p className="text-gray-600 mb-2">November - May</p>
-                    <p className="text-sm text-gray-500">Lush landscapes and fewer crowds</p>
-                  </div>
+                  <p className="text-gray-600 mb-2 font-medium">November - May</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Lush landscapes, calving season, and fewer crowds
+                  </p>
                 </div>
               </div>
             </section>
           </div>
 
-          {/* Sidebar */}
+          {/* Enhanced Sidebar */}
           <div className="lg:col-span-1">
             {/* Booking Card */}
-            <div className="bg-white p-6 rounded-xl shadow-lg sticky top-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Book Your Safari</h3>
+            <div className="card-classic p-6 sm:p-8 sticky top-6 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Book Your Safari</h3>
+                <div className="flex items-center space-x-1">
+                  <Heart className="w-5 h-5 text-red-500" />
+                  <span className="text-sm text-gray-500">Save</span>
+                </div>
+              </div>
               
               {/* Package Selection */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">Select Package</label>
-                <div className="space-y-3">
+              <div className="mb-8">
+                <label className="block text-sm font-semibold text-gray-700 mb-4">Select Package</label>
+                <div className="space-y-4">
                   {packages.map((pkg, index) => (
                     <div
                       key={index}
-                      className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                      className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                         selectedPackage === index
-                          ? 'border-emerald-600 bg-emerald-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-emerald-500 bg-emerald-50 shadow-classic'
+                          : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
                       }`}
                       onClick={() => setSelectedPackage(index)}
                     >
-                      <div className="flex justify-between items-start mb-2">
+                      {pkg.popular && (
+                        <div className="absolute -top-2 left-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full px-3 py-1 flex items-center space-x-1 text-xs font-semibold shadow-classic">
+                          <Sparkles className="w-3 h-3" />
+                          <span>Popular</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-start mb-3">
                         <h4 className="font-semibold text-gray-900">{pkg.name}</h4>
-                        <span className="text-emerald-600 font-bold">{pkg.price}</span>
+                        <span className="text-emerald-600 font-bold text-lg">{pkg.price}</span>
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">{pkg.description}</p>
-                      <p className="text-sm text-gray-500">{pkg.duration}</p>
+                      <p className="text-sm text-gray-600 mb-2 leading-relaxed">{pkg.description}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-gray-500 font-medium">{pkg.duration}</p>
+                        <div className={`w-4 h-4 rounded-full border-2 ${
+                          selectedPackage === index 
+                            ? 'border-emerald-500 bg-emerald-500' 
+                            : 'border-gray-300'
+                        }`}>
+                          {selectedPackage === index && (
+                            <div className="w-2 h-2 bg-white rounded-full m-0.5"></div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Includes */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Package Includes:</h4>
-                <ul className="space-y-2">
+              <div className="mb-8">
+                <h4 className="font-semibold text-gray-900 mb-4">Package Includes:</h4>
+                <ul className="space-y-3">
                   {packages[selectedPackage].includes.map((item, index) => (
-                    <li key={index} className="flex items-center space-x-2 text-sm text-gray-600">
-                      <div className="w-2 h-2 bg-emerald-600 rounded-full" />
+                    <li key={index} className="flex items-center space-x-3 text-sm text-gray-600">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -208,30 +314,37 @@ const SerengetiDetail: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-3">
+              <div className="space-y-4 mb-8">
                 <button
-                  onClick={() => navigate('/plan-trip')}
-                  className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 transition-colors font-semibold"
+                  onClick={handleBookNow}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 rounded-xl transition-all duration-300 font-semibold shadow-classic hover:shadow-classic-lg transform hover:scale-105"
                 >
                   Book Now
                 </button>
-                <button className="w-full border-2 border-emerald-600 text-emerald-600 py-3 rounded-xl hover:bg-emerald-50 transition-colors font-semibold">
-                  Get Quote
+                <button className="w-full border-2 border-emerald-600 text-emerald-600 py-4 rounded-xl hover:bg-emerald-50 transition-all duration-300 font-semibold">
+                  Get Custom Quote
                 </button>
               </div>
 
               {/* Contact Info */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-3">Need Help?</h4>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <div className="flex items-center space-x-2">
-                    <Phone className="w-4 h-4" />
-                                        <span>+255 765 696 445</span>
-                                      </div>
-                                      <div className="flex items-center space-x-2">
-                                        <Mail className="w-4 h-4" />
-                                        <span>info@babblerstours.com</span>
-                  </div>
+              <div className="pt-6 border-t border-gray-200">
+                <h4 className="font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+                  <Phone className="w-4 h-4 text-emerald-600" />
+                  <span>Need Help?</span>
+                </h4>
+                <div className="space-y-3 text-sm">
+                  <a href="tel:+255765696445" className="flex items-center space-x-3 text-gray-600 hover:text-emerald-600 transition-colors duration-300">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                      <Phone className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <span>+255 765 696 445</span>
+                  </a>
+                  <a href="mailto:info@babblerstours.com" className="flex items-center space-x-3 text-gray-600 hover:text-emerald-600 transition-colors duration-300">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <span className="break-all">info@babblerstours.com</span>
+                  </a>
                 </div>
               </div>
             </div>
