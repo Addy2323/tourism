@@ -132,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                         (useDarkText ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
                         : ''}`}
                     >
-                      <span className="relative z-10">{item.name}</span>
+                      <span className="relative z-10 whitespace-nowrap">{item.name}</span>
                       <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${aboutDropdownOpen ? 'rotate-180' : ''}`} />
                       {location.pathname.startsWith(item.href) && (
                         <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
@@ -173,7 +173,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                       (useDarkText ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
                       : ''}`}
                   >
-                    <span className="relative z-10">{item.name}</span>
+                    <span className="relative z-10 whitespace-nowrap">{item.name}</span>
                     {location.pathname === item.href && (
                       <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
                         useDarkText ? 'bg-emerald-600' : 'bg-amber-400'
@@ -187,10 +187,10 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
           </nav>
 
           {/* Enhanced Right Side Actions */}
-          <div className="hidden lg:flex items-center space-x-3">
-            <CurrencySelector className={`${useDarkText ? 'bg-white border-gray-200 text-gray-700' : 'bg-white/90 text-gray-800'} shadow-sm`} />
+          <div className="hidden lg:flex items-center gap-2">
+            <CurrencySelector className={`${useDarkText ? 'bg-white border-gray-200 text-gray-700' : 'bg-white/90 text-gray-800 border border-white/20'} shadow-sm`} />
             <button
-              className={`p-3 rounded-full transition-all duration-300 group ${
+              className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 group ${
                 useDarkText
                   ? 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
                   : 'text-white/80 hover:text-white hover:bg-white/10'
