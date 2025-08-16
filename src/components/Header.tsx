@@ -22,6 +22,7 @@ import {
   Truck,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import CurrencySelector from './CurrencySelector';
 
 interface HeaderProps {
   onAuthClick: () => void;
@@ -187,6 +188,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
 
           {/* Enhanced Right Side Actions */}
           <div className="hidden lg:flex items-center space-x-3">
+            <CurrencySelector className={`${useDarkText ? 'bg-white border-gray-200 text-gray-700' : 'bg-white/90 text-gray-800'} shadow-sm`} />
             <button
               className={`p-3 rounded-full transition-all duration-300 group ${
                 useDarkText
@@ -376,6 +378,10 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
 
           {/* Enhanced Bottom Actions */}
           <div className="border-t border-gray-100 bg-gray-50 p-6 space-y-3">
+            {/* Currency Selector */}
+            <div className="w-full">
+              <CurrencySelector className="w-full bg-white border-gray-200 text-gray-700" />
+            </div>
             {/* Search Button */}
             <button className="w-full flex items-center justify-center space-x-3 bg-white hover:bg-gray-100 text-gray-700 py-4 px-4 rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-classic border border-gray-200">
               <Search className="w-5 h-5" />

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, MapPin, Clock, Star, Sparkles } from 'lucide-react';
+import Price from './Price';
 
 const FeaturedDestinations: React.FC = () => {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ const FeaturedDestinations: React.FC = () => {
       image: 'https://images.pexels.com/photos/1670732/pexels-photo-1670732.jpeg?auto=compress&cs=tinysrgb&w=800',
       duration: '3-7 days',
       rating: 4.9,
-      price: 'From $450/day',
+      priceUSD: 450,
+      priceUnit: '/day',
       highlights: ['Great Migration', 'Big Five', 'Hot Air Balloons'],
       route: '/destinations/serengeti',
       featured: true
@@ -50,7 +52,7 @@ const FeaturedDestinations: React.FC = () => {
       image: 'https://plus.unsplash.com/premium_photo-1664304370557-233bccc0ac85?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8a2lsaW1hbmphcm98ZW58MHx8MHx8fDA%3D',
       duration: '5-9 days',
       rating: 4.8,
-      price: 'From $1,200',
+      priceUSD: 1200,
       highlights: ['Uhuru Peak', 'Multiple Routes', 'Glaciers'],
       route: '/destinations/kilimanjaro',
       featured: false
@@ -62,7 +64,8 @@ const FeaturedDestinations: React.FC = () => {
       image: 'https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=800',
       duration: '3-10 days',
       rating: 4.7,
-      price: 'From $180/day',
+      priceUSD: 180,
+      priceUnit: '/day',
       highlights: ['Stone Town', 'Spice Tours', 'Pristine Beaches'],
       route: '/destinations/zanzibar',
       featured: false
@@ -74,7 +77,8 @@ const FeaturedDestinations: React.FC = () => {
       image: 'https://plus.unsplash.com/premium_photo-1697729506473-f0f7e3a5407c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bmdvcm9uZ29ybyUyMGNyYXRlcnxlbnwwfHwwfHx8MA%3D%3D',
       duration: '1-3 days',
       rating: 4.9,
-      price: 'From $380/day',
+      priceUSD: 380,
+      priceUnit: '/day',
       highlights: ['Crater Floor', 'Black Rhinos', 'Maasai Culture'],
       route: '/destinations/ngorongoro',
       featured: true
@@ -148,7 +152,7 @@ const FeaturedDestinations: React.FC = () => {
                 
                 {/* Price Badge */}
                 <div className="absolute bottom-4 left-4 bg-emerald-600/95 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold shadow-classic">
-                  {destination.price}
+                  <Price amountUSD={destination.priceUSD} prefix="From " unit={destination.priceUnit} />
                 </div>
               </div>
 

@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import LoadingScreen from './components/LoadingScreen';
 import { AuthProvider } from './contexts/AuthContext';
+import { CurrencyProvider } from './contexts/CurrencyContext';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import AdminTest from './components/AdminTest';
 
@@ -97,60 +98,62 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen bg-white">
-          <Header onAuthClick={() => setIsAuthModalOpen(true)} />
-          
-          <Suspense fallback={<PageLoader />}>
-            <RouteTransition>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/destinations" element={<Destinations />} />
-                <Route path="/destinations/serengeti" element={<SerengetiDetail />} />
-                <Route path="/destinations/zanzibar" element={<ZanzibarDetail />} />
-                <Route path="/destinations/lake-Manyara" element={<LakeManyaraDetail />} />  
-                <Route path="/destinations/Tarangire" element={<TarangireDetail />} />
-                <Route path="/destinations/kilimanjaro" element={<KilimanjaroDetail />} />
-                <Route path="/destinations/ngorongoro" element={<NgorongoroDetail />} />
-                <Route path="/experiences" element={<ExperiencesPage />} />
-                <Route path="/plan-your-trip" element={<PlanTrip />} />
-                <Route path="/impact" element={<CommunityImpact />} />
-                <Route path="/booking" element={<BookingPage />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/about/company" element={<AboutCompany />} />
-                <Route path="/about/team" element={<OurTeam />} />
-                <Route path="/about/vehicles" element={<OurVehicles />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/dashboard" element={<UserDashboard />} />
-                <Route 
-                  path="/admin" 
-                  element={
-                    <AdminProtectedRoute>
-                      <Suspense fallback={<PageLoader />}>
-                        <AdminDashboard />
-                      </Suspense>
-                    </AdminProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/test" 
-                  element={
-                    <AdminProtectedRoute>
-                      <AdminTest />
-                    </AdminProtectedRoute>
-                  } 
-                />
-              </Routes>
-            </RouteTransition>
-          </Suspense>
-          
-          <Footer />
-          
-          <AuthModal 
-            isOpen={isAuthModalOpen} 
-            onClose={() => setIsAuthModalOpen(false)} 
-          />
-        </div>
+        <CurrencyProvider>
+          <div className="min-h-screen bg-white">
+            <Header onAuthClick={() => setIsAuthModalOpen(true)} />
+            
+            <Suspense fallback={<PageLoader />}>
+              <RouteTransition>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/destinations" element={<Destinations />} />
+                  <Route path="/destinations/serengeti" element={<SerengetiDetail />} />
+                  <Route path="/destinations/zanzibar" element={<ZanzibarDetail />} />
+                  <Route path="/destinations/lake-Manyara" element={<LakeManyaraDetail />} />  
+                  <Route path="/destinations/Tarangire" element={<TarangireDetail />} />
+                  <Route path="/destinations/kilimanjaro" element={<KilimanjaroDetail />} />
+                  <Route path="/destinations/ngorongoro" element={<NgorongoroDetail />} />
+                  <Route path="/experiences" element={<ExperiencesPage />} />
+                  <Route path="/plan-your-trip" element={<PlanTrip />} />
+                  <Route path="/impact" element={<CommunityImpact />} />
+                  <Route path="/booking" element={<BookingPage />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/about/company" element={<AboutCompany />} />
+                  <Route path="/about/team" element={<OurTeam />} />
+                  <Route path="/about/vehicles" element={<OurVehicles />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/dashboard" element={<UserDashboard />} />
+                  <Route 
+                    path="/admin" 
+                    element={
+                      <AdminProtectedRoute>
+                        <Suspense fallback={<PageLoader />}>
+                          <AdminDashboard />
+                        </Suspense>
+                      </AdminProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/admin/test" 
+                    element={
+                      <AdminProtectedRoute>
+                        <AdminTest />
+                      </AdminProtectedRoute>
+                    } 
+                  />
+                </Routes>
+              </RouteTransition>
+            </Suspense>
+            
+            <Footer />
+            
+            <AuthModal 
+              isOpen={isAuthModalOpen} 
+              onClose={() => setIsAuthModalOpen(false)} 
+            />
+          </div>
+        </CurrencyProvider>
       </AuthProvider>
     </Router>
   );
