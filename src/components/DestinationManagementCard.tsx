@@ -4,9 +4,10 @@ import { DestinationData } from '../data/adminMockData';
 
 interface DestinationManagementCardProps {
   destination: DestinationData;
+  onEdit: (destination: DestinationData) => void;
 }
 
-const DestinationManagementCard: React.FC<DestinationManagementCardProps> = ({ destination }) => {
+const DestinationManagementCard: React.FC<DestinationManagementCardProps> = ({ destination, onEdit }) => {
   const { name, bookings, revenue, rating, status } = destination;
 
   return (
@@ -33,7 +34,12 @@ const DestinationManagementCard: React.FC<DestinationManagementCardProps> = ({ d
         <span className="text-sm text-gray-500 ml-1">rating</span>
       </div>
       <div className="flex items-center gap-2">
-        <button className="btn-secondary flex-1 flex items-center justify-center gap-2"><Edit size={14} /> Edit</button>
+        <button 
+          className="btn-secondary flex-1 flex items-center justify-center gap-2"
+          onClick={() => onEdit(destination)}
+        >
+          <Edit size={14} /> Edit
+        </button>
         <button className="btn-secondary flex-1 flex items-center justify-center gap-2"><BarChart2 size={14} /> Analytics</button>
       </div>
     </div>

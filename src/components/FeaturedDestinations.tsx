@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, MapPin, Clock, Star, Sparkles } from 'lucide-react';
 
 const FeaturedDestinations: React.FC = () => {
   const navigate = useNavigate();
+  const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0');
+            setVisibleCards(prev => new Set([...prev, index]));
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    cardRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const destinations = [
     {
       id: 1,
@@ -90,8 +116,9 @@ const FeaturedDestinations: React.FC = () => {
           {destinations.map((destination, index) => (
             <div
               key={destination.id}
-              className="group card-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up"
-              style={{ animationDelay: `${index * 100 + 300}ms` }}
+              ref={(ref) => cardRefs.current[index] = ref}
+              data-index={index}
+              className={`group card-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 ${visibleCards.has(index) ? 'animate-fadeIn' : 'opacity-0'}`}
             >
               {/* Enhanced Image Container */}
               <div className="relative overflow-hidden rounded-t-xl">

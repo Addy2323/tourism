@@ -14,8 +14,12 @@ import {
   Info,
   Phone,
   ChevronRight,
+  ChevronDown,
   LayoutDashboard,
   LogOut,
+  Building,
+  UserCheck,
+  Truck,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -26,11 +30,19 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
 
   const isDashboardPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard');
-  const useDarkText = isScrolled && !isDashboardPage;
+  const isBookingPage = location.pathname.startsWith('/booking');
+  const useDarkText = (isScrolled || isBookingPage) && !isDashboardPage;
+
+  const aboutSubmenuItems = [
+    { name: 'About Big Time Adventures', href: '/about/company', icon: Building },
+    { name: 'Our Team', href: '/about/team', icon: UserCheck },
+    { name: 'Our Vehicles', href: '/about/vehicles', icon: Truck },
+  ];
 
   const navItems = [
     { name: 'Home', href: '/', icon: Home },
@@ -39,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
     { name: 'Plan Your Trip', href: '/plan-your-trip', icon: Calendar },
     { name: 'Community Impact', href: '/impact', icon: Users },
     { name: 'Blog', href: '/blog', icon: Book },
-    { name: 'About', href: '/about', icon: Info },
+    { name: 'About', href: '/about', icon: Info, hasSubmenu: true },
     { name: 'Contact', href: '/contact', icon: Phone },
     ...(isAuthenticated ? [{ name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }] : []),
   ];
@@ -54,6 +66,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
 
   useEffect(() => {
     setIsMenuOpen(false);
+    setAboutDropdownOpen(false);
   }, [location.pathname]);
 
   // Close mobile menu when clicking outside
@@ -62,22 +75,25 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
       if (isMenuOpen && !(event.target as Element).closest('.mobile-menu')) {
         setIsMenuOpen(false);
       }
+      if (aboutDropdownOpen && !(event.target as Element).closest('.about-dropdown')) {
+        setAboutDropdownOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isMenuOpen]);
+  }, [isMenuOpen, aboutDropdownOpen]);
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isDashboardPage
           ? 'bg-emerald-800 shadow-classic'
-          : isScrolled || isMenuOpen
+          : (isScrolled || isMenuOpen || isBookingPage)
           ? 'bg-white/95 shadow-classic backdrop-blur-md border-b border-gray-100'
           : 'bg-transparent'
       }`}
     >
-      <div className="container-mobile">
+      <div className="container-mobile relative">
         <div className="flex items-center justify-between h-20">
           {/* Enhanced Logo */}
           <Link to="/" className="flex-shrink-0 group">
@@ -102,25 +118,70 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
           {/* Enhanced Desktop Navigation */}
           <nav className="hidden lg:flex items-center justify-center flex-1 space-x-1">
             {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 group ${
-                  useDarkText
-                    ? 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
-                    : 'text-white/90 hover:text-white hover:bg-white/10'
-                } ${location.pathname === item.href ? 
-                  (useDarkText ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
-                  : ''}`}
-              >
-                <span className="relative z-10">{item.name}</span>
-                {location.pathname === item.href && (
-                  <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
-                    useDarkText ? 'bg-emerald-600' : 'bg-amber-400'
-                  }`}></div>
+              <div key={item.name} className="relative about-dropdown">
+                {item.hasSubmenu ? (
+                  <div className="relative">
+                    <button
+                      onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
+                      className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 group flex items-center gap-1 ${
+                        useDarkText
+                          ? 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
+                          : 'text-white/90 hover:text-white hover:bg-white/10'
+                      } ${location.pathname.startsWith(item.href) ? 
+                        (useDarkText ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
+                        : ''}`}
+                    >
+                      <span className="relative z-10">{item.name}</span>
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${aboutDropdownOpen ? 'rotate-180' : ''}`} />
+                      {location.pathname.startsWith(item.href) && (
+                        <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
+                          useDarkText ? 'bg-emerald-600' : 'bg-amber-400'
+                        }`}></div>
+                      )}
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </button>
+                    
+                    {/* Desktop Dropdown */}
+                    {aboutDropdownOpen && (
+                      <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-classic-lg border border-gray-100 py-2 z-50">
+                        {aboutSubmenuItems.map((subItem) => {
+                          const SubIcon = subItem.icon;
+                          return (
+                            <Link
+                              key={subItem.name}
+                              to={subItem.href}
+                              className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors"
+                              onClick={() => setAboutDropdownOpen(false)}
+                            >
+                              <SubIcon className="w-4 h-4" />
+                              {subItem.name}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    to={item.href}
+                    className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 group ${
+                      useDarkText
+                        ? 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
+                        : 'text-white/90 hover:text-white hover:bg-white/10'
+                    } ${location.pathname === item.href ? 
+                      (useDarkText ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
+                      : ''}`}
+                  >
+                    <span className="relative z-10">{item.name}</span>
+                    {location.pathname === item.href && (
+                      <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
+                        useDarkText ? 'bg-emerald-600' : 'bg-amber-400'
+                      }`}></div>
+                    )}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </Link>
                 )}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </Link>
+              </div>
             ))}
           </nav>
 
@@ -148,7 +209,12 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                       <p className="font-semibold text-sm text-gray-800">{user?.name}</p>
                       <p className="text-xs text-gray-500">{user?.email}</p>
                     </div>
-                    <Link to="/dashboard" className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-emerald-600 rounded-md">Dashboard</Link>
+                    <Link 
+                      to={user?.role === 'admin' ? '/admin' : '/dashboard'} 
+                      className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-emerald-600 rounded-md"
+                    >
+                      {user?.role === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+                    </Link>
                     <button onClick={logout} className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-emerald-600 rounded-md">Logout</button>
                   </div>
                 </div>
@@ -220,35 +286,90 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
           <div className="p-6 space-y-2">
             {navItems.map((item, index) => {
               const IconComponent = item.icon;
-              const isActive = location.pathname === item.href;
+              const isActive = location.pathname === item.href || (item.hasSubmenu && location.pathname.startsWith(item.href));
               
               return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`flex items-center justify-between p-4 rounded-xl transition-all duration-200 font-medium text-base group ${
-                    isActive
-                      ? 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-l-4 border-emerald-600 shadow-sm'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-emerald-700'
-                  }`}
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className={`p-2 rounded-lg transition-colors ${
-                      isActive ? 'bg-emerald-200' : 'bg-gray-100 group-hover:bg-emerald-100'
-                    }`}>
-                      <IconComponent className={`w-5 h-5 transition-colors ${
-                        isActive ? 'text-emerald-700' : 'text-gray-600 group-hover:text-emerald-600'
-                      }`} />
+                <div key={item.name}>
+                  {item.hasSubmenu ? (
+                    <div className="space-y-1">
+                      <button
+                        onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl transition-all duration-200 font-medium text-base group ${
+                          isActive
+                            ? 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-l-4 border-emerald-600 shadow-sm'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-emerald-700'
+                        }`}
+                        style={{ animationDelay: `${index * 0.05}s` }}
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className={`p-2 rounded-lg transition-colors ${
+                            isActive ? 'bg-emerald-200' : 'bg-gray-100 group-hover:bg-emerald-100'
+                          }`}>
+                            <IconComponent className={`w-5 h-5 transition-colors ${
+                              isActive ? 'text-emerald-700' : 'text-gray-600 group-hover:text-emerald-600'
+                            }`} />
+                          </div>
+                          <span className="flex-1">{item.name}</span>
+                        </div>
+                        
+                        <ChevronDown className={`w-4 h-4 transition-all duration-200 ${
+                          aboutDropdownOpen ? 'rotate-180' : ''
+                        } ${isActive ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-500'}`} />
+                      </button>
+                      
+                      {/* Mobile Submenu */}
+                      {aboutDropdownOpen && (
+                        <div className="ml-4 space-y-1">
+                          {aboutSubmenuItems.map((subItem) => {
+                            const SubIcon = subItem.icon;
+                            const isSubActive = location.pathname === subItem.href;
+                            return (
+                              <Link
+                                key={subItem.name}
+                                to={subItem.href}
+                                onClick={() => setIsMenuOpen(false)}
+                                className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 text-sm ${
+                                  isSubActive
+                                    ? 'bg-emerald-100 text-emerald-800 border-l-2 border-emerald-600'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-emerald-600'
+                                }`}
+                              >
+                                <SubIcon className="w-4 h-4" />
+                                <span>{subItem.name}</span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
-                    <span className="flex-1">{item.name}</span>
-                  </div>
-                  
-                  <ChevronRight className={`w-4 h-4 transition-all duration-200 ${
-                    isActive ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-500 group-hover:translate-x-1'
-                  }`} />
-                </Link>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`flex items-center justify-between p-4 rounded-xl transition-all duration-200 font-medium text-base group ${
+                        isActive
+                          ? 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-l-4 border-emerald-600 shadow-sm'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-emerald-700'
+                      }`}
+                      style={{ animationDelay: `${index * 0.05}s` }}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className={`p-2 rounded-lg transition-colors ${
+                          isActive ? 'bg-emerald-200' : 'bg-gray-100 group-hover:bg-emerald-100'
+                        }`}>
+                          <IconComponent className={`w-5 h-5 transition-colors ${
+                            isActive ? 'text-emerald-700' : 'text-gray-600 group-hover:text-emerald-600'
+                          }`} />
+                        </div>
+                        <span className="flex-1">{item.name}</span>
+                      </div>
+                      
+                      <ChevronRight className={`w-4 h-4 transition-all duration-200 ${
+                        isActive ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-500 group-hover:translate-x-1'
+                      }`} />
+                    </Link>
+                  )}
+                </div>
               );
             })}
           </div>

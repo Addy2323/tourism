@@ -1,0 +1,210 @@
+/* High-performance animations optimized for 240Hz/120Hz displays */
+
+/* Hardware acceleration base classes */
+.hero-fade-in-up {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  animation: heroFadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.hero-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.hero-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.hero-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.hero-delay-800 {
+  animation-delay: 0.8s;
+}
+
+/* Optimized fade-in-up animation */
+@keyframes heroFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* High-performance pulse animation */
+.hero-pulse {
+  animation: heroPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: opacity;
+}
+
+@keyframes heroPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Smooth bounce animation for scroll indicator */
+.hero-bounce {
+  animation: heroBounce 2s infinite;
+  will-change: transform;
+  transform-origin: center bottom;
+}
+
+@keyframes heroBounce {
+  0%, 20%, 53%, 80%, 100% {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -15px, 0);
+  }
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -7px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+/* Optimized button transitions */
+.hero-button-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, background-color, color, box-shadow;
+  transform: translate3d(0, 0, 0);
+}
+
+.hero-button-transition:hover {
+  transform: translate3d(0, -2px, 0) scale(1.02);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Arrow transition for CTA button */
+.hero-arrow-transition {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.group:hover .hero-arrow-transition {
+  transform: translate3d(4px, 0, 0);
+}
+
+/* Play button transition */
+.hero-play-transition {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.group:hover .hero-play-transition {
+  transform: scale(1.1);
+}
+
+/* Stats card transitions */
+.hero-stat-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, background-color;
+}
+
+.hero-stat-transition:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translate3d(0, -2px, 0) scale(1.02);
+}
+
+/* Smooth scrolling optimization */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-in-up,
+  .hero-pulse,
+  .hero-bounce,
+  .hero-button-transition,
+  .hero-arrow-transition,
+  .hero-play-transition,
+  .hero-stat-transition {
+    animation: none;
+    transition: none;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* High refresh rate optimizations */
+@media (min-resolution: 120dpi) and (min-refresh-rate: 120Hz) {
+  .hero-fade-in-up {
+    animation-duration: 0.6s;
+  }
+  
+  .hero-pulse {
+    animation-duration: 1.5s;
+  }
+  
+  .hero-bounce {
+    animation-duration: 1.5s;
+  }
+  
+  .hero-button-transition,
+  .hero-arrow-transition,
+  .hero-play-transition,
+  .hero-stat-transition {
+    transition-duration: 0.2s;
+  }
+}
+
+/* Ultra-high refresh rate optimizations (240Hz+) */
+@media (min-refresh-rate: 240Hz) {
+  .hero-fade-in-up {
+    animation-duration: 0.4s;
+  }
+  
+  .hero-pulse {
+    animation-duration: 1s;
+  }
+  
+  .hero-bounce {
+    animation-duration: 1s;
+  }
+  
+  .hero-button-transition,
+  .hero-arrow-transition,
+  .hero-play-transition,
+  .hero-stat-transition {
+    transition-duration: 0.15s;
+  }
+}
+
+/* Performance optimizations for mobile devices */
+@media (max-width: 768px) {
+  .hero-fade-in-up,
+  .hero-pulse,
+  .hero-bounce,
+  .hero-button-transition,
+  .hero-arrow-transition,
+  .hero-play-transition,
+  .hero-stat-transition {
+    will-change: auto;
+  }
+}
+
+/* GPU layer creation for critical elements */
+.hero-performance-layer {
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

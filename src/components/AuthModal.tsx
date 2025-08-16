@@ -23,9 +23,48 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate a successful login
-    login({ name: formData.name, email: formData.email, role: 'user' });
-    onClose();
+    
+    // Test credentials with passwords
+    const testAccounts = [
+      {
+        email: 'admin@babblerstours.com',
+        password: 'admin123',
+        name: 'Admin User',
+        role: 'admin' as const
+      },
+      {
+        email: 'superadmin@babblerstours.com',
+        password: 'super123',
+        name: 'Super Admin',
+        role: 'admin' as const
+      },
+      {
+        email: 'user@babblerstours.com',
+        password: 'user123',
+        name: 'John Doe',
+        role: 'user' as const
+      },
+      {
+        email: 'sarah@example.com',
+        password: 'sarah123',
+        name: 'Sarah Johnson',
+        role: 'user' as const
+      }
+    ];
+
+    // Find matching account
+    const account = testAccounts.find(acc => 
+      acc.email === formData.email && acc.password === formData.password
+    );
+
+    if (account) {
+      // Successful login
+      login({ name: account.name, email: account.email, role: account.role });
+      onClose();
+    } else {
+      // Invalid credentials - show error
+      alert('Invalid email or password. Try one of the test accounts:\n\nAdmin:\n- admin@babblerstours.com / admin123\n- superadmin@babblerstours.com / super123\n\nUser:\n- user@babblerstours.com / user123\n- sarah@example.com / sarah123');
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +75,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-6 sm:pt-10 overflow-y-auto">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fadeIn"

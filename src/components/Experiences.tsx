@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Camera, Mountain, Waves, Utensils, Users, ArrowRight, Sparkles, Star } from 'lucide-react';
 
 const Experiences: React.FC = () => {
   const navigate = useNavigate();
+  const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0');
+            setVisibleCards(prev => new Set([...prev, index]));
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    cardRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleExploreClick = () => {
     navigate('/experiences');
@@ -104,8 +129,9 @@ const Experiences: React.FC = () => {
             return (
               <div
                 key={experience.id}
-                className="group relative overflow-hidden rounded-2xl shadow-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up"
-                style={{ animationDelay: `${index * 150 + 300}ms` }}
+                ref={(ref) => cardRefs.current[index] = ref}
+                data-index={index}
+                className={`group relative overflow-hidden rounded-2xl shadow-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 ${visibleCards.has(index) ? 'animate-fadeIn' : 'opacity-0'}`}
               >
                 {/* Enhanced Background Image */}
                 <div className="absolute inset-0">

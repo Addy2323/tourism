@@ -5,7 +5,8 @@ import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import LoadingScreen from './components/LoadingScreen';
 import { AuthProvider } from './contexts/AuthContext';
-import AdminProtectedRoute from '@/components/AdminProtectedRoute';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
+import AdminTest from './components/AdminTest';
 
 // Preload critical components immediately
 const Home = lazy(() => import('./pages/Home'));
@@ -14,11 +15,14 @@ const ExperiencesPage = lazy(() => import('./pages/ExperiencesPage'));
 const BookingPage = lazy(() => import('./pages/bookingpage'));
 const PlanTrip = lazy(() => import('./pages/PlanTrip'));
 const About = lazy(() => import('./pages/About'));
+const AboutCompany = lazy(() => import('./pages/AboutCompany'));
+const OurTeam = lazy(() => import('./pages/OurTeam'));
+const OurVehicles = lazy(() => import('./pages/OurVehicles'));
 const Blog = lazy(() => import('./pages/Blog'));
 const CommunityImpact = lazy(() => import('./components/CommunityImpact'));
 const Contact = lazy(() => import('./pages/Contact'));
 import UserDashboard from './pages/UserDashboard';
-import AdminDashboard from './pages/AdminDashboard';
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
 // Destination detail pages with prefetch hints
 const SerengetiDetail = lazy(() => 
@@ -113,13 +117,26 @@ function App() {
                 <Route path="/booking" element={<BookingPage />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/about/company" element={<AboutCompany />} />
+                <Route path="/about/team" element={<OurTeam />} />
+                <Route path="/about/vehicles" element={<OurVehicles />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/dashboard" element={<UserDashboard />} />
                 <Route 
                   path="/admin" 
                   element={
                     <AdminProtectedRoute>
-                      <AdminDashboard />
+                      <Suspense fallback={<PageLoader />}>
+                        <AdminDashboard />
+                      </Suspense>
+                    </AdminProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/test" 
+                  element={
+                    <AdminProtectedRoute>
+                      <AdminTest />
                     </AdminProtectedRoute>
                   } 
                 />
