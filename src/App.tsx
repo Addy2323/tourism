@@ -66,6 +66,16 @@ const RouteTransition: React.FC<{ children: React.ReactNode }> = ({ children }) 
   );
 };
 
+// Ensure window scrolls to top on each route change
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    // Use instant jump to top to avoid any accumulated offset
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
+  return null;
+};
+
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -100,6 +110,7 @@ function App() {
       <AuthProvider>
         <CurrencyProvider>
           <div className="min-h-screen bg-white">
+            <ScrollToTop />
             <Header onAuthClick={() => setIsAuthModalOpen(true)} />
             
             <Suspense fallback={<PageLoader />}>

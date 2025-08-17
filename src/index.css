@@ -558,14 +558,6 @@
   }
 }
 
-/* Global 90% zoom for the entire website */
-html {
-  transform: scale(0.9);
-  transform-origin: top left;
-  width: 111.11%; /* Compensate for the scale to maintain full width */
-  height: 111.11%; /* Compensate for the scale to maintain full height */
-}
-
 body {
   margin: 0;
   padding: 0;
