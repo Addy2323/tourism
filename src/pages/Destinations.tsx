@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Clock, Star, Camera, Mountain, Waves, TreePine, ArrowRight, Users, Calendar } from 'lucide-react';
+import { useCurrency } from '../contexts/CurrencyContext';
 
 const Destinations: React.FC = () => {
   const navigate = useNavigate();
+  const { format } = useCurrency();
 
   const destinations = [
     {
@@ -101,7 +103,7 @@ const Destinations: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900 text-white">
+      <section className="relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900 text-white pt-28 lg:pt-36">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
@@ -185,7 +187,14 @@ const Destinations: React.FC = () => {
                     
                     {/* Price Badge */}
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold">
-                      {destination.price}
+                      {(() => {
+                        const raw = destination.price as string;
+                        const amount = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0;
+                        const hasPerDay = /\/day\b/i.test(raw);
+                        const hasFrom = /^\s*from\b/i.test(raw);
+                        const prefix = hasFrom ? 'From ' : '';
+                        return `${prefix}${format(amount)}${hasPerDay ? '/day' : ''}`;
+                      })()}
                     </div>
 
                     {/* Rating */}

@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Menu,
   X,
@@ -32,6 +33,9 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
+  const aboutButtonRef = useRef<HTMLDivElement | null>(null);
+  const aboutPortalRef = useRef<HTMLDivElement | null>(null);
+  const [aboutPos, setAboutPos] = useState<{ top: number; left: number; width: number }>({ top: 0, left: 0, width: 0 });
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
 
@@ -70,14 +74,44 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
     setAboutDropdownOpen(false);
   }, [location.pathname]);
 
-  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const updatePos = () => {
+      if (!aboutButtonRef.current) return;
+      const rect = aboutButtonRef.current.getBoundingClientRect();
+      // For fixed positioning, use viewport coordinates (no scroll offsets)
+      const dropdownWidth = 256; // w-64
+      const padding = 8; // small offset below the button
+      const maxLeft = Math.max(0, window.innerWidth - dropdownWidth - 8);
+      const left = Math.min(Math.max(8, rect.left), maxLeft);
+      const top = rect.bottom + padding;
+      setAboutPos({ top, left, width: rect.width });
+    };
+    if (aboutDropdownOpen) {
+      updatePos();
+      window.addEventListener('scroll', updatePos, { passive: true });
+      window.addEventListener('resize', updatePos);
+    }
+    return () => {
+      window.removeEventListener('scroll', updatePos as any);
+      window.removeEventListener('resize', updatePos as any);
+    };
+  }, [aboutDropdownOpen]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isMenuOpen && !(event.target as Element).closest('.mobile-menu')) {
+      const target = event.target as Node;
+
+      if (isMenuOpen && !(target as Element).closest('.mobile-menu')) {
         setIsMenuOpen(false);
       }
-      if (aboutDropdownOpen && !(event.target as Element).closest('.about-dropdown')) {
-        setAboutDropdownOpen(false);
+
+      if (aboutDropdownOpen) {
+        const insideAboutButton = aboutButtonRef.current?.contains(target);
+        const insideAboutPortal = aboutPortalRef.current?.contains(target);
+        const insideLegacyAbout = (target as Element).closest?.('.about-dropdown');
+        if (!insideAboutButton && !insideAboutPortal && !insideLegacyAbout) {
+          setAboutDropdownOpen(false);
+        }
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -86,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 isolate ${
         isDashboardPage
           ? 'bg-emerald-800 shadow-classic'
           : (isScrolled || isMenuOpen || isBookingPage)
@@ -95,7 +129,8 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
       }`}
     >
       <div className="container-mobile relative">
-        <div className="flex items-center justify-between h-20">
+        {/* Top Row: Logo + Actions (desktop), full header (mobile) */}
+        <div className="flex items-center justify-between h-20 lg:h-16">
           {/* Enhanced Logo */}
           <Link to="/" className="flex-shrink-0 group">
             <div className="flex items-center space-x-3">
@@ -116,92 +151,9 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
             </div>
           </Link>
 
-          {/* Enhanced Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 space-x-1">
-            {navItems.map((item) => (
-              <div key={item.name} className="relative about-dropdown">
-                {item.hasSubmenu ? (
-                  <div className="relative">
-                    <button
-                      onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
-                      className={`relative px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 group flex items-center gap-1 ${
-                        useDarkText
-                          ? 'text-gray-700 hover:text-emerald-700 hover:bg-emerald-50'
-                          : 'text-white/90 hover:text-white hover:bg-white/10'
-                      } ${location.pathname.startsWith(item.href) ?
-                        (
-                          useDarkText
-                            ? 'ring-1 ring-emerald-500/40 bg-emerald-500/5 text-emerald-700 shadow-[0_2px_10px_rgba(16,185,129,0.15)]'
-                            : 'ring-1 ring-emerald-400/40 bg-white/10 text-amber-400 shadow-[0_2px_10px_rgba(16,185,129,0.2)] backdrop-blur-[2px]'
-                        ) : ''}`}
-                    >
-                      <span className="relative z-10 whitespace-nowrap">{item.name}</span>
-                      <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${aboutDropdownOpen ? 'rotate-180' : ''}`} />
-                      {location.pathname.startsWith(item.href) && (
-                        <>
-                          {/* pill glow */}
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 pointer-events-none" />
-                          {/* accent dot */}
-                          <div className={`absolute -bottom-1 left-2 w-1.5 h-1.5 rounded-full ${useDarkText ? 'bg-emerald-600' : 'bg-amber-400'}`} />
-                        </>
-                      )}
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </button>
-                    
-                    {/* Desktop Dropdown */}
-                    {aboutDropdownOpen && (
-                      <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-classic-lg border border-gray-100 py-2 z-50">
-                        {aboutSubmenuItems.map((subItem) => {
-                          const SubIcon = subItem.icon;
-                          return (
-                            <Link
-                              key={subItem.name}
-                              to={subItem.href}
-                              className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors"
-                              onClick={() => setAboutDropdownOpen(false)}
-                            >
-                              <SubIcon className="w-4 h-4" />
-                              {subItem.name}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link
-                    to={item.href}
-                    className={`relative px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 group ${
-                      useDarkText
-                        ? 'text-gray-700 hover:text-emerald-700 hover:bg-emerald-50'
-                        : 'text-white/90 hover:text-white hover:bg-white/10'
-                    } ${location.pathname === item.href ? 
-                        (
-                          useDarkText
-                            ? 'ring-1 ring-emerald-500/40 bg-emerald-500/5 text-emerald-700 shadow-[0_2px_10px_rgba(16,185,129,0.15)]'
-                            : 'ring-1 ring-emerald-400/40 bg-white/10 text-amber-400 shadow-[0_2px_10px_rgba(16,185,129,0.2)] backdrop-blur-[2px]'
-                        )
-                      : ''}`}
-                  >
-                    <span className="relative z-10 whitespace-nowrap">{item.name}</span>
-                    {location.pathname === item.href && (
-                      <>
-                        {/* pill glow */}
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 pointer-events-none" />
-                        {/* accent dot */}
-                        <div className={`absolute -bottom-1 left-2 w-1.5 h-1.5 rounded-full ${useDarkText ? 'bg-emerald-600' : 'bg-amber-400'}`} />
-                      </>
-                    )}
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </Link>
-                )}
-              </div>
-            ))}
-          </nav>
-
           {/* Enhanced Right Side Actions */}
-          <div className="hidden lg:flex items-center gap-2">
-            <CurrencySelector className={`${useDarkText ? 'bg-white border-gray-200 text-gray-700' : 'bg-white/90 text-gray-800 border border-white/20'} shadow-sm`} />
+          <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
+            <CurrencySelector className={`h-10 min-w-[88px] px-3 text-xs truncate ${useDarkText ? 'bg-white border-gray-200 text-gray-700' : 'bg-white/90 text-gray-800 border border-white/20'} shadow-sm`} />
             <button
               className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 group ${
                 useDarkText
@@ -258,6 +210,75 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
+        </div>
+
+        {/* Second Row: Desktop Nav */}
+        <div className="hidden lg:block">
+          <nav className="relative z-[100] flex items-center justify-center border-t border-white/10 pt-3 pb-6">
+            <div className="relative flex items-center max-w-[1200px] w-full overflow-x-auto overflow-y-visible no-scrollbar whitespace-nowrap gap-1 justify-center px-2">
+              {navItems.map((item) => (
+                <div key={item.name} className="relative about-dropdown">
+                  {item.hasSubmenu ? (
+                    <div className="relative" ref={aboutButtonRef}>
+                      <button
+                        onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
+                        className={`relative px-4 md:px-5 py-2 text-[13px] md:text-sm font-semibold rounded-full transition-all duration-200 group flex items-center gap-2 border ${
+                          useDarkText
+                            ? 'text-gray-700 border-emerald-600/50 hover:bg-emerald-50 hover:text-emerald-700'
+                            : 'text-white border-white/40 hover:bg-white/10 hover:text-white'
+                        } ${location.pathname.startsWith(item.href) ?
+                          (useDarkText
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-600/70'
+                            : 'bg-white/10 text-white border-emerald-300')
+                          : ''}`}
+                      >
+                        <span className="relative z-10 whitespace-nowrap">{item.name}</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${aboutDropdownOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      {aboutDropdownOpen && typeof document !== 'undefined' && createPortal(
+                        <div
+                          ref={aboutPortalRef}
+                          className="fixed w-64 bg-white rounded-xl shadow-classic-lg border border-gray-100 py-2 z-[200]"
+                          style={{ top: aboutPos.top, left: aboutPos.left }}
+                        >
+                          {aboutSubmenuItems.map((subItem) => {
+                            const SubIcon = subItem.icon;
+                            return (
+                              <Link
+                                key={subItem.name}
+                                to={subItem.href}
+                                className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors"
+                                onClick={() => setAboutDropdownOpen(false)}
+                              >
+                                <SubIcon className="w-4 h-4" />
+                                {subItem.name}
+                              </Link>
+                            );
+                          })}
+                        </div>,
+                        (document.getElementById('portal-root') as HTMLElement) || document.body
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      className={`relative px-4 md:px-5 py-2 text-[13px] md:text-sm font-semibold rounded-full transition-all duration-200 group border ${
+                        useDarkText
+                          ? 'text-gray-700 border-emerald-600/50 hover:bg-emerald-50 hover:text-emerald-700'
+                          : 'text-white/90 border-white/40 hover:bg-white/10 hover:text-white'
+                      } ${location.pathname === item.href ? 
+                          (useDarkText
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-600/70'
+                            : 'bg-white/10 text-white border-emerald-300')
+                        : ''}`}
+                    >
+                      <span className="relative z-10 whitespace-nowrap">{item.name}</span>
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+          </nav>
         </div>
       </div>
 

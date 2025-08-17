@@ -39,7 +39,7 @@ const About: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section 
-        className="relative h-96 flex items-center justify-center bg-cover bg-center"
+        className="relative h-96 flex items-center justify-center bg-cover bg-center pt-28 lg:pt-36"
         style={{ backgroundImage: "url('https://images.pexels.com/photos/3889742/pexels-photo-3889742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')" }}
       >
         <div className="absolute inset-0 bg-black/50"></div>

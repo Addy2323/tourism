@@ -118,7 +118,7 @@ const OurTeam: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-emerald-800 to-emerald-900 text-white py-20">
+      <section className="relative bg-gradient-to-r from-emerald-800 to-emerald-900 text-white py-20 pt-28 lg:pt-36">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">

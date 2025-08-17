@@ -4,6 +4,7 @@ import {
   Calendar, Users, MapPin, Phone, Mail, CreditCard, Check, ArrowLeft, 
   Star, Clock, Shield, AlertCircle, X, Award, Eye, TreePine 
 } from 'lucide-react';
+import { useCurrency } from '../contexts/CurrencyContext';
 
 interface BookingFormData {
   destination: string;
@@ -37,6 +38,7 @@ const BookingPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const { format } = useCurrency();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -279,7 +281,7 @@ const BookingPage: React.FC = () => {
                     <h4 className="font-semibold text-gray-900">{option.label}</h4>
                     <p className="text-sm text-gray-600">{option.desc}</p>
                     <p className="text-emerald-600 font-semibold mt-1">
-                      {option.price > 0 ? `+$${option.price}` : 'Included'}
+                      {option.price > 0 ? `+${format(option.price)}` : 'Included'}
                     </p>
                   </div>
                 ))}
@@ -306,7 +308,7 @@ const BookingPage: React.FC = () => {
                     <h4 className="font-semibold text-gray-900">{option.label}</h4>
                     <p className="text-sm text-gray-600">{option.desc}</p>
                     <p className="text-emerald-600 font-semibold mt-1">
-                      {option.price > 0 ? `+$${option.price}` : 'Included'}
+                      {option.price > 0 ? `+${format(option.price)}` : 'Included'}
                     </p>
                   </div>
                 ))}
@@ -491,23 +493,29 @@ const BookingPage: React.FC = () => {
             <div className="bg-gray-50 p-6 rounded-xl">
               <div className="flex justify-between items-center text-lg font-bold">
                 <span>Total Amount:</span>
-                <span className="text-emerald-600">${calculateTotal()}</span>
+                <span className="text-emerald-600">{format(calculateTotal())}</span>
               </div>
               <div className="text-sm text-gray-600 mt-2 space-y-1">
                 <div className="flex justify-between">
                   <span>Base price ({formData.adults} adults, {formData.children} children):</span>
-                  <span>${(parseFloat(formData.packagePrice.replace(/[^0-9.]/g, '')) || 0) * formData.adults + (parseFloat(formData.packagePrice.replace(/[^0-9.]/g, '')) || 0) * 0.7 * formData.children}</span>
+                  <span>
+                    {(() => {
+                      const base = (parseFloat(formData.packagePrice.replace(/[^0-9.]/g, '')) || 0);
+                      const total = base * formData.adults + base * 0.7 * formData.children;
+                      return format(total);
+                    })()}
+                  </span>
                 </div>
                 {formData.accommodation !== 'standard' && (
                   <div className="flex justify-between">
                     <span>Accommodation upgrade:</span>
-                    <span>+${formData.accommodation === 'luxury' ? 200 : 100}</span>
+                    <span>+{format(formData.accommodation === 'luxury' ? 200 : 100)}</span>
                   </div>
                 )}
                 {formData.transport === 'private' && (
                   <div className="flex justify-between">
                     <span>Private transport:</span>
-                    <span>+$150</span>
+                    <span>+{format(150)}</span>
                   </div>
                 )}
               </div>
@@ -602,7 +610,7 @@ const BookingPage: React.FC = () => {
               <h4 className="font-semibold text-gray-900">{formData.destination}</h4>
               <p className="text-emerald-600 font-semibold">{formData.packageName}</p>
               <p className="text-sm text-gray-600">{formData.packageDuration}</p>
-              <p className="text-lg font-bold text-gray-900 mt-2">Total: ${calculateTotal()}</p>
+              <p className="text-lg font-bold text-gray-900 mt-2">Total: {format(calculateTotal())}</p>
             </div>
             {formData.packageIncludes.length > 0 && (
               <div>

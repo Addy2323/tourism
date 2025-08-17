@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, Clock, MapPin, Users, Camera, Eye, Calendar, Phone, Mail, Globe, Award, Heart, Sparkles } from 'lucide-react';
+import { useCurrency } from '../../contexts/CurrencyContext';
 
 const SerengetiDetail: React.FC = () => {
   const navigate = useNavigate();
   const [selectedPackage, setSelectedPackage] = useState(0);
+  const { format } = useCurrency();
 
   const packages = [
     {
@@ -280,7 +282,15 @@ const SerengetiDetail: React.FC = () => {
                       )}
                       <div className="flex justify-between items-start mb-3">
                         <h4 className="font-semibold text-gray-900">{pkg.name}</h4>
-                        <span className="text-emerald-600 font-bold text-lg">{pkg.price}</span>
+                        <span className="text-emerald-600 font-bold text-lg">
+                          {(() => {
+                            const raw = pkg.price as string;
+                            const amount = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0;
+                            const perDay = /\/day\b/i.test(raw);
+                            const perPerson = /\/person\b/i.test(raw);
+                            return `${format(amount)}${perDay ? '/day' : perPerson ? '/person' : ''}`;
+                          })()}
+                        </span>
                       </div>
                       <p className="text-sm text-gray-600 mb-2 leading-relaxed">{pkg.description}</p>
                       <div className="flex items-center justify-between">

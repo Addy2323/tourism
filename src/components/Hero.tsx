@@ -132,7 +132,7 @@ const Hero: FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex items-center overflow-hidden" style={{ willChange: 'transform' }}>
+    <div className="relative min-h-screen flex items-center overflow-hidden pt-28 lg:pt-36" style={{ willChange: 'transform' }}>
       {/* Hardware-accelerated background with optimized transitions */}
       <div className="absolute inset-0" style={{ willChange: 'transform' }}>
         {/* Optimized sliding images with GPU acceleration */}
@@ -183,7 +183,7 @@ const Hero: FC = () => {
         
 
         {/* Enhanced main heading with optimized animations */}
-        <div className="mb-8 mt-16 lg:mt-20 hero-fade-in-up hero-delay-200">
+        <div className="mb-8 mt-4 lg:mt-6 hero-fade-in-up hero-delay-200">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-4 text-balance">
             Discover the{" "}
             <span className="relative">

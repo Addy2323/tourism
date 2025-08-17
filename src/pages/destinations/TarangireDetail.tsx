@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, Clock, MapPin, Users, Camera, Eye, Calendar, Phone, Mail, Globe, TreePine } from 'lucide-react';
+import { useCurrency } from '../../contexts/CurrencyContext';
 
 const TarangireDetail: React.FC = () => {
   const navigate = useNavigate();
   const [selectedPackage, setSelectedPackage] = useState(0);
+  const { format } = useCurrency();
 
   const packages = [
     {
@@ -187,7 +189,15 @@ const TarangireDetail: React.FC = () => {
                     >
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-semibold text-gray-900">{pkg.name}</h4>
-                        <span className="text-emerald-600 font-bold">{pkg.price}</span>
+                        <span className="text-emerald-600 font-bold">
+                          {(() => {
+                            const raw = pkg.price as string;
+                            const amount = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0;
+                            const perDay = /\/day\b/i.test(raw);
+                            const perPerson = /\/person\b/i.test(raw);
+                            return `${format(amount)}${perDay ? '/day' : perPerson ? '/person' : ''}`;
+                          })()}
+                        </span>
                       </div>
                       <p className="text-sm text-gray-600 mb-2">{pkg.description}</p>
                       <p className="text-sm text-gray-500">{pkg.duration}</p>
@@ -239,11 +249,11 @@ const TarangireDetail: React.FC = () => {
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-center space-x-2">
                     <Phone className="w-4 h-4" />
-                                        <span>+255 765 696 445</span>
-                                      </div>
-                                      <div className="flex items-center space-x-2">
-                                        <Mail className="w-4 h-4" />
-                                        <span>info@babblerstours.com</span>
+                    <span>+255 765 696 445</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Mail className="w-4 h-4" />
+                    <span>info@babblerstours.com</span>
                   </div>
                 </div>
               </div>

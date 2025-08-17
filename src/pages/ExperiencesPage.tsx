@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Camera, Mountain, Waves, Utensils, Users, Heart, Star, Clock, CheckCircle, AlertCircle, User, Mail, Phone, Calendar, MapPin, CreditCard, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useCurrency } from '../contexts/CurrencyContext';
 
 const ExperiencesPage: React.FC = () => {
   const navigate = useNavigate();
+  const { format } = useCurrency();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [flashMessage, setFlashMessage] = useState<{type: 'success' | 'error' | 'info', message: string} | null>(null);
@@ -245,7 +247,7 @@ const ExperiencesPage: React.FC = () => {
       image: 'https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1200',
       color: 'from-emerald-500 to-emerald-600',
       experiences: [
-        {
+        { 
           name: 'Big Five Safari',
           duration: '3 days',
           price: '$450/day',
@@ -443,7 +445,7 @@ const ExperiencesPage: React.FC = () => {
       </section>
 
       {/* Experience Categories */}
-      <section className="py-16 px-4 max-w-7xl mx-auto">
+      <section className="py-16 px-4 max-w-7xl mx-auto scroll-mt-36">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Adventure</h2>
           <p className="text-xl text-gray-600">From thrilling safaris to peaceful beach retreats, we offer experiences that create lasting memories</p>
@@ -487,7 +489,15 @@ const ExperiencesPage: React.FC = () => {
                               <Clock className="w-4 h-4" />
                               <span>{experience.duration}</span>
                             </div>
-                            <span className="font-semibold text-emerald-600">{experience.price}</span>
+                            <span className="font-semibold text-emerald-600">
+                              {(() => {
+                                const raw = experience.price as string;
+                                const amount = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0;
+                                const perDay = /\/day\b/i.test(raw);
+                                const perPerson = /\/person\b/i.test(raw);
+                                return `${format(amount)}${perDay ? '/day' : perPerson ? '/person' : ''}`;
+                              })()}
+                            </span>
                           </div>
                           <button 
                             onClick={() => navigate('/booking')}
@@ -707,9 +717,19 @@ const ExperiencesPage: React.FC = () => {
                       }`}
                     >
                       <option value="">Choose your adventure...</option>
-                      {experienceOptions.map((option, index) => (
-                        <option key={index} value={option}>{option}</option>
-                      ))}
+                      {experienceOptions.map((option, index) => {
+                        const match = option.match(/\$(\d+(?:\.\d+)?)/);
+                        const amount = match ? parseFloat(match[1]) : 0;
+                        const perDay = /\/day\b/i.test(option);
+                        const perPerson = /\/person\b/i.test(option);
+                        const formatted = match
+                          ? option.replace(match[0], format(amount))
+                          : option;
+                        const display = perDay || perPerson ? formatted : formatted;
+                        return (
+                          <option key={index} value={option}>{display}</option>
+                        );
+                      })}
                     </select>
                     {formErrors.experience && <p className="text-red-500 text-sm mt-1">{formErrors.experience}</p>}
                   </div>

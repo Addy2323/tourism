@@ -40,9 +40,9 @@ const CommunityImpact: React.FC = () => {
   ];
 
   return (
-    <section id="impact">
+    <section id="impact" className="scroll-mt-36">
       {/* Header Section - Similar to Plan Your Trip */}
-      <div className="bg-emerald-600 py-16 sm:py-20 lg:py-24">
+      <div className="bg-emerald-600 pt-28 lg:pt-36 py-16 sm:py-20 lg:py-24">
         <div className="container-mobile text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 mb-6 animate-fade-in-up">
             <Heart className="w-4 h-4 text-white" />
