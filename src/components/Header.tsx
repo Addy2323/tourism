@@ -293,7 +293,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
               return (
                 <div key={item.name}>
                   {item.hasSubmenu ? (
-                    <div className="space-y-1">
+                    <div className="space-y-1 about-dropdown">
                       <button
                         onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
                         className={`w-full flex items-center justify-between p-4 rounded-xl transition-all duration-200 font-medium text-base group ${

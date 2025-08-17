@@ -248,13 +248,7 @@ const Hero: FC = () => {
         </div>
       </div>
 
-      {/* Optimized scroll indicator */}
-      <div className="fixed top-80 right-3 md:bottom-8 md:right-6 z-30 pointer-events-none hero-bounce">
-        <div className="w-7 h-12 border-2 border-white/70 bg-black/20 backdrop-blur-sm rounded-full flex justify-center items-start">
-          <div className="w-1 h-3 bg-white/80 rounded-full mt-2 hero-pulse"></div>
-        </div>
-        <p className="hidden sm:block text-white/80 text-xs mt-2 font-medium text-right drop-shadow">Scroll to explore</p>
-      </div>
+    
     </div>
   );
 };
