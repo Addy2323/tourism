@@ -8,6 +8,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { CurrencyProvider } from './contexts/CurrencyContext';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import AdminTest from './components/AdminTest';
+import { usePerformance } from './hooks/usePerformance';
 
 // Preload critical components immediately
 const Home = lazy(() => import('./pages/Home'));
@@ -79,6 +80,8 @@ const ScrollToTop: React.FC = () => {
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { metrics } = usePerformance();
+  const hzClass = metrics.isUltraHighRefreshRate ? 'hz-240' : metrics.isHighRefreshRate ? 'hz-120' : '';
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -109,7 +112,7 @@ function App() {
     <Router>
       <AuthProvider>
         <CurrencyProvider>
-          <div className="min-h-screen bg-white">
+          <div className={`min-h-screen bg-white ${hzClass}`}>
             <ScrollToTop />
             <Header onAuthClick={() => setIsAuthModalOpen(true)} />
             

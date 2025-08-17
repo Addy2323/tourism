@@ -13,6 +13,8 @@
     /* High refresh rate optimizations */
     -webkit-overflow-scrolling: touch;
     scroll-padding-top: 80px;
+    /* Prevent layout shift when scrollbar appears/disappears */
+    scrollbar-gutter: stable both-edges;
   }
   
   body {
@@ -184,6 +186,19 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Use on long sections to let the browser skip offscreen rendering */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 600px;
+  }
+
+  /* Helps sticky headers render cheaply during scroll */
+  .sticky-accelerated {
+    contain: paint;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
   .instant-feedback {
     transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -296,9 +311,11 @@
   @keyframes fadeIn {
     from {
       opacity: 0;
+      transform: translateY(30px);
     }
     to {
       opacity: 1;
+      transform: translateY(0);
     }
   }
 
@@ -370,41 +387,22 @@
     animation: bounce 2s infinite;
   }
 
-  /* High refresh rate optimizations */
-  @media (min-resolution: 120dpi) and (min-refresh-rate: 120Hz) {
-    * {
-      transition-duration: 0.2s !important;
-    }
-    
-    .animate-fadeIn,
-    .animate-fadeInUp,
-    .animate-slideDown,
-    .animate-slideUp {
-      animation-duration: 0.4s;
-    }
-    
-    .animate-bounce {
-      animation-duration: 1.5s;
-    }
-  }
+  /* Class-based high refresh rate tuning (applied by App via usePerformance) */
+  .hz-120 * { transition-duration: 0.2s !important; }
+  .hz-240 * { transition-duration: 0.15s !important; }
 
-  /* Ultra-high refresh rate optimizations (240Hz+) */
-  @media (min-refresh-rate: 240Hz) {
-    * {
-      transition-duration: 0.15s !important;
-    }
-    
-    .animate-fadeIn,
-    .animate-fadeInUp,
-    .animate-slideDown,
-    .animate-slideUp {
-      animation-duration: 0.3s;
-    }
-    
-    .animate-bounce {
-      animation-duration: 1s;
-    }
-  }
+  .hz-120 .animate-fadeIn,
+  .hz-120 .animate-fadeInUp,
+  .hz-120 .animate-slideDown,
+  .hz-120 .animate-slideUp { animation-duration: 0.4s !important; }
+
+  .hz-240 .animate-fadeIn,
+  .hz-240 .animate-fadeInUp,
+  .hz-240 .animate-slideDown,
+  .hz-240 .animate-slideUp { animation-duration: 0.3s !important; }
+
+  .hz-120 .animate-bounce { animation-duration: 1.5s !important; }
+  .hz-240 .animate-bounce { animation-duration: 1s !important; }
 
   /* Reduce motion for accessibility */
   @media (prefers-reduced-motion: reduce) {
