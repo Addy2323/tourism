@@ -120,6 +120,31 @@ export default {
   			soft: '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
   			medium: '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
   			large: '0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05)'
+  		},
+  		screens: {
+  			// extra small phones
+  			xs: '480px',
+  			// default Tailwind screens remain available: sm, md, lg, xl
+  			// wide screens
+  			'2xl': '1440px',
+  			'3xl': '1920px',
+  			// height-based queries
+  			short: { raw: '(max-height: 700px)' },
+  			tall: { raw: '(min-height: 800px)' },
+  			// orientation queries
+  			land: { raw: '(orientation: landscape)' },
+  			port: { raw: '(orientation: portrait)' }
+  		},
+  		container: {
+  			center: true,
+  			padding: {
+  				DEFAULT: '1rem',
+  				sm: '1rem',
+  				md: '2rem',
+  				lg: '2rem',
+  				xl: '2.5rem',
+  				'2xl': '3rem'
+  			}
   		}
   	}
   },

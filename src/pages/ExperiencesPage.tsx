@@ -434,11 +434,11 @@ const ExperiencesPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative h-96 bg-gradient-to-r from-emerald-600 to-emerald-800 flex items-center justify-center">
+      <section className="relative h-64 xs:h-80 md:h-96 tall:h-[28rem] short:h-56 bg-gradient-to-r from-emerald-600 to-emerald-800 flex items-center justify-center">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="relative z-10 text-center text-white">
-          <h1 className="text-5xl font-bold mb-4">Unforgettable Experiences</h1>
-          <p className="text-xl max-w-2xl mx-auto">
+          <h1 className="text-3xl xs:text-4xl md:text-5xl 2xl:text-6xl font-bold mb-4">Unforgettable Experiences</h1>
+          <p className="text-base xs:text-lg md:text-xl max-w-2xl mx-auto">
             Discover the magic of Tanzania through our carefully curated adventures
           </p>
         </div>
@@ -447,8 +447,8 @@ const ExperiencesPage: React.FC = () => {
       {/* Experience Categories */}
       <section className="py-16 px-4 max-w-7xl mx-auto scroll-mt-36">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Adventure</h2>
-          <p className="text-xl text-gray-600">From thrilling safaris to peaceful beach retreats, we offer experiences that create lasting memories</p>
+          <h2 className="text-3xl xs:text-4xl font-bold text-gray-900 mb-4">Choose Your Adventure</h2>
+          <p className="text-base xs:text-lg text-gray-600">From thrilling safaris to peaceful beach retreats, we offer experiences that create lasting memories</p>
         </div>
 
         <div className="space-y-16">
@@ -467,7 +467,7 @@ const ExperiencesPage: React.FC = () => {
 
                 {/* Experiences Grid */}
                 <div className="p-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
                     {category.experiences.map((experience, index) => (
                       <div key={index} className="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div className="relative h-48">
@@ -520,11 +520,11 @@ const ExperiencesPage: React.FC = () => {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Adventurers Say</h2>
-            <p className="text-xl text-gray-600">Real experiences from real travelers</p>
+            <h2 className="text-3xl xs:text-4xl font-bold text-gray-900 mb-4">What Our Adventurers Say</h2>
+            <p className="text-base xs:text-lg text-gray-600">Real experiences from real travelers</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-8">
             {[
               {
                 name: "Sarah Johnson",

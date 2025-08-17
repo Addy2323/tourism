@@ -156,7 +156,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center p-2 pt-4 sm:p-4 sm:pt-10 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-start short:items-center justify-center p-2 xs:p-3 pt-4 short:pt-6 sm:p-4 sm:pt-10 overflow-y-auto">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fadeIn"
@@ -164,7 +164,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       ></div>
 
       {/* Modal */}
-      <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-[22rem] sm:max-w-md animate-slideUp overflow-hidden">
+      <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-[22rem] xs:max-w-sm sm:max-w-md md:max-w-lg 2xl:max-w-xl animate-slideUp overflow-hidden">
         {/* Header with Green Background */}
         <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-3 sm:p-4 text-center relative">
           <button
@@ -196,7 +196,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-3 space-y-3 sm:p-4 sm:space-y-4">
+        <form onSubmit={handleSubmit} className="p-3 xs:p-4 space-y-3 sm:space-y-4">
           {isLogin && flash && (
             <div className={`flex items-start gap-3 p-2.5 sm:p-3 rounded-lg border shadow-sm animate-slideDown ${
               flashType === 'error' ? 'border-red-200 bg-red-50 text-red-800' : 'border-emerald-200 bg-emerald-50 text-emerald-800'
@@ -315,7 +315,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         </form>
 
         {/* Footer */}
-        <div className="px-3 py-2.5 sm:px-4 sm:py-3 bg-emerald-50 text-center border-t border-emerald-100">
+        <div className="px-3 xs:px-4 py-2.5 sm:py-3 bg-emerald-50 text-center border-t border-emerald-100">
           <p className="text-xs text-gray-600">
             {isLogin ? "New to Babblers Tours?" : "Already exploring with us?"}
           </p>

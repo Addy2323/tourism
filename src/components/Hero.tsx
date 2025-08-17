@@ -132,7 +132,7 @@ const Hero: FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex items-center overflow-hidden pt-28 lg:pt-36" style={{ willChange: 'transform' }}>
+    <div className="relative min-h-screen short:min-h-[80vh] tall:min-h-screen flex items-center overflow-hidden pt-28 short:pt-24 port:pt-24 lg:pt-36" style={{ willChange: 'transform' }}>
       {/* Hardware-accelerated background with optimized transitions */}
       <div className="absolute inset-0" style={{ willChange: 'transform' }}>
         {/* Optimized sliding images with GPU acceleration */}
@@ -147,7 +147,7 @@ const Hero: FC = () => {
           {backgroundImages.map((image, index) => (
             <div
               key={index}
-              className="w-full h-screen flex-shrink-0"
+              className="w-full h-screen short:h-[75vh] tall:h-screen flex-shrink-0"
               style={{
                 backgroundImage: `url(${image})`,
                 backgroundSize: 'cover',

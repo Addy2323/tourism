@@ -284,12 +284,12 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
 
       {/* Enhanced Mobile Navigation */}
       <div
-        className={`mobile-menu fixed top-0 right-0 bottom-0 w-full max-w-sm lg:hidden bg-white shadow-classic-xl transition-all duration-300 ease-out transform z-50 ${
+        className={`mobile-menu fixed top-0 right-0 bottom-0 w-[78vw] xs:w-[80vw] sm:w-[360px] max-w-[360px] lg:hidden bg-ocean-800 text-white shadow-classic-xl transition-transform duration-300 ease-out transform z-50 ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Enhanced Mobile Header */}
-        <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-emerald-600 to-emerald-700">
+        <div className="p-6 border-b border-white/10 bg-gradient-to-r from-ocean-700 to-ocean-800">
           <div className="flex items-center justify-between">
             <Link 
               to="/" 
@@ -302,7 +302,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                 className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm group-hover:scale-105 transition-transform" 
               />
               <div className="text-white">
-                <h3 className="font-bold text-lg">Babblers Tours</h3>
+                <h3 className="font-bold text-lg tracking-wide">Babblers Tours</h3>
                 <p className="text-xs opacity-90">Authentic Tanzania</p>
               </div>
             </Link>
@@ -318,8 +318,8 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
         </div>
 
         {/* Enhanced Navigation Links */}
-        <nav className="flex-1 overflow-y-auto bg-white">
-          <div className="p-6 space-y-2">
+        <nav className="flex-1 overflow-y-auto bg-ocean-800">
+          <div className="p-4 space-y-1">
             {navItems.map((item, index) => {
               const IconComponent = item.icon;
               const isActive = location.pathname === item.href || (item.hasSubmenu && location.pathname.startsWith(item.href));
@@ -330,19 +330,19 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                     <div className="space-y-1 about-dropdown">
                       <button
                         onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
-                        className={`w-full flex items-center justify-between p-4 rounded-xl transition-all duration-200 font-medium text-base group ${
+                        className={`w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200 font-semibold tracking-wide text-sm uppercase group ${
                           isActive
-                            ? 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-l-4 border-emerald-600 shadow-sm'
-                            : 'text-gray-700 hover:bg-gray-50 hover:text-emerald-700'
+                            ? 'bg-white/10 text-white border-l-4 border-white shadow-sm'
+                            : 'text-white/90 hover:bg-white/5 hover:text-white'
                         }`}
                         style={{ animationDelay: `${index * 0.05}s` }}
                       >
                         <div className="flex items-center space-x-4">
                           <div className={`p-2 rounded-lg transition-colors ${
-                            isActive ? 'bg-emerald-200' : 'bg-gray-100 group-hover:bg-emerald-100'
+                            isActive ? 'bg-white/20' : 'bg-white/10 group-hover:bg-white/15'
                           }`}>
                             <IconComponent className={`w-5 h-5 transition-colors ${
-                              isActive ? 'text-emerald-700' : 'text-gray-600 group-hover:text-emerald-600'
+                              isActive ? 'text-white' : 'text-white/90 group-hover:text-white'
                             }`} />
                           </div>
                           <span className="flex-1">{item.name}</span>
@@ -350,7 +350,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                         
                         <ChevronDown className={`w-4 h-4 transition-all duration-200 ${
                           aboutDropdownOpen ? 'rotate-180' : ''
-                        } ${isActive ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-500'}`} />
+                        } ${isActive ? 'text-white' : 'text-white/60 group-hover:text-white'}`} />
                       </button>
                       
                       {/* Mobile Submenu */}
@@ -364,10 +364,10 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                                 key={subItem.name}
                                 to={subItem.href}
                                 onClick={() => setIsMenuOpen(false)}
-                                className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 text-sm ${
+                                className={`flex items-center space-x-3 p-2.5 rounded-lg transition-all duration-200 text-xs tracking-wide uppercase ${
                                   isSubActive
-                                    ? 'bg-emerald-100 text-emerald-800 border-l-2 border-emerald-600'
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-emerald-600'
+                                    ? 'bg-white/10 text-white border-l-2 border-white'
+                                    : 'text-white/80 hover:bg-white/5 hover:text-white'
                                 }`}
                               >
                                 <SubIcon className="w-4 h-4" />
@@ -382,26 +382,26 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                     <Link
                       to={item.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center justify-between p-4 rounded-xl transition-all duration-200 font-medium text-base group ${
+                      className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 font-semibold tracking-wide text-sm uppercase group ${
                         isActive
-                          ? 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-l-4 border-emerald-600 shadow-sm'
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-emerald-700'
+                          ? 'bg-white/10 text-white border-l-4 border-white shadow-sm'
+                          : 'text-white/90 hover:bg-white/5 hover:text-white'
                       }`}
                       style={{ animationDelay: `${index * 0.05}s` }}
                     >
                       <div className="flex items-center space-x-4">
                         <div className={`p-2 rounded-lg transition-colors ${
-                          isActive ? 'bg-emerald-200' : 'bg-gray-100 group-hover:bg-emerald-100'
+                          isActive ? 'bg-white/20' : 'bg-white/10 group-hover:bg-white/15'
                         }`}>
                           <IconComponent className={`w-5 h-5 transition-colors ${
-                            isActive ? 'text-emerald-700' : 'text-gray-600 group-hover:text-emerald-600'
+                            isActive ? 'text-white' : 'text-white/90 group-hover:text-white'
                           }`} />
                         </div>
                         <span className="flex-1">{item.name}</span>
                       </div>
                       
                       <ChevronRight className={`w-4 h-4 transition-all duration-200 ${
-                        isActive ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-500 group-hover:translate-x-1'
+                        isActive ? 'text-white' : 'text-white/60 group-hover:text-white group-hover:translate-x-1'
                       }`} />
                     </Link>
                   )}
@@ -411,13 +411,13 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
           </div>
 
           {/* Enhanced Bottom Actions */}
-          <div className="border-t border-gray-100 bg-gray-50 p-6 space-y-3">
+          <div className="border-t border-white/10 bg-ocean-800 p-4 space-y-3">
             {/* Currency Selector */}
             <div className="w-full">
-              <CurrencySelector className="w-full bg-white border-gray-200 text-gray-700" />
+              <CurrencySelector className="w-full bg-white text-gray-700" />
             </div>
             {/* Search Button */}
-            <button className="w-full flex items-center justify-center space-x-3 bg-white hover:bg-gray-100 text-gray-700 py-4 px-4 rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-classic border border-gray-200">
+            <button className="w-full flex items-center justify-center space-x-3 bg-white/10 hover:bg-white/15 text-white py-3 px-4 rounded-lg font-semibold tracking-wide text-sm uppercase transition-all duration-200 border border-white/10">
               <Search className="w-5 h-5" />
               <span>Search Destinations</span>
             </button>
@@ -426,7 +426,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
             {isAuthenticated ? (
               <button
                 onClick={logout}
-                className="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-4 px-4 rounded-xl font-medium transition-all duration-200 shadow-classic hover:shadow-classic-lg transform hover:scale-[1.02]"
+                className="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 px-4 rounded-lg font-semibold tracking-wide text-sm uppercase transition-all duration-200"
               >
                 <LogOut className="w-5 h-5" />
                 <span>Logout</span>
@@ -434,7 +434,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
             ) : (
               <button
                 onClick={onAuthClick}
-                className="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 px-4 rounded-xl font-medium transition-all duration-200 shadow-classic hover:shadow-classic-lg transform hover:scale-[1.02]"
+                className="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-3 px-4 rounded-lg font-semibold tracking-wide text-sm uppercase transition-all duration-200"
               >
                 <User className="w-5 h-5" />
                 <span>Sign In / Register</span>
@@ -447,7 +447,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
       {/* Mobile Menu Backdrop */}
       {isMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm lg:hidden z-40 transition-opacity duration-300"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm lg:hidden z-40 transition-opacity duration-300"
           onClick={() => setIsMenuOpen(false)}
         />
       )}
