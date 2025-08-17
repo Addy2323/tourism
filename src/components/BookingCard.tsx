@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Calendar, DollarSign, Users, User, Download, Mail, Star } from 'lucide-react';
 import { Booking } from '../data/mockData';
+import Price from './Price';
 
 interface BookingCardProps {
   booking: Booking;
@@ -32,7 +33,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking }) => {
           <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-4">
             <div className="flex items-center"><Calendar className="w-4 h-4 mr-2 text-emerald-600" /> Dates: {dates}</div>
             <div className="flex items-center"><Users className="w-4 h-4 mr-2 text-emerald-600" /> Guests: {guests}</div>
-            <div className="flex items-center"><DollarSign className="w-4 h-4 mr-2 text-emerald-600" /> Price: ${price.toLocaleString()}</div>
+            <div className="flex items-center"><DollarSign className="w-4 h-4 mr-2 text-emerald-600" /> Price: <Price amountUSD={price} /></div>
             <div className="flex items-center"><User className="w-4 h-4 mr-2 text-emerald-600" /> Guide: {guide}</div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -7,23 +8,49 @@ interface AuthModalProps {
   onClose: () => void;
 }
 
+type StoredUser = {
+  name: string;
+  email: string;
+  password: string; // Note: plain text for demo only
+  role: 'user';
+};
+
+const REGISTERED_USERS_KEY = 'registered_users';
+
+type FlashType = '' | 'success' | 'error';
+
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [flash, setFlash] = useState<string>('');
+  const [flashType, setFlashType] = useState<FlashType>('');
   const [formData, setFormData] = useState({
-    name: 'John Doe', // Default name for login simulation
+    name: '', // Default name for login simulation
     email: '',
     password: '',
     confirmPassword: ''
   });
 
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
+  const loadRegistered = (): StoredUser[] => {
+    try {
+      const s = localStorage.getItem(REGISTERED_USERS_KEY);
+      return s ? JSON.parse(s) as StoredUser[] : [];
+    } catch {
+      return [];
+    }
+  };
+  const saveRegistered = (users: StoredUser[]) => {
+    try { localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users)); } catch {}
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Test credentials with passwords
     const testAccounts = [
       {
@@ -52,18 +79,72 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       }
     ];
 
-    // Find matching account
-    const account = testAccounts.find(acc => 
-      acc.email === formData.email && acc.password === formData.password
-    );
+    const registered = loadRegistered();
 
-    if (account) {
-      // Successful login
-      login({ name: account.name, email: account.email, role: account.role });
-      onClose();
+    if (isLogin) {
+      // Try local registered users first
+      const local = registered.find(u => u.email === formData.email && u.password === formData.password);
+      if (local) {
+        login({ name: local.name, email: local.email, role: 'user' });
+        onClose();
+        navigate('/dashboard', { replace: true });
+        return;
+      }
+
+      // Fallback: test accounts
+      const account = testAccounts.find(acc => 
+        acc.email === formData.email && acc.password === formData.password
+      );
+
+      if (account) {
+        login({ name: account.name, email: account.email, role: account.role });
+        onClose();
+        if (account.role === 'admin') {
+          navigate('/admin', { replace: true });
+        } else {
+          navigate('/dashboard', { replace: true });
+        }
+      } else {
+        setFlashType('error');
+        setFlash('Invalid email or password. If you are new, please register.');
+        setTimeout(() => { setFlash(''); setFlashType(''); }, 6000);
+      }
     } else {
-      // Invalid credentials - show error
-      alert('Invalid email or password. Try one of the test accounts:\n\nAdmin:\n- admin@babblerstours.com / admin123\n- superadmin@babblerstours.com / super123\n\nUser:\n- user@babblerstours.com / user123\n- sarah@example.com / sarah123');
+      // Registration flow
+      if (!formData.name.trim()) {
+        alert('Please enter your full name.');
+        return;
+      }
+      if (formData.password.length < 6) {
+        alert('Password must be at least 6 characters.');
+        return;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+      // Prevent duplicate emails (across registered and test accounts)
+      const exists = registered.some(u => u.email === formData.email) || testAccounts.some(t => t.email === formData.email);
+      if (exists) {
+        alert('An account with this email already exists. Please log in.');
+        return;
+      }
+
+      const newUser: StoredUser = {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        role: 'user'
+      };
+
+      const updated = [newUser, ...registered];
+      saveRegistered(updated);
+
+      setIsLogin(true);
+      setFlashType('success');
+      setFlash('Account created successfully! Please sign in to continue.');
+      setFormData(prev => ({ ...prev, email: newUser.email, password: '', confirmPassword: '' }));
+      setTimeout(() => { setFlash(''); setFlashType(''); }, 6000);
     }
   };
 
@@ -116,6 +197,28 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          {isLogin && flash && (
+            <div className={`flex items-start gap-3 p-3 rounded-lg border shadow-sm animate-slideDown ${
+              flashType === 'error' ? 'border-red-200 bg-red-50 text-red-800' : 'border-emerald-200 bg-emerald-50 text-emerald-800'
+            }`}>
+              <div className="mt-0.5">
+                {flashType === 'error' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-red-600">
+                    <path fillRule="evenodd" d="M9.401 3.004a3.75 3.75 0 0 1 5.197 0l6.398 6.397a3.75 3.75 0 0 1 0 5.197l-6.398 6.398a3.75 3.75 0 0 1-5.197 0L3.004 14.598a3.75 3.75 0 0 1 0-5.197l6.397-6.397Zm3.099 4.246a.75.75 0 0 0-1.5 0v5.25a.75.75 0 0 0 1.5 0V7.25Zm-.75 8.25a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-emerald-600">
+                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-2.59a.75.75 0 10-1.22-.86l-3.284 4.662-1.69-1.69a.75.75 0 10-1.06 1.06l2.25 2.25a.75.75 0 001.155-.094l3.85-5.328z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </div>
+              <div className="text-sm">
+                <p className="font-semibold">{flashType === 'error' ? 'Sign-in Failed' : 'Registration Successful'}</p>
+                <p className={flashType === 'error' ? 'text-red-700' : 'text-emerald-700'}>{flash}</p>
+              </div>
+              <button type="button" onClick={() => { setFlash(''); setFlashType(''); }} className={`${flashType === 'error' ? 'text-red-700 hover:text-red-900' : 'text-emerald-700 hover:text-emerald-900'} ml-auto`}>✕</button>
+            </div>
+          )}
           {!isLogin && (
             <div className="space-y-1">
               <label className="block text-xs font-medium text-gray-700">Full Name</label>

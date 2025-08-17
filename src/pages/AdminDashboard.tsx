@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { DollarSign, Users, Briefcase, CheckCircle, Shield, Settings, Bell, BarChart3, Calendar, MapPin, Star, TrendingUp, UserCheck, AlertTriangle, Plus, Filter, Search, Edit3, Eye, Trash2, Download, Upload } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { DollarSign, Users, Briefcase, CheckCircle, Shield, Settings, Bell, BarChart3, Calendar, MapPin, Star, TrendingUp, UserCheck, AlertTriangle, Plus, Filter, Search, Edit3, Eye, Trash2, Download, Upload, Camera } from 'lucide-react';
 import { adminStats, destinationData as initialDestinationData, DestinationData, userData as initialUserData, UserData } from '../data/adminMockData';
 import AdminStatCard from '../components/AdminStatCard';
 import DestinationManagementCard from '../components/DestinationManagementCard';
@@ -8,29 +8,101 @@ import TopDestinations from '../components/TopDestinations';
 import AdminDestinationModal from '../components/AdminDestinationModal';
 import AdminUserModal from '../components/AdminUserModal';
 import AdminBookingModal from '../components/AdminBookingModal';
+import type { BookingData } from '../components/AdminBookingModal';
+import { useCurrency } from '../contexts/CurrencyContext';
+import Price from '../components/Price';
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [destinations, setDestinations] = useState(initialDestinationData);
-  const [users, setUsers] = useState(initialUserData);
+  const STORAGE_KEYS = {
+    destinations: 'admin_destinations',
+    users: 'admin_users',
+    bookings: 'admin_bookings',
+  } as const;
+
+  // Admin avatar persistence
+  const ADMIN_AVATAR_KEY = 'admin_avatar';
+  const [adminAvatar, setAdminAvatar] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(ADMIN_AVATAR_KEY);
+    } catch {
+      return null;
+    }
+  });
+  useEffect(() => {
+    try {
+      if (adminAvatar) localStorage.setItem(ADMIN_AVATAR_KEY, adminAvatar);
+      else localStorage.removeItem(ADMIN_AVATAR_KEY);
+    } catch {}
+  }, [adminAvatar]);
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const onPickAdminAvatar = () => avatarInputRef.current?.click();
+  const onAdminAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = typeof reader.result === 'string' ? reader.result : '';
+      if (dataUrl) setAdminAvatar(dataUrl);
+    };
+    reader.readAsDataURL(file);
+    e.currentTarget.value = '';
+  };
+
+  const [destinations, setDestinations] = useState<DestinationData[]>(() => {
+    try {
+      const s = localStorage.getItem(STORAGE_KEYS.destinations);
+      return s ? JSON.parse(s) : initialDestinationData;
+    } catch {
+      return initialDestinationData;
+    }
+  });
+
+  const [users, setUsers] = useState<UserData[]>(() => {
+    try {
+      const s = localStorage.getItem(STORAGE_KEYS.users);
+      return s ? JSON.parse(s) : initialUserData;
+    } catch {
+      return initialUserData;
+    }
+  });
+
+  const [bookings, setBookings] = useState<BookingData[]>(() => {
+    try {
+      const s = localStorage.getItem(STORAGE_KEYS.bookings);
+      return s ? JSON.parse(s) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEYS.destinations, JSON.stringify(destinations)); } catch {}
+  }, [destinations]);
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEYS.users, JSON.stringify(users)); } catch {}
+  }, [users]);
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(bookings)); } catch {}
+  }, [bookings]);
+
   const [destinationModalOpen, setDestinationModalOpen] = useState(false);
   const [userModalOpen, setUserModalOpen] = useState(false);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [editingDestination, setEditingDestination] = useState<DestinationData | undefined>(undefined);
   const [editingUser, setEditingUser] = useState<UserData | undefined>(undefined);
-  const [editingBooking, setEditingBooking] = useState(undefined);
+  const [editingBooking, setEditingBooking] = useState<BookingData | undefined>(undefined);
 
   const handleDestinationSave = (destination: DestinationData) => {
     if (destination.id) {
-      // Update existing destination
-      setDestinations(prev => prev.map(dest => 
-        dest.id === destination.id ? destination : dest
-      ));
+      setDestinations(prev => prev.map(dest => dest.id === destination.id ? destination : dest));
     } else {
-      // Create new destination
+      const nextId = Math.max(0, ...destinations.map(d => d.id)) + 1;
       const newDestination = {
         ...destination,
-        id: Math.max(...destinations.map(d => d.id)) + 1,
+        id: nextId,
         bookings: 0,
         revenue: 0,
         totalBookings: 0,
@@ -43,18 +115,16 @@ const AdminDashboard: React.FC = () => {
     setEditingDestination(undefined);
   };
 
+  const handleDestinationDelete = (id: number) => {
+    setDestinations(prev => prev.filter(d => d.id !== id));
+  };
+
   const handleUserSave = (user: UserData) => {
     if (user.id) {
-      // Update existing user
-      setUsers(prev => prev.map(u => 
-        u.id === user.id ? user : u
-      ));
+      setUsers(prev => prev.map(u => u.id === user.id ? user : u));
     } else {
-      // Create new user
-      const newUser = {
-        ...user,
-        id: Math.max(...users.map(u => u.id)) + 1
-      };
+      const nextId = Math.max(0, ...users.map(u => u.id)) + 1;
+      const newUser = { ...user, id: nextId };
       setUsers(prev => [...prev, newUser]);
     }
     
@@ -62,10 +132,23 @@ const AdminDashboard: React.FC = () => {
     setEditingUser(undefined);
   };
 
-  const handleBookingSave = (booking: any) => {
-    console.log('Saving booking:', booking);
-    // Here you would typically save to your backend
-    alert('Booking saved successfully!');
+  const handleUserDelete = (id: number) => {
+    setUsers(prev => prev.filter(u => u.id !== id));
+  };
+
+  const handleBookingSave = (booking: BookingData) => {
+    if (booking.id) {
+      setBookings(prev => prev.map(b => b.id === booking.id ? booking : b));
+    } else {
+      const nextId = Math.max(0, ...bookings.map(b => b.id ?? 0)) + 1;
+      setBookings(prev => [...prev, { ...booking, id: nextId }]);
+    }
+    setBookingModalOpen(false);
+    setEditingBooking(undefined);
+  };
+
+  const handleBookingDelete = (id: number) => {
+    setBookings(prev => prev.filter(b => b.id !== id));
   };
 
   const openDestinationModal = (destination?: DestinationData) => {
@@ -78,7 +161,7 @@ const AdminDashboard: React.FC = () => {
     setUserModalOpen(true);
   };
 
-  const openBookingModal = (booking = undefined) => {
+  const openBookingModal = (booking?: BookingData) => {
     setEditingBooking(booking);
     setBookingModalOpen(true);
   };
@@ -88,11 +171,18 @@ const AdminDashboard: React.FC = () => {
       case 'overview':
         return <OverviewTab onAddDestination={() => openDestinationModal()} onAddUser={() => openUserModal()} onAddBooking={() => openBookingModal()} />;
       case 'bookings':
-        return <BookingsManagementTab onAddBooking={() => openBookingModal()} onEditBooking={openBookingModal} />;
+        return (
+          <BookingsManagementTab 
+            bookings={bookings}
+            onAddBooking={() => openBookingModal()} 
+            onEditBooking={openBookingModal}
+            onDeleteBooking={handleBookingDelete}
+          />
+        );
       case 'users':
-        return <UsersManagementTab users={users} onAddUser={() => openUserModal()} onEditUser={openUserModal} />;
+        return <UsersManagementTab users={users} onAddUser={() => openUserModal()} onEditUser={openUserModal} onDeleteUser={(u) => handleUserDelete(u.id)} />;
       case 'destinations':
-        return <DestinationsTab destinations={destinations} onAddDestination={() => openDestinationModal()} onEditDestination={openDestinationModal} />;
+        return <DestinationsTab destinations={destinations} onAddDestination={() => openDestinationModal()} onEditDestination={openDestinationModal} onDeleteDestination={(d) => handleDestinationDelete(d.id)} />;
       case 'analytics':
         return <AnalyticsTab />;
       default:
@@ -109,12 +199,32 @@ const AdminDashboard: React.FC = () => {
             {/* Admin Profile Section */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 flex-1">
               <div className="relative flex-shrink-0">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                  <Shield size={32} />
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
-                  <CheckCircle size={16} className="text-white" />
-                </div>
+                {adminAvatar ? (
+                  <img
+                    src={adminAvatar}
+                    alt="Admin avatar"
+                    className="w-20 h-20 rounded-2xl object-cover shadow-lg"
+                  />
+                ) : (
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                    <Shield size={32} />
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={onPickAdminAvatar}
+                  className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-blue-600 hover:bg-blue-50 transition-colors"
+                  aria-label="Upload admin avatar"
+                >
+                  <Camera size={14} />
+                </button>
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onAdminAvatarChange}
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
@@ -166,13 +276,16 @@ const AdminDashboard: React.FC = () => {
             icon={DollarSign} 
             title="Monthly Revenue" 
             value="$127,450" 
+            numericValue={127450}
             subtitle="+12.5% from last month"
             gradient="from-emerald-600 to-emerald-700"
+            isCurrency
           />
           <AdminStatCardLocal 
             icon={Users} 
             title="Total Users" 
             value={users.length.toString()} 
+            numericValue={users.length}
             change="+23 this week"
             color="text-blue-600"
             bgColor="bg-blue-50"
@@ -181,6 +294,7 @@ const AdminDashboard: React.FC = () => {
             icon={Briefcase} 
             title="Active Bookings" 
             value="89" 
+            numericValue={89}
             change="+5 today"
             color="text-purple-600"
             bgColor="bg-purple-50"
@@ -189,6 +303,7 @@ const AdminDashboard: React.FC = () => {
             icon={CheckCircle} 
             title="Completed Trips" 
             value="342" 
+            numericValue={342}
             change="+18 this month"
             color="text-emerald-600"
             bgColor="bg-emerald-50"
@@ -208,8 +323,8 @@ const AdminDashboard: React.FC = () => {
           </nav>
         </div>
 
-        {/* Tab Content */}
-        <div>
+        {/* Tab Content with subtle transition */}
+        <div key={activeTab} className="transition-all duration-300 ease-out opacity-100 translate-y-0 will-change-transform">
           {renderContent()}
         </div>
 
@@ -248,6 +363,43 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
+// Count-up hook
+function useCountUp(target: number, duration = 1000, startOnView = true) {
+  const [value, setValue] = useState(0);
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    let raf = 0;
+    let start = 0;
+    let started = !startOnView;
+    const el = ref.current;
+    let io: IntersectionObserver | null = null;
+    const run = (ts: number) => {
+      if (!start) start = ts;
+      const p = Math.min(1, (ts - start) / duration);
+      setValue(Math.floor(target * p));
+      if (p < 1) raf = requestAnimationFrame(run);
+    };
+    const begin = () => {
+      if (started) return;
+      started = true;
+      raf = requestAnimationFrame(run);
+    };
+    if (startOnView && el && 'IntersectionObserver' in window) {
+      io = new IntersectionObserver((entries) => {
+        if (entries.some(e => e.isIntersecting)) begin();
+      }, { threshold: 0.2 });
+      io.observe(el);
+    } else {
+      begin();
+    }
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      if (io && el) io.unobserve(el);
+    };
+  }, [target, duration, startOnView]);
+  return { value, ref } as const;
+}
+
 // Enhanced Admin Stat Card Components
 const AdminStatCardPrimary: React.FC<{ 
   icon: React.ElementType; 
@@ -255,20 +407,31 @@ const AdminStatCardPrimary: React.FC<{
   value: string; 
   subtitle?: string;
   gradient: string;
-}> = ({ icon: Icon, title, value, subtitle, gradient }) => (
-  <div className={`bg-gradient-to-br ${gradient} text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}>
-    <div className="flex items-start justify-between mb-4">
-      <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
-        <Icon className="w-6 h-6" />
-      </div>
-      <div className="text-right">
-        <p className="text-sm font-medium opacity-90">{title}</p>
-        <p className="text-xl font-bold">{value}</p>
-        {subtitle && <p className="text-xs opacity-75 mt-1">{subtitle}</p>}
+  numericValue?: number; // optional for count-up
+  prefix?: string;
+  suffix?: string;
+  isCurrency?: boolean;
+}> = ({ icon: Icon, title, value, subtitle, gradient, numericValue, prefix = '', suffix = '', isCurrency = false }) => {
+  const { value: n, ref } = useCountUp(numericValue ?? 0, 900);
+  const { format } = useCurrency();
+  const display = numericValue != null 
+    ? (isCurrency ? `${format(numericValue ? n : 0)}` : `${prefix}${n.toLocaleString()}${suffix}`)
+    : value;
+  return (
+    <div className={`bg-gradient-to-br ${gradient} text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}>
+      <div className="flex items-start justify-between mb-4">
+        <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+          <Icon className="w-6 h-6" />
+        </div>
+        <div className="text-right" ref={ref}>
+          <p className="text-sm font-medium opacity-90">{title}</p>
+          <p className="text-xl font-bold">{display}</p>
+          {subtitle && <p className="text-xs opacity-75 mt-1">{subtitle}</p>}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const AdminStatCardLocal: React.FC<{ 
   icon: React.ElementType; 
@@ -277,20 +440,27 @@ const AdminStatCardLocal: React.FC<{
   change?: string;
   color: string;
   bgColor: string;
-}> = ({ icon: Icon, title, value, change, color, bgColor }) => (
-  <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-classic hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-    <div className="flex items-start justify-between mb-4">
-      <div className={`${bgColor} p-3 rounded-xl ${color}`}>
-        <Icon className="w-6 h-6" />
-      </div>
-      <div className="text-right">
-        <p className="text-sm font-medium text-gray-600">{title}</p>
-        <p className="text-2xl font-bold text-gray-900">{value}</p>
-        {change && <p className="text-xs text-emerald-600 mt-1">{change}</p>}
+  numericValue?: number;
+  prefix?: string;
+  suffix?: string;
+}> = ({ icon: Icon, title, value, change, color, bgColor, numericValue, prefix = '', suffix = '' }) => {
+  const { value: n, ref } = useCountUp(numericValue ?? 0, 800);
+  const display = numericValue != null ? `${prefix}${n.toLocaleString()}${suffix}` : value;
+  return (
+    <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-classic hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+      <div className="flex items-start justify-between mb-4">
+        <div className={`${bgColor} p-3 rounded-xl ${color}`}>
+          <Icon className="w-6 h-6" />
+        </div>
+        <div className="text-right" ref={ref}>
+          <p className="text-sm font-medium text-gray-600">{title}</p>
+          <p className="text-2xl font-bold text-gray-900">{display}</p>
+          {change && <p className="text-xs text-emerald-600 mt-1">{change}</p>}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Enhanced Admin Tab Button
 const AdminTabButton: React.FC<{ 
@@ -387,9 +557,11 @@ const OverviewTab: React.FC<{
 
 // Bookings Management Tab
 const BookingsManagementTab: React.FC<{ 
+  bookings: BookingData[];
   onAddBooking: () => void; 
-  onEditBooking: (booking: any) => void;
-}> = ({ onAddBooking, onEditBooking }) => (
+  onEditBooking: (booking: BookingData) => void;
+  onDeleteBooking: (id: number) => void;
+}> = ({ bookings, onAddBooking, onEditBooking, onDeleteBooking }) => (
   <div className="bg-white rounded-2xl shadow-classic p-6 border border-gray-100">
     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
       <h2 className="text-2xl font-bold text-gray-900">Bookings Management</h2>
@@ -409,8 +581,11 @@ const BookingsManagementTab: React.FC<{
       </div>
     </div>
     <div className="space-y-4">
-      {[1, 2, 3, 4, 5].map(item => (
-        <BookingManagementItem key={item} onEdit={onEditBooking} />
+      {bookings.length === 0 && (
+        <div className="p-4 text-gray-500 border border-gray-200 rounded-xl">No bookings yet.</div>
+      )}
+      {bookings.map(b => (
+        <BookingManagementItem key={b.id} booking={b} onEdit={onEditBooking} onDelete={() => onDeleteBooking(b.id!)} />
       ))}
     </div>
   </div>
@@ -421,7 +596,8 @@ const UsersManagementTab: React.FC<{
   users: UserData[];
   onAddUser: () => void; 
   onEditUser: (user: UserData) => void;
-}> = ({ users, onAddUser, onEditUser }) => (
+  onDeleteUser: (user: UserData) => void;
+}> = ({ users, onAddUser, onEditUser, onDeleteUser }) => (
   <div className="bg-white rounded-2xl shadow-classic p-6 border border-gray-100">
     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
       <h2 className="text-2xl font-bold text-gray-900">Users Management</h2>
@@ -442,7 +618,7 @@ const UsersManagementTab: React.FC<{
     </div>
     <div className="space-y-4">
       {users.map(user => (
-        <UserManagementItem key={user.id} user={user} onEdit={onEditUser} />
+        <UserManagementItem key={user.id} user={user} onEdit={onEditUser} onDelete={() => onDeleteUser(user)} />
       ))}
     </div>
   </div>
@@ -451,7 +627,8 @@ const UsersManagementTab: React.FC<{
 const UserManagementItem: React.FC<{ 
   user: UserData;
   onEdit: (user: UserData) => void;
-}> = ({ user, onEdit }) => {
+  onDelete: () => void;
+}> = ({ user, onEdit, onDelete }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Active': return 'bg-emerald-100 text-emerald-800';
@@ -498,6 +675,13 @@ const UserManagementItem: React.FC<{
         >
           <Edit3 size={16} />
         </button>
+        <button 
+          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
+          onClick={onDelete}
+          aria-label="Delete user"
+        >
+          <Trash2 size={16} />
+        </button>
       </div>
     </div>
   );
@@ -507,8 +691,9 @@ const UserManagementItem: React.FC<{
 const DestinationsTab: React.FC<{ 
   destinations: DestinationData[];
   onAddDestination: () => void; 
-  onEditDestination: (destination: any) => void;
-}> = ({ destinations, onAddDestination, onEditDestination }) => (
+  onEditDestination: (destination: DestinationData) => void;
+  onDeleteDestination: (destination: DestinationData) => void;
+}> = ({ destinations, onAddDestination, onEditDestination, onDeleteDestination }) => (
   <div className="bg-white rounded-2xl shadow-classic p-6 border border-gray-100">
     <div className="flex items-center justify-between mb-6">
       <h2 className="text-2xl font-bold text-gray-900">Destinations Management</h2>
@@ -519,7 +704,7 @@ const DestinationsTab: React.FC<{
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {destinations.map(dest => (
-        <DestinationManagementCard key={dest.id} destination={dest} onEdit={onEditDestination} />
+        <DestinationManagementCard key={dest.id} destination={dest} onEdit={onEditDestination} onDelete={onDeleteDestination} />
       ))}
     </div>
   </div>
@@ -583,24 +768,26 @@ const SystemStatusItem: React.FC<{
 );
 
 const BookingManagementItem: React.FC<{ 
-  onEdit: (booking: any) => void;
-}> = ({ onEdit }) => (
+  booking: BookingData;
+  onEdit: (booking: BookingData) => void;
+  onDelete: () => void;
+}> = ({ booking, onEdit, onDelete }) => (
   <div className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
     <div className="flex items-center gap-4">
       <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
         <Briefcase className="w-6 h-6 text-emerald-600" />
       </div>
       <div>
-        <h4 className="font-semibold text-gray-900">Serengeti Safari - Sarah Johnson</h4>
-        <p className="text-sm text-gray-600">Dec 15, 2024 • $2,499 • Confirmed</p>
+        <h4 className="font-semibold text-gray-900">{booking.destination} - {booking.customerName}</h4>
+        <p className="text-sm text-gray-600">{booking.startDate} • <Price amountUSD={booking.totalPrice} /> • {booking.status}</p>
       </div>
     </div>
     <div className="flex items-center gap-2">
-      <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" onClick={() => onEdit({})}>
-        <Eye size={16} />
-      </button>
-      <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={() => onEdit({})}>
+      <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" onClick={() => onEdit(booking)}>
         <Edit3 size={16} />
+      </button>
+      <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={onDelete} aria-label="Delete booking">
+        <Trash2 size={16} />
       </button>
     </div>
   </div>

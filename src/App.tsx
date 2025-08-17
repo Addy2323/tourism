@@ -6,7 +6,7 @@ import AuthModal from './components/AuthModal';
 import LoadingScreen from './components/LoadingScreen';
 import { AuthProvider } from './contexts/AuthContext';
 import { CurrencyProvider } from './contexts/CurrencyContext';
-import AdminProtectedRoute from './components/AdminProtectedRoute';
+import AdminProtectedRoute, { UserProtectedRoute } from './components/AdminProtectedRoute';
 import AdminTest from './components/AdminTest';
 import { usePerformance } from './hooks/usePerformance';
 
@@ -137,7 +137,14 @@ function App() {
                   <Route path="/about/team" element={<OurTeam />} />
                   <Route path="/about/vehicles" element={<OurVehicles />} />
                   <Route path="/contact" element={<Contact />} />
-                  <Route path="/dashboard" element={<UserDashboard />} />
+                  <Route 
+                    path="/dashboard" 
+                    element={
+                      <UserProtectedRoute>
+                        <UserDashboard />
+                      </UserProtectedRoute>
+                    } 
+                  />
                   <Route 
                     path="/admin" 
                     element={

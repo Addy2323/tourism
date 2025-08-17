@@ -1,13 +1,14 @@
 import React from 'react';
-import { Star, Edit, BarChart2 } from 'lucide-react';
+import { Star, Edit, BarChart2, Trash2 } from 'lucide-react';
 import { DestinationData } from '../data/adminMockData';
 
 interface DestinationManagementCardProps {
   destination: DestinationData;
   onEdit: (destination: DestinationData) => void;
+  onDelete?: (destination: DestinationData) => void;
 }
 
-const DestinationManagementCard: React.FC<DestinationManagementCardProps> = ({ destination, onEdit }) => {
+const DestinationManagementCard: React.FC<DestinationManagementCardProps> = ({ destination, onEdit, onDelete }) => {
   const { name, bookings, revenue, rating, status } = destination;
 
   return (
@@ -41,6 +42,15 @@ const DestinationManagementCard: React.FC<DestinationManagementCardProps> = ({ d
           <Edit size={14} /> Edit
         </button>
         <button className="btn-secondary flex-1 flex items-center justify-center gap-2"><BarChart2 size={14} /> Analytics</button>
+        {onDelete && (
+          <button 
+            className="px-3 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors flex items-center gap-2"
+            onClick={() => onDelete(destination)}
+            aria-label="Delete destination"
+          >
+            <Trash2 size={14} /> Delete
+          </button>
+        )}
       </div>
     </div>
   );
