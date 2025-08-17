@@ -73,10 +73,10 @@ const Footer: React.FC = () => {
 
       <div className="container-mobile relative z-20 pt-20 sm:pt-24 lg:pt-28 pb-8 sm:pb-12">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 lg:gap-12 mb-12 sm:mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8 lg:gap-12 mb-12 sm:mb-16">
           
           {/* Column 1: Company Info */}
-          <div className="col-span-3 sm:col-span-2 lg:col-span-1">
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
               <div className="relative">
                 <img 
@@ -113,27 +113,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
-          <div className="col-span-1">
-            <h4 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 relative">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-400">
-                Quick Links
-              </span>
-              <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
-            </h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  <a 
-                    href={link.href} 
-                    className="text-gray-300 hover:text-white transition-colors duration-300 text-xs sm:text-sm lg:text-base hover:translate-x-1 transform inline-block"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+
 
           {/* Column 3: Popular Destinations */}
           <div className="col-span-1">
@@ -141,7 +121,6 @@ const Footer: React.FC = () => {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-400">
                 Destinations
               </span>
-              <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
             </h4>
             <ul className="space-y-2 sm:space-y-3">
               {destinations.map((destination, index) => (
@@ -163,7 +142,6 @@ const Footer: React.FC = () => {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-400">
                 Get in Touch
               </span>
-              <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full"></div>
             </h4>
             <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
               <a href="tel:+255765696445" className="flex items-center space-x-2 sm:space-x-3 text-gray-300 hover:text-white transition-all duration-300 group text-xs sm:text-sm lg:text-base">
@@ -187,15 +165,15 @@ const Footer: React.FC = () => {
             </div>
             
             {/* Social Media */}
-            <div className="flex space-x-2 sm:space-x-3">
-              <a href="#" className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 group">
-                <Facebook className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" />
+            <div className="flex space-x-2 sm:space-x-2 pr-1 sm:pr-3">
+              <a href="#" className="w-8 h-8 sm:w-8 sm:h-8 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 group">
+                <Facebook className="w-4 h-4 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-300" />
               </a>
-              <a href="#" className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 group">
-                <Twitter className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" />
+              <a href="#" className="w-8 h-8 sm:w-8 sm:h-8 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 group">
+                <Twitter className="w-4 h-4 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-300" />
               </a>
-              <a href="#" className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 group">
-                <Instagram className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" />
+              <a href="#" aria-label="Instagram" title="Instagram" className="w-8 h-8 sm:w-8 sm:h-8 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center text-gray-200 hover:text-white hover:bg-white/20 transition-all duration-300 group">
+                <Instagram strokeWidth={2.5} className="w-5 h-5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-300" />
               </a>
             </div>
           </div>
