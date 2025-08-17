@@ -124,20 +124,26 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                   <div className="relative">
                     <button
                       onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
-                      className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 group flex items-center gap-1 ${
+                      className={`relative px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 group flex items-center gap-1 ${
                         useDarkText
-                          ? 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
+                          ? 'text-gray-700 hover:text-emerald-700 hover:bg-emerald-50'
                           : 'text-white/90 hover:text-white hover:bg-white/10'
-                      } ${location.pathname.startsWith(item.href) ? 
-                        (useDarkText ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
-                        : ''}`}
+                      } ${location.pathname.startsWith(item.href) ?
+                        (
+                          useDarkText
+                            ? 'ring-1 ring-emerald-500/40 bg-emerald-500/5 text-emerald-700 shadow-[0_2px_10px_rgba(16,185,129,0.15)]'
+                            : 'ring-1 ring-emerald-400/40 bg-white/10 text-amber-400 shadow-[0_2px_10px_rgba(16,185,129,0.2)] backdrop-blur-[2px]'
+                        ) : ''}`}
                     >
                       <span className="relative z-10 whitespace-nowrap">{item.name}</span>
                       <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${aboutDropdownOpen ? 'rotate-180' : ''}`} />
                       {location.pathname.startsWith(item.href) && (
-                        <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
-                          useDarkText ? 'bg-emerald-600' : 'bg-amber-400'
-                        }`}></div>
+                        <>
+                          {/* pill glow */}
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 pointer-events-none" />
+                          {/* accent dot */}
+                          <div className={`absolute -bottom-1 left-2 w-1.5 h-1.5 rounded-full ${useDarkText ? 'bg-emerald-600' : 'bg-amber-400'}`} />
+                        </>
                       )}
                       <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </button>
@@ -165,19 +171,26 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                 ) : (
                   <Link
                     to={item.href}
-                    className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 group ${
+                    className={`relative px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 group ${
                       useDarkText
-                        ? 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
+                        ? 'text-gray-700 hover:text-emerald-700 hover:bg-emerald-50'
                         : 'text-white/90 hover:text-white hover:bg-white/10'
                     } ${location.pathname === item.href ? 
-                      (useDarkText ? '!text-emerald-600 !bg-emerald-50' : '!text-amber-400 !bg-white/10') 
+                        (
+                          useDarkText
+                            ? 'ring-1 ring-emerald-500/40 bg-emerald-500/5 text-emerald-700 shadow-[0_2px_10px_rgba(16,185,129,0.15)]'
+                            : 'ring-1 ring-emerald-400/40 bg-white/10 text-amber-400 shadow-[0_2px_10px_rgba(16,185,129,0.2)] backdrop-blur-[2px]'
+                        )
                       : ''}`}
                   >
                     <span className="relative z-10 whitespace-nowrap">{item.name}</span>
                     {location.pathname === item.href && (
-                      <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
-                        useDarkText ? 'bg-emerald-600' : 'bg-amber-400'
-                      }`}></div>
+                      <>
+                        {/* pill glow */}
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 pointer-events-none" />
+                        {/* accent dot */}
+                        <div className={`absolute -bottom-1 left-2 w-1.5 h-1.5 rounded-full ${useDarkText ? 'bg-emerald-600' : 'bg-amber-400'}`} />
+                      </>
                     )}
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </Link>
