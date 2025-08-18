@@ -123,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 isolate ${
         isDashboardPage
           ? 'bg-emerald-800 shadow-classic'
-          : (isScrolled || isMenuOpen || isBookingPage)
+          : (isMenuOpen)
           ? 'bg-white/95 shadow-classic backdrop-blur-md border-b border-gray-100'
           : 'bg-transparent'
       }`}
