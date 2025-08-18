@@ -58,23 +58,21 @@ const Hero: FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen short:min-h-[80vh] tall:min-h-screen flex items-center overflow-hidden pt-28 short:pt-24 port:pt-24 lg:pt-36" style={{ willChange: 'transform' }}>
+    <div className="relative min-h-[100svh] short:min-h-[80svh] tall:min-h-[100svh] flex items-center overflow-hidden pt-28 short:pt-24 port:pt-24 lg:pt-36" style={{ willChange: 'transform' }}>
       {/* Hardware-accelerated background with optimized transitions */}
-      <div className="absolute inset-0 overflow-hidden" style={{ willChange: 'transform' }}>
+      <div className="hero-video-wrapper" style={{ willChange: 'transform' }}>
         {/* Background YouTube video */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <iframe
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[67.5vw] min-w-full min-h-full"
-            src={`https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&playsinline=1`}
-            title="Background video"
-            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-            allowFullScreen={false}
-            frameBorder={0}
-            referrerPolicy="no-referrer-when-downgrade"
-            onLoad={() => setIsLoaded(true)}
-          />
-        </div>
-        
+        <iframe
+          className="hero-video-embed"
+          src={`https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&playsinline=1`}
+          title="Background video"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+          allowFullScreen={false}
+          frameBorder={0}
+          referrerPolicy="no-referrer-when-downgrade"
+          onLoad={() => setIsLoaded(true)}
+          aria-hidden="true"
+        />
         {/* Hardware-accelerated gradient overlays */}
         <div 
           className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"

@@ -208,3 +208,29 @@ html {
   backface-visibility: hidden;
   perspective: 1000px;
 }
+
+/* Full-bleed YouTube background cover sizing */
+.hero-video-wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-video-embed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Cover behavior for 16:9 video */
+  width: 100vw;           /* Fit by width first */
+  height: 56.25vw;        /* 9/16 of width */
+  min-width: 177.78vh;    /* 16/9 of height to ensure cover on tall screens */
+  min-height: 100vh;      /* Always at least the viewport height */
+  pointer-events: none;   /* Keep UI interactive */
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+@media (min-aspect-ratio: 16/9) {
+  /* On very wide screens, fit by height (already covered by min-*) */
+}
