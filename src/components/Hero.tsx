@@ -58,7 +58,7 @@ const Hero: FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-[100svh] short:min-h-[80svh] tall:min-h-[100svh] flex items-center overflow-hidden pt-28 short:pt-24 port:pt-24 lg:pt-36" style={{ willChange: 'transform' }}>
+    <div className="hero-root relative min-h-[100svh] short:min-h-[80svh] tall:min-h-[100svh] flex items-center overflow-hidden pt-0 md:pt-6 lg:pt-10" style={{ willChange: 'transform' }}>
       {/* Hardware-accelerated background with optimized transitions */}
       <div className="hero-video-wrapper" style={{ willChange: 'transform' }}>
         {/* Background YouTube video */}
@@ -73,13 +73,13 @@ const Hero: FC = () => {
           onLoad={() => setIsLoaded(true)}
           aria-hidden="true"
         />
-        {/* Hardware-accelerated gradient overlays */}
+        {/* Gradient overlays disabled on small screens to show full video */}
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"
+          className="hidden md:block absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"
           style={{ willChange: 'opacity' }}
         ></div>
         <div 
-          className="absolute inset-0 bg-gradient-to-r from-emerald-900/20 to-transparent"
+          className="hidden md:block absolute inset-0 bg-gradient-to-r from-emerald-900/20 to-transparent"
           style={{ willChange: 'opacity' }}
         ></div>
       </div>
@@ -95,7 +95,7 @@ const Hero: FC = () => {
         
 
         {/* Enhanced main heading with optimized animations */}
-        <div className="mb-8 mt-4 lg:mt-6 hero-fade-in-up hero-delay-200">
+        <div className="mb-8 mt-16 sm:mt-20 md:mt-24 lg:mt-28 hero-fade-in-up hero-delay-200">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-4 text-balance">
             Discover the{" "}
             <span className="relative">

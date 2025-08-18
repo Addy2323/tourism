@@ -201,6 +201,25 @@ html {
   }
 }
 
+/* Robust viewport height handling for mobile (incl. Pixel 2) */
+.hero-root {
+  /* Fallback for older browsers */
+  min-height: 100vh;
+}
+
+@supports (height: 100svh) {
+  .hero-root { min-height: 100svh; }
+}
+
+@supports (height: 100dvh) {
+  .hero-root { min-height: 100dvh; }
+}
+
+/* Reduce top padding a bit on small phones (Pixel 2 width ~411px) */
+@media (max-width: 420px) {
+  .hero-root { padding-top: 5.5rem; }
+}
+
 /* GPU layer creation for critical elements */
 .hero-performance-layer {
   transform: translate3d(0, 0, 0);
@@ -221,16 +240,25 @@ html {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* Cover behavior for 16:9 video */
-  width: 100vw;           /* Fit by width first */
-  height: 56.25vw;        /* 9/16 of width */
-  min-width: 177.78vh;    /* 16/9 of height to ensure cover on tall screens */
-  min-height: 100vh;      /* Always at least the viewport height */
-  pointer-events: none;   /* Keep UI interactive */
+  /* Dynamic cover sizing for any aspect ratio */
+  width: max(100vw, 177.78vh);   /* 16/9 = 1.7778 */
+  height: max(56.25vw, 100vh);   /* 9/16 = 0.5625 */
+  pointer-events: none;          /* Keep UI interactive */
   backface-visibility: hidden;
   will-change: transform;
 }
 
-@media (min-aspect-ratio: 16/9) {
-  /* On very wide screens, fit by height (already covered by min-*) */
+/* Prefer small/dynamic viewport units when available */
+@supports (height: 100svh) {
+  .hero-video-embed {
+    width: max(100vw, 177.78svh);
+    height: max(56.25vw, 100svh);
+  }
+}
+
+@supports (height: 100dvh) {
+  .hero-video-embed {
+    width: max(100vw, 177.78dvh);
+    height: max(56.25vw, 100dvh);
+  }
 }
