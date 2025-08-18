@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
   const useDarkText = (isScrolled || isBookingPage) && !isDashboardPage;
 
   const aboutSubmenuItems = [
-    { name: 'About Big Time Adventures', href: '/about/company', icon: Building },
+    { name: 'About  Babblers Tours', href: '/about/company', icon: Building },
     { name: 'Our Team', href: '/about/team', icon: UserCheck },
     { name: 'Our Vehicles', href: '/about/vehicles', icon: Truck },
   ];

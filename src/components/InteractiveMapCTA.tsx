@@ -10,11 +10,11 @@ const InteractiveMapCTA: React.FC = () => {
       <div className="container-mobile">
         <div className="relative overflow-hidden rounded-2xl shadow-xl">
           <img
-            src="https://images.pexels.com/photos/2246476/pexels-photo-2246476.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Interactive map"
-            className="w-full h-[220px] sm:h-[280px] lg:h-[360px] object-cover"
-            loading="lazy"
-          />
+            src="https://images.goway.com/production/hero/iStock-1387357630.jpg"
+             alt="Interactive map"
+             className="w-full h-[220px] sm:h-[280px] lg:h-[360px] object-cover"
+             loading="lazy"
+           />
           <div className="absolute inset-0 bg-black/40"></div>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
             <h3 className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">

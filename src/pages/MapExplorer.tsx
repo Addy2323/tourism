@@ -8,8 +8,9 @@ interface DestinationItem {
   region?: string;
   slug: string;
 }
-// Tanzania map background (use local public image)
-const MAP_BG_URL = '/images/map.png';
+// Tanzania map background (served from public/ for reliability)
+
+const MAP_BG_URL = "/images/map.png";
 // Toggle to true temporarily to calibrate pin positions by clicking on the map
 const CALIBRATE_PINS = false;
 
