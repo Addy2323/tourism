@@ -25,6 +25,7 @@ const CommunityImpact = lazy(() => import('./components/CommunityImpact'));
 const Contact = lazy(() => import('./pages/Contact'));
 import UserDashboard from './pages/UserDashboard';
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const MapExplorer = lazy(() => import('./pages/MapExplorer'));
 
 // Destination detail pages with prefetch hints
 const SerengetiDetail = lazy(() => 
@@ -121,10 +122,11 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/destinations" element={<Destinations />} />
+                  <Route path="/map" element={<MapExplorer />} />
                   <Route path="/destinations/serengeti" element={<SerengetiDetail />} />
                   <Route path="/destinations/zanzibar" element={<ZanzibarDetail />} />
-                  <Route path="/destinations/lake-Manyara" element={<LakeManyaraDetail />} />  
-                  <Route path="/destinations/Tarangire" element={<TarangireDetail />} />
+                  <Route path="/destinations/lake-manyara" element={<LakeManyaraDetail />} />  
+                  <Route path="/destinations/tarangire" element={<TarangireDetail />} />
                   <Route path="/destinations/kilimanjaro" element={<KilimanjaroDetail />} />
                   <Route path="/destinations/ngorongoro" element={<NgorongoroDetail />} />
                   <Route path="/experiences" element={<ExperiencesPage />} />
