@@ -66,10 +66,10 @@ const MapExplorer: React.FC = () => {
   };
 
   const overlay = (
-    <div className="fixed inset-0 z-[9999] flex bg-black/40">{/* lighter backdrop */}
+    <div className="fixed inset-0 z-[9999] flex flex-col md:flex-row bg-black/40">{/* lighter backdrop */}
       {/* Left map */}
       <div
-        className={`relative flex-1 block ${CALIBRATE_PINS ? 'cursor-crosshair' : ''}`}
+        className={`relative flex-1 md:flex-[1_1_auto] block h-1/2 md:h-auto ${CALIBRATE_PINS ? 'cursor-crosshair' : ''}`}
         onClick={(e) => {
           if (!CALIBRATE_PINS || !active) return;
           const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -117,7 +117,7 @@ const MapExplorer: React.FC = () => {
       </div>
   
       {/* Right panel */}
-      <div className="relative w-full md:w-[480px] bg-white h-full shadow-2xl translate-x-0 md:animate-[slideIn_380ms_cubic-bezier(0.22,1,0.36,1)]" style={{ willChange: 'transform, opacity' }}>
+      <div className="relative w-full md:w-[480px] bg-white h-1/2 md:h-full shadow-2xl translate-x-0 md:animate-[slideIn_380ms_cubic-bezier(0.22,1,0.36,1)]" style={{ willChange: 'transform, opacity' }}>
         <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b sticky top-0 bg-white/95 backdrop-blur z-10">
           <div className="font-bold">Explore Tanzania places</div>
           <button onClick={() => navigate(-1)} className="p-2 rounded-md hover:bg-gray-100" aria-label="Close explorer">
