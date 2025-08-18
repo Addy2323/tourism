@@ -1,42 +1,13 @@
-import { useState, useEffect, useRef, useCallback, type FC } from "react";
+import { useState, useEffect, useRef, type FC } from "react";
 import { Search, MapPin, Calendar, Users, Play, ArrowRight } from "lucide-react";
 import "./Hero.css";
 
-const backgroundImages = [
-"https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.pexels.com/photos/572897/pexels-photo-572897.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.unsplash.com/photo-1589177900326-900782f88a55?w=1920&auto=format&fit=crop&q=80",
-"https://images.unsplash.com/photo-1575999080555-3f7a698dd8d9?w=1920&auto=format&fit=crop&q=80",
-"https://plus.unsplash.com/premium_photo-1661831880989-bb3184c5dcc8?w=1920&auto=format&fit=crop&q=80",
-"https://images.unsplash.com/photo-1549035092-33b2937b075a?w=1920&auto=format&fit=crop&q=80",
-"https://images.unsplash.com/photo-1586347378036-7a8c24975a61?w=1920&auto=format&fit=crop&q=80",
-"https://images.unsplash.com/photo-1589553416260-f586c8f1514f?w=1920&auto=format&fit=crop&q=80",
-"https://images.pexels.com/photos/11081448/pexels-photo-11081448.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.unsplash.com/photo-1605706177774-8b50d8457dfe?w=1920&auto=format&fit=crop&q=80",
-"https://images.pexels.com/photos/8828591/pexels-photo-8828591.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&auto=format&fit=crop&q=80",
-"https://images.pexels.com/photos/802112/pexels-photo-802112.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.unsplash.com/photo-1549366021-9f761d040ed2?w=1920&auto=format&fit=crop&q=80",
-"https://images.pexels.com/photos/3551227/pexels-photo-3551227.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.unsplash.com/photo-1563833717765-00460e0a9772?w=1920&auto=format&fit=crop&q=80",
-"https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&auto=format&fit=crop&q=80",
-"https://images.pexels.com/photos/6633919/pexels-photo-6633919.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.unsplash.com/photo-1589177736491-9d2c3e7b0c4e?w=1920&auto=format&fit=crop&q=80",
-"https://images.pexels.com/photos/3889871/pexels-photo-3889871.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1920&auto=format&fit=crop&q=80",
-"https://images.pexels.com/photos/3889727/pexels-photo-3889727.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-"https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&auto=format&fit=crop&q=80",
-"https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
-];
+const YT_VIDEO_ID = 'Cv61LWMZBxA';
 
 const Hero: FC = () => {
-  const [currentImage, setCurrentImage] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [refreshRate, setRefreshRate] = useState(60);
   const [visibleStats, setVisibleStats] = useState<Set<number>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number>();
   const statsRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Intersection Observer for stats animation
@@ -63,55 +34,10 @@ const Hero: FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Detect display refresh rate for optimal animations
+  // Mark content as loaded once the video iframe loads
   useEffect(() => {
-    let frameCount = 0;
-    let startTime = performance.now();
-    
-    const measureRefreshRate = () => {
-      frameCount++;
-      const currentTime = performance.now();
-      
-      if (currentTime - startTime >= 1000) {
-        const fps = Math.round(frameCount);
-        setRefreshRate(fps);
-        frameCount = 0;
-        startTime = currentTime;
-      }
-      
-      requestAnimationFrame(measureRefreshRate);
-    };
-    
-    requestAnimationFrame(measureRefreshRate);
-  }, []);
-
-  // Optimized image transition with hardware acceleration
-  const handleImageTransition = useCallback(() => {
-    setCurrentImage((prev) => (prev + 1) % backgroundImages.length);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(handleImageTransition, 6000);
-    return () => clearInterval(interval);
-  }, [handleImageTransition]);
-
-  // Preload images for better performance
-  useEffect(() => {
-    const preloadImages = async () => {
-      const imagePromises = backgroundImages.slice(0, 3).map((src) => {
-        return new Promise<void>((resolve) => {
-          const img = new Image();
-          img.onload = () => resolve();
-          img.onerror = () => resolve();
-          img.src = src;
-        });
-      });
-      
-      await Promise.all(imagePromises);
-      setIsLoaded(true);
-    };
-
-    preloadImages();
+    const timeout = setTimeout(() => setIsLoaded(true), 1500);
+    return () => clearTimeout(timeout);
   }, []);
 
   // Smooth scroll optimization
@@ -134,31 +60,19 @@ const Hero: FC = () => {
   return (
     <div className="relative min-h-screen short:min-h-[80vh] tall:min-h-screen flex items-center overflow-hidden pt-28 short:pt-24 port:pt-24 lg:pt-36" style={{ willChange: 'transform' }}>
       {/* Hardware-accelerated background with optimized transitions */}
-      <div className="absolute inset-0" style={{ willChange: 'transform' }}>
-        {/* Optimized sliding images with GPU acceleration */}
-        <div 
-          className="absolute inset-0 flex"
-          style={{ 
-            transform: `translate3d(-${currentImage * 100}%, 0, 0)`,
-            transition: `transform ${refreshRate >= 120 ? '1500ms' : '2000ms'} cubic-bezier(0.4, 0, 0.2, 1)`,
-            willChange: 'transform'
-          }}
-        >
-          {backgroundImages.map((image, index) => (
-            <div
-              key={index}
-              className="w-full h-screen short:h-[75vh] tall:h-screen flex-shrink-0"
-              style={{
-                backgroundImage: `url(${image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                willChange: 'transform',
-                backfaceVisibility: 'hidden',
-                perspective: '1000px'
-              }}
-            />
-          ))}
+      <div className="absolute inset-0 overflow-hidden" style={{ willChange: 'transform' }}>
+        {/* Background YouTube video */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <iframe
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[67.5vw] min-w-full min-h-full"
+            src={`https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&playsinline=1`}
+            title="Background video"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+            allowFullScreen={false}
+            frameBorder={0}
+            referrerPolicy="no-referrer-when-downgrade"
+            onLoad={() => setIsLoaded(true)}
+          />
         </div>
         
         {/* Hardware-accelerated gradient overlays */}
