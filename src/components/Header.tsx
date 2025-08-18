@@ -284,12 +284,12 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
 
       {/* Enhanced Mobile Navigation */}
       <div
-        className={`mobile-menu fixed top-0 right-0 bottom-0 w-[78vw] xs:w-[80vw] sm:w-[360px] max-w-[360px] lg:hidden bg-ocean-800 text-white shadow-classic-xl transition-transform duration-300 ease-out transform z-50 ${
+        className={`mobile-menu fixed top-0 right-0 bottom-0 w-[70vw] xs:w-[72vw] sm:w-[300px] max-w-[300px] lg:hidden bg-emerald-800 text-white shadow-classic-xl transition-transform duration-300 ease-out transform z-50 ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Enhanced Mobile Header */}
-        <div className="p-6 border-b border-white/10 bg-gradient-to-r from-ocean-700 to-ocean-800">
+        <div className="p-6 border-b border-white/10 bg-gradient-to-r from-emerald-700 to-emerald-800">
           <div className="flex items-center justify-between">
             <Link 
               to="/" 
@@ -318,7 +318,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
         </div>
 
         {/* Enhanced Navigation Links */}
-        <nav className="flex-1 overflow-y-auto bg-ocean-800">
+        <nav className="flex-1 overflow-y-auto bg-emerald-800">
           <div className="p-4 space-y-1">
             {navItems.map((item, index) => {
               const IconComponent = item.icon;
@@ -411,7 +411,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
           </div>
 
           {/* Enhanced Bottom Actions */}
-          <div className="border-t border-white/10 bg-ocean-800 p-4 space-y-3">
+          <div className="border-t border-white/10 bg-emerald-800 p-4 space-y-3">
             {/* Currency Selector */}
             <div className="w-full">
               <CurrencySelector className="w-full bg-white text-gray-700" />

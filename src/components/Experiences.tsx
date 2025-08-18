@@ -89,6 +89,17 @@ const Experiences: React.FC = () => {
       tours: '12+ Culinary Tours',
       rating: 4.6,
       featured: false
+    },
+    {
+      id: 6,
+      title: '🌿 Nature & Hiking',
+      description: 'Step into adventure with scenic hikes through misty rainforests, volcanic craters, and rolling highlands. Breathe fresh air, chase waterfalls, and discover hidden trails where every step is a story.',
+      icon: Mountain,
+      image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&auto=format&fit=crop&q=60',
+      gradient: 'from-green-500/90 to-emerald-700/90',
+      tours: '10+ Epic Trails',
+      rating: 4.8,
+      featured: false
     }
   ];
 
