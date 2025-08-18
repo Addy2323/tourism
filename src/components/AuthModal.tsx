@@ -156,15 +156,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start short:items-center justify-center p-2 xs:p-3 pt-4 short:pt-6 sm:p-4 sm:pt-10 overflow-y-auto">
+    <div className="fixed inset-0 z-[1200] flex items-start justify-center p-2 xs:p-3 pt-4 sm:p-4 sm:pt-10 overflow-y-auto">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fadeIn"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fadeIn z-0"
         onClick={onClose}
       ></div>
 
       {/* Modal */}
-      <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-[22rem] xs:max-w-sm sm:max-w-md md:max-w-lg 2xl:max-w-xl animate-slideUp overflow-hidden">
+      <div className="relative z-10 bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-[22rem] xs:max-w-sm sm:max-w-md md:max-w-lg 2xl:max-w-xl animate-slideUp overflow-hidden mt-2 sm:mt-0">
         {/* Header with Green Background */}
         <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-3 sm:p-4 text-center relative">
           <button
