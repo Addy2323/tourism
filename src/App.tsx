@@ -188,15 +188,15 @@ const FAQPageInline: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-amber-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="container-mobile py-12">
+      <div className="container-mobile pt-24 pb-8 sm:py-12">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-extrabold text-emerald-800">Frequently Asked Questions</h1>
-            <p className="text-gray-600 mt-2">Find quick answers about booking, payments, safety, and more.</p>
+          <div className="text-center mb-8 scroll-mt-24">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-emerald-800">Frequently Asked Questions</h1>
+            <p className="text-gray-600 mt-2 text-sm sm:text-base">Find quick answers about booking, payments, safety, and more.</p>
           </div>
 
           {/* Search + Suggestions */}
-          <div className="relative mb-4">
+          <div className="relative mb-4 scroll-mt-24">
             <input
               value={query}
               onChange={(e) => { setQuery(e.target.value); setActiveIdx(-1); }}
@@ -211,16 +211,19 @@ const FAQPageInline: React.FC = () => {
                 }
               }}
               placeholder="Search questions... (e.g. deposit, transfer, safari)"
+              aria-label="Search FAQ"
+              autoComplete="off"
+              enterKeyHint="search"
               className="w-full rounded-xl border border-emerald-200 bg-white px-4 py-3 pr-12 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500">🔎</div>
             {suggestions.length > 0 && (
-              <div className="absolute mt-2 w-full bg-white rounded-xl shadow-classic border border-emerald-100 z-10 overflow-hidden">
+              <div className="absolute mt-2 w-full bg-white rounded-xl shadow-classic border border-emerald-100 z-10 overflow-hidden max-h-60 overflow-y-auto overscroll-contain">
                 {suggestions.map((s, i) => (
                   <button
                     key={s.q}
                     onMouseDown={() => { setQuery(s.q); setOpen(s.q); }}
-                    className={`w-full text-left px-4 py-2 text-sm flex items-start gap-2 ${i === activeIdx ? 'bg-emerald-50' : 'hover:bg-emerald-50'}`}
+                    className={`w-full text-left px-4 py-3 text-sm flex items-start gap-2 ${i === activeIdx ? 'bg-emerald-50' : 'hover:bg-emerald-50'}`}
                   >
                     <span className="text-emerald-600">Q:</span>
                     <span className="text-gray-800">{highlight(s.q)}</span>
@@ -231,18 +234,20 @@ const FAQPageInline: React.FC = () => {
           </div>
 
           {/* Category Chips */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {categories.map(c => (
-              <button
-                key={c.id}
-                onClick={() => setCategory(c.id)}
-                className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
-                  category === c.id ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
-                }`}
-              >
-                {c.label}
-              </button>
-            ))}
+          <div className="mb-6 -mx-4 px-4 overflow-x-auto sm:overflow-visible">
+            <div className="inline-flex gap-2 whitespace-nowrap sm:whitespace-normal sm:flex sm:flex-wrap">
+              {categories.map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => setCategory(c.id)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+                    category === c.id ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                  }`}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Results */}
@@ -256,18 +261,18 @@ const FAQPageInline: React.FC = () => {
                 <div key={item.q} className={`rounded-2xl border ${isOpen ? 'border-emerald-300 bg-white shadow-classic' : 'border-gray-200 bg-white/80'} transition-all`}>
                   <button
                     onClick={() => setOpen(isOpen ? null : item.q)}
-                    className="w-full flex items-center justify-between gap-4 p-4 text-left"
+                    className="w-full flex items-center justify-between gap-4 p-4 sm:p-5 text-left"
                     aria-expanded={isOpen}
                   >
                     <div>
-                      <span className="block font-semibold text-gray-900">{highlight(item.q)}</span>
+                      <span className="block font-semibold text-gray-900 text-base sm:text-lg">{highlight(item.q)}</span>
                       <span className="mt-0.5 inline-block text-xs text-gray-500 capitalize">{item.cat}</span>
                     </div>
                     <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full border text-emerald-700 border-emerald-200 bg-emerald-50 transition-transform ${isOpen ? 'rotate-45' : ''}`}>+</span>
                   </button>
                   <div className={`grid transition-all duration-300 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden">
-                      <div className="px-4 pb-4 text-gray-700 leading-relaxed">{highlight(item.a)}</div>
+                      <div className="px-4 pb-4 sm:px-5 text-gray-700 leading-relaxed text-sm sm:text-base">{highlight(item.a)}</div>
                     </div>
                   </div>
                 </div>
