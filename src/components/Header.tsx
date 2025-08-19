@@ -41,7 +41,8 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
 
   const isDashboardPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard');
   const isBookingPage = location.pathname.startsWith('/booking');
-  const useDarkText = (isScrolled || isBookingPage) && !isDashboardPage;
+  // Keep white nav text on scroll; only use dark text on booking pages (and not in dashboards)
+  const useDarkText = isBookingPage && !isDashboardPage;
 
   const aboutSubmenuItems = [
     { name: 'About  Babblers Tours', href: '/about/company', icon: Building },

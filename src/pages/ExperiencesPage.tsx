@@ -434,7 +434,7 @@ const ExperiencesPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative h-64 xs:h-80 md:h-96 tall:h-[28rem] short:h-56 bg-gradient-to-r from-emerald-600 to-emerald-800 flex items-center justify-center">
+      <section className="relative h-64 xs:h-80 md:h-96 tall:h-[28rem] short:h-56 bg-gradient-to-r from-emerald-600 to-emerald-800 flex items-center justify-center pt-24 lg:pt-32">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="relative z-10 text-center text-white">
           <h1 className="text-3xl xs:text-4xl md:text-5xl 2xl:text-6xl font-bold mb-4">Unforgettable Experiences</h1>
