@@ -89,9 +89,10 @@ export default {
   				'sans-serif'
   			],
   			display: [
+  				'Playfair Display',
   				'Inter',
   				'system-ui',
-  				'sans-serif'
+  				'serif'
   			]
   		},
   		animation: {

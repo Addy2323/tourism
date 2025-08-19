@@ -387,6 +387,54 @@
     animation: bounce 2s infinite;
   }
 
+  /* Logo animations (subtle, premium) */
+  @keyframes logoPop {
+    0% { opacity: 0; transform: scale(0.85) rotate(-4deg); }
+    60% { opacity: 1; transform: scale(1.06) rotate(0deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  @keyframes ringPulse {
+    0% { opacity: 0.35; transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.45); }
+    100% { opacity: 0; transform: scale(1.55); box-shadow: 0 0 0 14px rgba(255,255,255,0); }
+  }
+
+  .logo-pop { animation: logoPop 700ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both; will-change: transform, opacity; }
+  .logo-hover .logo-img { transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .logo-hover:hover .logo-img { transform: scale(1.08); }
+
+  .logo-ring {
+    position: absolute;
+    inset: -2px;
+    border-radius: 9999px;
+    border: 2px solid rgba(255,255,255,0.65);
+    animation: ringPulse 1200ms ease-out 450ms 1 both;
+    pointer-events: none;
+  }
+
+  /* Coin-toss style rotation synced with 15s cycle */
+  @keyframes coinFlip {
+    0%   { transform: rotateZ(0deg) rotateX(12deg) rotateY(0deg) scale(1); }
+    25%  { transform: rotateZ(90deg) rotateX(8deg) rotateY(12deg) scale(1.03); }
+    50%  { transform: rotateZ(180deg) rotateX(12deg) rotateY(0deg) scale(1); }
+    75%  { transform: rotateZ(270deg) rotateX(8deg) rotateY(-12deg) scale(1.03); }
+    100% { transform: rotateZ(360deg) rotateX(12deg) rotateY(0deg) scale(1); }
+  }
+  .logo-coin { 
+    animation: coinFlip 15s cubic-bezier(0.22, 1, 0.36, 1) infinite; 
+    transform-origin: 50% 50%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+
+  /* Perspective wrapper so 3D tilt looks natural */
+  .logo-3d { perspective: 800px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-pop, .logo-ring, .logo-rotate, .logo-coin { animation: none !important; }
+    .logo-hover .logo-img, .logo-hover:hover .logo-img { transform: none !important; }
+  }
+
   /* Class-based high refresh rate tuning (applied by App via usePerformance) */
   .hz-120 * { transition-duration: 0.2s !important; }
   .hz-240 * { transition-duration: 0.15s !important; }
@@ -637,4 +685,38 @@
   .animate-fadeIn:nth-child(4) { animation-delay: 0.8s; }
   .animate-fadeIn:nth-child(5) { animation-delay: 1.0s; }
   .animate-fadeIn:nth-child(6) { animation-delay: 1.2s; }
+
+  /* Premium aurora ring + float for logo */
+  @keyframes spin360 { to { transform: rotate(360deg); } }
+  @keyframes floatY { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
+
+  .ring-rotate {
+    position: absolute;
+    inset: -6px;
+    border-radius: 9999px;
+    background: conic-gradient(from 0deg, #34d399, #f59e0b, #10b981, #60a5fa, #34d399);
+    animation: spin360 10s linear infinite;
+    opacity: 0.65;
+    filter: saturate(1.1);
+    /* cut out the center to form a ring */
+    -webkit-mask: radial-gradient(circle calc(100% - 6px) at 50% 50%, transparent calc(100% - 8px), #000 calc(100% - 6px));
+            mask: radial-gradient(circle calc(100% - 6px) at 50% 50%, transparent calc(100% - 8px), #000 calc(100% - 6px));
+    pointer-events: none;
+  }
+
+  .logo-float { animation: floatY 6s ease-in-out infinite; }
+
+  /* Shimmer text utility */
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  .text-shimmer {
+    background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6), rgba(255,255,255,0.9));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2.2s linear infinite;
+  }
 }

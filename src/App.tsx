@@ -78,6 +78,84 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
+// Inline modern FAQ page (can be extracted to src/pages/FAQ.tsx later)
+const FAQPageInline: React.FC = () => {
+  const [query, setQuery] = useState('');
+  const [open, setOpen] = useState<number | null>(0);
+  const faqs = [
+    { q: 'What is the best time to visit Tanzania?', a: 'June to October for safaris (dry season) and December to March for the Serengeti calving season. Zanzibar is great year-round with two short rainy windows.' },
+    { q: 'Do you arrange airport pickups and transfers?', a: 'Yes. We provide private airport transfers and inter-destination transport with licensed guides and comfortable vehicles.' },
+    { q: 'Are your tours customizable?', a: 'Absolutely. All itineraries can be tailored—accommodation level, pace, activities, and special interests.' },
+    { q: 'What payment options are available?', a: 'We accept major credit cards, bank transfers, and secure online payments. Deposits confirm bookings, balance due before trip start.' },
+    { q: 'Is travel insurance required?', a: 'We strongly recommend comprehensive travel insurance covering medical, trip cancellation, and baggage.' },
+  ];
+  const filtered = faqs.filter(x => (x.q + ' ' + x.a).toLowerCase().includes(query.toLowerCase()));
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': filtered.map(f => ({
+      '@type': 'Question',
+      'name': f.q,
+      'acceptedAnswer': { '@type': 'Answer', 'text': f.a }
+    }))
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-amber-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <div className="container-mobile py-12">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-extrabold text-emerald-800">Frequently Asked Questions</h1>
+            <p className="text-gray-600 mt-2">Everything you need to know about traveling with Babblers Tours.</p>
+          </div>
+
+          <div className="relative mb-6">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search questions..."
+              className="w-full rounded-xl border border-emerald-200 bg-white px-4 py-3 pr-12 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500">🔎</div>
+          </div>
+
+          <div className="space-y-3">
+            {filtered.length === 0 && (
+              <div className="p-4 text-sm text-emerald-800 bg-emerald-50 rounded-xl border border-emerald-100">No results. Try different keywords.</div>
+            )}
+            {filtered.map((item, idx) => {
+              // Map back to original index to maintain a stable open index if needed
+              const i = faqs.findIndex(f => f.q === item.q);
+              const isOpen = open === i;
+              return (
+                <div key={item.q} className={`rounded-2xl border ${isOpen ? 'border-emerald-300 bg-white shadow-classic' : 'border-gray-200 bg-white/80'} transition-all`}>
+                  <button
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    className="w-full flex items-center justify-between gap-4 p-4 text-left"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-semibold text-gray-900">{item.q}</span>
+                    <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full border text-emerald-700 border-emerald-200 bg-emerald-50 transition-transform ${isOpen ? 'rotate-45' : ''}`}>+</span>
+                  </button>
+                  <div className={`grid transition-all duration-300 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                    <div className="overflow-hidden">
+                      <div className="px-4 pb-4 text-gray-700 leading-relaxed">{item.a}</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-10 text-center text-sm text-gray-500">Still have questions? <a href="/contact" className="text-emerald-700 font-semibold hover:underline">Contact us</a>.</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -121,6 +199,7 @@ function App() {
               <RouteTransition>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/faq" element={<FAQPageInline />} />
                   <Route path="/destinations" element={<Destinations />} />
                   <Route path="/map" element={<MapExplorer />} />
                   <Route path="/destinations/serengeti" element={<SerengetiDetail />} />

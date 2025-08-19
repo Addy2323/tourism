@@ -21,6 +21,7 @@ import {
   Building,
   UserCheck,
   Truck,
+  HelpCircle,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import CurrencySelector from './CurrencySelector';
@@ -40,9 +41,8 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
   const { isAuthenticated, user, logout } = useAuth();
 
   const isDashboardPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard');
-  const isBookingPage = location.pathname.startsWith('/booking');
-  // Keep white nav text on scroll; only use dark text on booking pages (and not in dashboards)
-  const useDarkText = isBookingPage && !isDashboardPage;
+  // Use consistent light-on-dark header like the provided design
+  const useDarkText = false;
 
   const aboutSubmenuItems = [
     { name: 'About  Babblers Tours', href: '/about/company', icon: Building },
@@ -57,6 +57,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
     { name: 'Plan Your Trip', href: '/plan-your-trip', icon: Calendar },
     { name: 'Community Impact', href: '/impact', icon: Users },
     { name: 'Blog', href: '/blog', icon: Book },
+    { name: 'FAQ', href: '/faq', icon: HelpCircle },
     { name: 'About', href: '/about', icon: Info, hasSubmenu: true },
     { name: 'Contact', href: '/contact', icon: Phone },
     ...(isAuthenticated ? [{ name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }] : []),
@@ -119,48 +120,66 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen, aboutDropdownOpen]);
 
+  // Auto-typing brand text (loops every ~25s)
+  const fullTitle = 'Babblers Tours';
+  const fullTagline = 'Authentic Tanzania';
+  const titleLen = fullTitle.length;
+  const tagLen = fullTagline.length;
+  const totalSteps = titleLen + tagLen + 2; // +pause steps
+  const TYPE_CYCLE_MS = 9000; // total duration for a full type loop
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    // Compute speed so a full cycle ~TYPE_CYCLE_MS
+    const speed = Math.max(20, Math.floor(TYPE_CYCLE_MS / totalSteps));
+    const id = setInterval(() => {
+      setStep((prev) => (prev + 1) % totalSteps);
+    }, speed);
+    return () => clearInterval(id);
+  }, [totalSteps, TYPE_CYCLE_MS]);
+
+  const typedTitle = step <= titleLen ? fullTitle.slice(0, step) : fullTitle;
+  const typedTagline = step <= titleLen
+    ? ''
+    : (step - titleLen <= tagLen ? fullTagline.slice(0, step - titleLen) : fullTagline);
+  const typingDone = step >= titleLen + tagLen; // during pause phase
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 isolate ${
-        isDashboardPage
-          ? 'bg-emerald-800 shadow-classic'
-          : (isMenuOpen)
-          ? 'bg-white/95 shadow-classic backdrop-blur-md border-b border-gray-100'
-          : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 isolate 
+        bg-gradient-to-r from-emerald-700 via-emerald-800 to-emerald-900 shadow-classic`}
     >
       <div className="container-mobile relative">
         {/* Top Row: Logo + Actions (desktop), full header (mobile) */}
         <div className="flex items-center justify-between h-20 lg:h-16">
           {/* Enhanced Logo */}
-          <Link to="/" className="flex-shrink-0 group">
+          <Link to="/" className="flex-shrink-0 group logo-hover">
             <div className="flex items-center space-x-3">
-              <div className="relative">
+              <div className="relative logo-3d">
+                <div className="ring-rotate"></div>
                 <img
                   src="/images/logo.png"
                   alt="Babblers Tours Logo"
-                  className="h-12 w-12 rounded-full object-cover border-2 border-white shadow-classic transition-all duration-300 group-hover:scale-110 group-hover:shadow-classic-lg"
+                  className="logo-img logo-pop logo-float h-12 w-12 rounded-full object-cover border-2 border-white shadow-classic transition-all duration-300 group-hover:shadow-classic-lg"
                 />
+                <div className="logo-ring"></div>
                 <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400/20 to-amber-400/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              <div className={`hidden sm:block transition-colors duration-300 ${
-                useDarkText ? 'text-gray-800' : 'text-white'
-              }`}>
-                <h2 className="text-xl font-bold tracking-tight">Babblers Tours</h2>
-                <p className="text-xs opacity-75 font-medium">Authentic Tanzania</p>
+              <div className={`hidden sm:block transition-colors duration-300 text-white`}>
+                <h2 className={`text-xl font-bold tracking-tight text-shimmer`}>
+                  {typedTitle}
+                  {!typingDone && <span className="tw-caret" />}
+                </h2>
+                <p className={`text-xs opacity-75 font-medium text-shimmer`}>{typedTagline}</p>
               </div>
             </div>
           </Link>
 
           {/* Enhanced Right Side Actions */}
-          <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
-            <CurrencySelector className={`h-10 min-w-[88px] px-3 text-xs truncate ${useDarkText ? 'bg-white border-gray-200 text-gray-700' : 'bg-white/90 text-gray-800 border border-white/20'} shadow-sm`} />
+          <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
+            <CurrencySelector className={`h-10 min-w-[104px] px-4 text-xs truncate bg-white text-gray-800 border border-white/30 shadow-sm rounded-full`} />
             <button
-              className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 group ${
-                useDarkText
-                  ? 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
-              }`}
+              className={`w-11 h-11 flex items-center justify-center rounded-full transition-all duration-300 group text-white/90 hover:text-white bg-white/10 hover:bg-white/15 border border-white/10`}
               aria-label="Search"
             >
               <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -168,7 +187,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
             
             {isAuthenticated ? (
               <div className="relative group">
-                <button className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-full shadow-classic">
+                <button className="flex items-center justify-center w-11 h-11 bg-white/10 hover:bg-white/15 text-white rounded-full border border-white/10">
                   <User className="w-5 h-5" />
                 </button>
                 <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-classic-lg border border-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:translate-y-0 translate-y-2 z-10">
@@ -190,7 +209,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
             ) : (
               <button
                 onClick={onAuthClick}
-                className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-full hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-classic hover:shadow-classic-lg transform hover:scale-110 group"
+                className="flex items-center justify-center w-11 h-11 bg-white/10 hover:bg-white/15 text-white rounded-full border border-white/10 transition-all duration-300 group"
               >
                 <User className="w-5 h-5 group-hover:scale-110 transition-transform" />
               </button>
@@ -201,11 +220,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
           <div className="lg:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`p-2 rounded-xl transition-all duration-300 ${
-                useDarkText
-                  ? 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
-                  : 'text-white hover:text-white/80 hover:bg-white/10'
-              }`}
+              className={`p-2 rounded-xl transition-all duration-300 text-white hover:text-white/80 hover:bg-white/10`}
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -216,22 +231,16 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
         {/* Second Row: Desktop Nav */}
         <div className="hidden lg:block">
           <nav className="relative z-[100] flex items-center justify-center border-t border-white/10 pt-3 pb-6">
-            <div className="relative flex items-center max-w-[1200px] w-full overflow-x-auto overflow-y-visible no-scrollbar whitespace-nowrap gap-1 justify-center px-2">
+            <div className="relative flex items-center max-w-[1200px] w-full overflow-x-auto overflow-y-visible no-scrollbar whitespace-nowrap gap-2 justify-center px-2">
               {navItems.map((item) => (
                 <div key={item.name} className="relative about-dropdown">
                   {item.hasSubmenu ? (
                     <div className="relative" ref={aboutButtonRef}>
                       <button
                         onClick={() => setAboutDropdownOpen(!aboutDropdownOpen)}
-                        className={`relative px-4 md:px-5 py-2 text-[13px] md:text-sm font-semibold rounded-full transition-all duration-200 group flex items-center gap-2 border ${
-                          useDarkText
-                            ? 'text-gray-700 border-emerald-600/50 hover:bg-emerald-50 hover:text-emerald-700'
-                            : 'text-white border-white/40 hover:bg-white/10 hover:text-white'
-                        } ${location.pathname.startsWith(item.href) ?
-                          (useDarkText
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-600/70'
-                            : 'bg-white/10 text-white border-emerald-300')
-                          : ''}`}
+                        className={`relative px-4 md:px-5 py-2 text-[13px] md:text-sm font-semibold rounded-full transition-all duration-200 group flex items-center gap-2 border 
+                          text-white border-white/30 hover:bg-white/10 hover:text-white
+                          ${location.pathname.startsWith(item.href) ? 'bg-white/10 text-white border-white/50' : ''}`}
                       >
                         <span className="relative z-10 whitespace-nowrap">{item.name}</span>
                         <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${aboutDropdownOpen ? 'rotate-180' : ''}`} />
@@ -263,15 +272,9 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
                   ) : (
                     <Link
                       to={item.href}
-                      className={`relative px-4 md:px-5 py-2 text-[13px] md:text-sm font-semibold rounded-full transition-all duration-200 group border ${
-                        useDarkText
-                          ? 'text-gray-700 border-emerald-600/50 hover:bg-emerald-50 hover:text-emerald-700'
-                          : 'text-white/90 border-white/40 hover:bg-white/10 hover:text-white'
-                      } ${location.pathname === item.href ? 
-                          (useDarkText
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-600/70'
-                            : 'bg-white/10 text-white border-emerald-300')
-                        : ''}`}
+                      className={`relative px-4 md:px-5 py-2 text-[13px] md:text-sm font-semibold rounded-full transition-all duration-200 group border 
+                        text-white/90 border-white/30 hover:bg-white/10 hover:text-white
+                        ${location.pathname === item.href ? 'bg-white/10 text-white border-white/50' : ''}`}
                     >
                       <span className="relative z-10 whitespace-nowrap">{item.name}</span>
                     </Link>
@@ -294,17 +297,21 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
           <div className="flex items-center justify-between">
             <Link 
               to="/" 
-              className="flex items-center space-x-3 group" 
+              className="flex items-center space-x-3 group logo-hover" 
               onClick={() => setIsMenuOpen(false)}
             >
-              <img
-                src="/images/logo.png"
-                alt="Babblers Tours Logo"
-                className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm group-hover:scale-105 transition-transform" 
-              />
+              <div className="relative logo-3d">
+                <div className="ring-rotate"></div>
+                <img
+                  src="/images/logo.png"
+                  alt="Babblers Tours Logo"
+                  className="logo-img logo-pop logo-float h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm transition-transform" 
+                />
+                <div className="logo-ring"></div>
+              </div>
               <div className="text-white">
-                <h3 className="font-bold text-lg tracking-wide">Babblers Tours</h3>
-                <p className="text-xs opacity-90">Authentic Tanzania</p>
+                <h3 className="font-bold text-lg tracking-wide text-shimmer">{typedTitle || fullTitle}</h3>
+                <p className="text-xs opacity-90 text-shimmer">{typedTagline}</p>
               </div>
             </Link>
             
