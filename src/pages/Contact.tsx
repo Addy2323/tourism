@@ -117,19 +117,7 @@ const Contact: React.FC = () => {
         </div>
       </section>
 
-      {/* Map Section */}
-      <section className="w-full">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.643333311029!2d36.67956267580799!3d-3.368434442470018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18371de53445c995%3A0x9733b99616858523!2sBabblers%20Tours%20%26%20Safaris!5e0!3m2!1sen!2sus!4v1694553457189!5m2!1sen!2sus"
-          width="100%"
-          height="450"
-          style={{ border: 0 }}
-          allowFullScreen={true}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          title="Babblers Tours & Safaris Location"
-        ></iframe>
-      </section>
+
     </div>
   );
 };
