@@ -1,5 +1,5 @@
 import React, { useState, lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
@@ -80,21 +80,105 @@ const ScrollToTop: React.FC = () => {
 
 // Inline modern FAQ page (can be extracted to src/pages/FAQ.tsx later)
 const FAQPageInline: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [open, setOpen] = useState<number | null>(0);
-  const faqs = [
-    { q: 'What is the best time to visit Tanzania?', a: 'June to October for safaris (dry season) and December to March for the Serengeti calving season. Zanzibar is great year-round with two short rainy windows.' },
-    { q: 'Do you arrange airport pickups and transfers?', a: 'Yes. We provide private airport transfers and inter-destination transport with licensed guides and comfortable vehicles.' },
-    { q: 'Are your tours customizable?', a: 'Absolutely. All itineraries can be tailored—accommodation level, pace, activities, and special interests.' },
-    { q: 'What payment options are available?', a: 'We accept major credit cards, bank transfers, and secure online payments. Deposits confirm bookings, balance due before trip start.' },
-    { q: 'Is travel insurance required?', a: 'We strongly recommend comprehensive travel insurance covering medical, trip cancellation, and baggage.' },
-  ];
-  const filtered = faqs.filter(x => (x.q + ' ' + x.a).toLowerCase().includes(query.toLowerCase()));
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const initialQ = params.get('q') || '';
+  const initialCat = params.get('cat') || 'all';
+  const [query, setQuery] = useState(initialQ);
+  const [category, setCategory] = useState(initialCat);
+  const [open, setOpen] = useState<string | null>(null);
+  const [activeIdx, setActiveIdx] = useState<number>(-1); // suggestions keyboard nav
 
+  // Categorized FAQ data
+  const data: Record<string, { q: string; a: string }[]> = {
+    booking: [
+      { q: 'How do I book a tour?', a: 'Choose your destination or itinerary, click “Book”, then follow the guided steps. Our team will confirm availability and next steps via email.' },
+      { q: 'Can I change my dates after booking?', a: 'Yes. Date changes are possible subject to availability and supplier policies. Contact us as early as possible for the best options.' },
+      { q: 'What is your cancellation policy?', a: 'Flexible within 24–48 hours of booking. Closer to departure, supplier policies apply. We’ll provide a clear breakdown before you pay.' },
+    ],
+    payments: [
+      { q: 'What payment methods do you accept?', a: 'Major credit cards, bank transfer, and secure online payments. We’ll send an invoice link with instructions.' },
+      { q: 'Do you require a deposit?', a: 'Yes. A deposit confirms your booking. The remaining balance is due before the trip starts as indicated in your invoice.' },
+      { q: 'Are prices in USD?', a: 'Yes, prices are shown in USD by default. You can switch currencies in the header; final charge is processed in USD unless stated otherwise.' },
+    ],
+    logistics: [
+      { q: 'Do you provide airport pickup?', a: 'Yes. Private airport transfers are available in all major arrival cities and included in most packages.' },
+      { q: 'What is included in the safari package?', a: 'Accommodation, park fees, guide, 4x4 vehicle, and most meals. Exclusions like visas and tips are listed on each package.' },
+      { q: 'Is Wi‑Fi available during the trip?', a: 'Many lodges offer Wi‑Fi. On the road, connectivity can vary. We also offer local SIM recommendations.' },
+    ],
+    safety: [
+      { q: 'Is it safe to travel in Tanzania?', a: 'Yes. We work with licensed guides, vetted partners, and follow safety protocols. As with any travel, follow local guidance and your guide’s instructions.' },
+      { q: 'Do I need travel insurance?', a: 'Highly recommended. Insurance should cover medical, evacuation, cancellation, and baggage.' },
+      { q: 'What vaccinations are required?', a: 'Requirements vary. Yellow fever vaccination is recommended/required depending on your transit. Consult a travel clinic ahead of time.' },
+    ],
+    destinations: [
+      { q: 'Best time to visit Serengeti?', a: 'Dry season June–October for classic safaris; December–March for calving season in the south.' },
+      { q: 'Is Zanzibar good year-round?', a: 'Yes. Short rainy windows in April/May and November. Otherwise, warm and beach-friendly most months.' },
+      { q: 'Can I climb Kilimanjaro without experience?', a: 'Yes, but good fitness is required. Choose a longer route (7–8 days) for acclimatization and higher success rates.' },
+    ],
+  };
+
+  const categories = [
+    { id: 'all', label: 'All' },
+    { id: 'booking', label: 'Booking' },
+    { id: 'payments', label: 'Payments' },
+    { id: 'logistics', label: 'Logistics' },
+    { id: 'safety', label: 'Health & Safety' },
+    { id: 'destinations', label: 'Destinations' },
+  ];
+
+  // Flatten and tag with category
+  const allFaqs = Object.entries(data).flatMap(([cat, items]) => items.map(x => ({ ...x, cat })));
+
+  // URL sync
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (query) p.set('q', query);
+    if (category && category !== 'all') p.set('cat', category);
+    const search = p.toString();
+    if (search !== location.search.replace(/^\?/, '')) {
+      navigate({ pathname: '/faq', search: search ? `?${search}` : '' }, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, category]);
+
+  // Simple scoring + filtering
+  const norm = (s: string) => s.toLowerCase();
+  const q = norm(query);
+  const pool = category === 'all' ? allFaqs : allFaqs.filter(f => f.cat === category);
+  const scored = pool
+    .map((f) => {
+      const text = norm(f.q + ' ' + f.a);
+      const idx = q ? text.indexOf(q) : -1;
+      const score = q ? (idx === -1 ? -1 : 1000 - idx) : 0; // earlier match ranks higher
+      return { ...f, score };
+    })
+    .filter(f => q ? f.score >= 0 : true)
+    .sort((a, b) => b.score - a.score || a.q.localeCompare(b.q));
+
+  // Suggestions (top 5 questions)
+  const suggestions = q ? scored.slice(0, 5) : [];
+
+  // Highlight helper
+  const highlight = (text: string) => {
+    if (!q) return text;
+    const i = text.toLowerCase().indexOf(q);
+    if (i === -1) return text;
+    return (
+      <>
+        {text.slice(0, i)}
+        <mark className="bg-amber-200 text-emerald-900 rounded px-0.5">{text.slice(i, i + q.length)}</mark>
+        {text.slice(i + q.length)}
+      </>
+    );
+  };
+
+  // JSON-LD for filtered items (limit to 10)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    'mainEntity': filtered.map(f => ({
+    'mainEntity': (q ? scored : pool).slice(0, 10).map(f => ({
       '@type': 'Question',
       'name': f.q,
       'acceptedAnswer': { '@type': 'Answer', 'text': f.a }
@@ -105,43 +189,85 @@ const FAQPageInline: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-amber-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="container-mobile py-12">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-extrabold text-emerald-800">Frequently Asked Questions</h1>
-            <p className="text-gray-600 mt-2">Everything you need to know about traveling with Babblers Tours.</p>
+            <p className="text-gray-600 mt-2">Find quick answers about booking, payments, safety, and more.</p>
           </div>
 
-          <div className="relative mb-6">
+          {/* Search + Suggestions */}
+          <div className="relative mb-4">
             <input
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search questions..."
+              onChange={(e) => { setQuery(e.target.value); setActiveIdx(-1); }}
+              onKeyDown={(e) => {
+                if (!suggestions.length) return;
+                if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIdx((i) => Math.min(i + 1, suggestions.length - 1)); }
+                if (e.key === 'ArrowUp') { e.preventDefault(); setActiveIdx((i) => Math.max(i - 1, 0)); }
+                if (e.key === 'Enter' && activeIdx >= 0) {
+                  const sel = suggestions[activeIdx];
+                  setQuery(sel.q);
+                  setOpen(sel.q);
+                }
+              }}
+              placeholder="Search questions... (e.g. deposit, transfer, safari)"
               className="w-full rounded-xl border border-emerald-200 bg-white px-4 py-3 pr-12 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500">🔎</div>
+            {suggestions.length > 0 && (
+              <div className="absolute mt-2 w-full bg-white rounded-xl shadow-classic border border-emerald-100 z-10 overflow-hidden">
+                {suggestions.map((s, i) => (
+                  <button
+                    key={s.q}
+                    onMouseDown={() => { setQuery(s.q); setOpen(s.q); }}
+                    className={`w-full text-left px-4 py-2 text-sm flex items-start gap-2 ${i === activeIdx ? 'bg-emerald-50' : 'hover:bg-emerald-50'}`}
+                  >
+                    <span className="text-emerald-600">Q:</span>
+                    <span className="text-gray-800">{highlight(s.q)}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
+          {/* Category Chips */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {categories.map(c => (
+              <button
+                key={c.id}
+                onClick={() => setCategory(c.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+                  category === c.id ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
+                }`}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Results */}
           <div className="space-y-3">
-            {filtered.length === 0 && (
+            {(q ? scored : pool).length === 0 && (
               <div className="p-4 text-sm text-emerald-800 bg-emerald-50 rounded-xl border border-emerald-100">No results. Try different keywords.</div>
             )}
-            {filtered.map((item, idx) => {
-              // Map back to original index to maintain a stable open index if needed
-              const i = faqs.findIndex(f => f.q === item.q);
-              const isOpen = open === i;
+            {(q ? scored : pool).map((item) => {
+              const isOpen = open === item.q;
               return (
                 <div key={item.q} className={`rounded-2xl border ${isOpen ? 'border-emerald-300 bg-white shadow-classic' : 'border-gray-200 bg-white/80'} transition-all`}>
                   <button
-                    onClick={() => setOpen(isOpen ? null : i)}
+                    onClick={() => setOpen(isOpen ? null : item.q)}
                     className="w-full flex items-center justify-between gap-4 p-4 text-left"
                     aria-expanded={isOpen}
                   >
-                    <span className="font-semibold text-gray-900">{item.q}</span>
+                    <div>
+                      <span className="block font-semibold text-gray-900">{highlight(item.q)}</span>
+                      <span className="mt-0.5 inline-block text-xs text-gray-500 capitalize">{item.cat}</span>
+                    </div>
                     <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full border text-emerald-700 border-emerald-200 bg-emerald-50 transition-transform ${isOpen ? 'rotate-45' : ''}`}>+</span>
                   </button>
                   <div className={`grid transition-all duration-300 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden">
-                      <div className="px-4 pb-4 text-gray-700 leading-relaxed">{item.a}</div>
+                      <div className="px-4 pb-4 text-gray-700 leading-relaxed">{highlight(item.a)}</div>
                     </div>
                   </div>
                 </div>
