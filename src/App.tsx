@@ -188,7 +188,10 @@ const FAQPageInline: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-amber-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="container-mobile pt-24 pb-8 sm:py-12">
+      <div
+        className="container-mobile pt-24 pb-8 sm:py-12"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 96px)' }}
+      >
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 scroll-mt-24">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-emerald-800">Frequently Asked Questions</h1>
@@ -218,7 +221,7 @@ const FAQPageInline: React.FC = () => {
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500">🔎</div>
             {suggestions.length > 0 && (
-              <div className="absolute mt-2 w-full bg-white rounded-xl shadow-classic border border-emerald-100 z-10 overflow-hidden max-h-60 overflow-y-auto overscroll-contain">
+              <div className="absolute mt-2 w-full bg-white rounded-xl shadow-classic border border-emerald-100 z-30 overflow-hidden max-h-60 overflow-y-auto overscroll-contain">
                 {suggestions.map((s, i) => (
                   <button
                     key={s.q}
