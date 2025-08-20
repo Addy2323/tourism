@@ -199,6 +199,20 @@ html {
   .hero-stat-transition {
     will-change: auto;
   }
+  
+  /* Ensure full-bleed background video on mobile */
+  .hero-video-wrapper { inset: 0; overflow: hidden; }
+  .hero-video-embed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
 }
 
 /* Robust viewport height handling for mobile (incl. Pixel 2) */
@@ -237,28 +251,15 @@ html {
 
 .hero-video-embed {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* Dynamic cover sizing for any aspect ratio */
-  width: max(100vw, 177.78vh);   /* 16/9 = 1.7778 */
-  height: max(56.25vw, 100vh);   /* 9/16 = 0.5625 */
-  pointer-events: none;          /* Keep UI interactive */
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
   backface-visibility: hidden;
   will-change: transform;
 }
 
-/* Prefer small/dynamic viewport units when available */
-@supports (height: 100svh) {
-  .hero-video-embed {
-    width: max(100vw, 177.78svh);
-    height: max(56.25vw, 100svh);
-  }
-}
-
-@supports (height: 100dvh) {
-  .hero-video-embed {
-    width: max(100vw, 177.78dvh);
-    height: max(56.25vw, 100dvh);
-  }
-}
+/* Prefer small/dynamic viewport units when available (handled by parent height) */
+/* No overrides needed; wrapper fills hero, video fills wrapper */

@@ -2,8 +2,6 @@ import { useState, useEffect, useRef, type FC } from "react";
 import { Search, MapPin, Calendar, Users, Play, ArrowRight } from "lucide-react";
 import "./Hero.css";
 
-const YT_VIDEO_ID = 'Cv61LWMZBxA';
-
 const Hero: FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [visibleStats, setVisibleStats] = useState<Set<number>>(new Set());
@@ -42,37 +40,62 @@ const Hero: FC = () => {
 
   // Smooth scroll optimization
   useEffect(() => {
-    const handleScroll = () => {
-      if (containerRef.current) {
-        const scrollY = window.scrollY;
-        const parallaxOffset = scrollY * 0.5;
-        
-        // Use transform3d for hardware acceleration
-        containerRef.current.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`;
+    const isDesktop = () => window.innerWidth >= 768;
+    const applyParallax = () => {
+      if (!containerRef.current) return;
+      if (!isDesktop()) {
+        // Disable parallax on mobile to keep hero fully in view
+        containerRef.current.style.transform = '';
+        return;
       }
+      const scrollY = window.scrollY;
+      const parallaxOffset = scrollY * 0.5;
+      containerRef.current.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`;
     };
 
-    // Use passive listener for better performance
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const onScroll = () => applyParallax();
+    const onResize = () => applyParallax();
+
+    // Initial apply
+    applyParallax();
+
+    // Only listen to scroll on desktop to save work on mobile
+    if (isDesktop()) {
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+    };
+   }, []);
 
   return (
     <div className="hero-root relative min-h-[100svh] short:min-h-[80svh] tall:min-h-[100svh] flex items-center overflow-hidden pt-0 md:pt-6 lg:pt-10" style={{ willChange: 'transform' }}>
       {/* Hardware-accelerated background with optimized transitions */}
       <div className="hero-video-wrapper" style={{ willChange: 'transform' }}>
-        {/* Background YouTube video */}
-        <iframe
+        {/* Background local video */}
+        <video
           className="hero-video-embed"
-          src={`https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${YT_VIDEO_ID}&modestbranding=1&iv_load_policy=3&playsinline=1`}
-          title="Background video"
-          allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-          allowFullScreen={false}
-          frameBorder={0}
-          referrerPolicy="no-referrer-when-downgrade"
-          onLoad={() => setIsLoaded(true)}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          onCanPlay={() => setIsLoaded(true)}
+          onError={(e) => {
+            // Surface video load/playback errors in dev tools
+            console.error('Hero background video failed to load/play', e);
+          }}
           aria-hidden="true"
-        />
+        >
+          {/* Prefer MP4 (H.264/AAC) for broad compatibility; add WebM as a modern alternative */}
+          <source src="/images/bgvideo.mp4" type="video/mp4" />
+          <source src="/images/bgvideo.webm" type="video/webm" />
+          {/* Optional fallback text */}
+          Your browser does not support the video tag.
+        </video>
         {/* Gradient overlays disabled on small screens to show full video */}
         <div 
           className="hidden md:block absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"
