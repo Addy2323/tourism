@@ -76,6 +76,24 @@ const Header: React.FC<HeaderProps> = ({ onAuthClick }) => {
     setAboutDropdownOpen(false);
   }, [location.pathname]);
 
+  // Force close mobile menu on any navigation
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsMenuOpen(false);
+      setAboutDropdownOpen(false);
+    };
+    
+    // Close menu immediately on mount if we're on a destination page
+    if (location.pathname.startsWith('/destinations/')) {
+      handleRouteChange();
+    }
+    
+    return () => {
+      // Cleanup on unmount
+      setIsMenuOpen(false);
+    };
+  }, [location.pathname]);
+
   useEffect(() => {
     const updatePos = () => {
       if (!aboutButtonRef.current) return;

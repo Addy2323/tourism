@@ -31,20 +31,34 @@ const MapExplorer = lazy(() => import('./pages/MapExplorer'));
 const SerengetiDetail = lazy(() => 
   import(/* webpackChunkName: "serengeti" */ './pages/destinations/SerengetiDetail')
 );
-const KilimanjaroDetail = lazy(() => 
-  import(/* webpackChunkName: "kilimanjaro" */ './pages/destinations/KilimanjaroDetail')
-);
+
 const NgorongoroDetail = lazy(() => 
   import(/* webpackChunkName: "ngorongoro" */ './pages/destinations/NgorongoroDetail')
 );
-const ZanzibarDetail = lazy(() => 
-  import(/* webpackChunkName: "zanzibar" */ './pages/destinations/ZanzibarDetails')
-);
+
 const TarangireDetail = lazy(() => 
   import(/* webpackChunkName: "tarangire" */ './pages/destinations/TarangireDetail')
 );
 const LakeManyaraDetail = lazy(() => 
   import(/* webpackChunkName: "lake-manyara" */ './pages/destinations/LakeManyaraDetail')
+);
+const MikumiDetail = lazy(() => 
+  import(/* webpackChunkName: "mikumi" */ './pages/destinations/MikumiDetail')
+);
+const UdzungwaDetail = lazy(() => 
+  import(/* webpackChunkName: "udzungwa" */ './pages/destinations/UdzungwaDetail')
+);
+const SelousDetail = lazy(() => 
+  import(/* webpackChunkName: "selous" */ './pages/destinations/SelousDetail')
+);
+const SaadaniDetail = lazy(() => 
+  import(/* webpackChunkName: "saadani" */ './pages/destinations/SaadaniDetail')
+);
+const MkomaziDetail = lazy(() => 
+  import(/* webpackChunkName: "mkomazi" */ './pages/destinations/MkomaziDetail')
+);
+const ArushaDetail = lazy(() => 
+  import(/* webpackChunkName: "arusha" */ './pages/destinations/ArushaDetail')
 );
 
 // Enhanced loading fallback component
@@ -337,11 +351,17 @@ function App() {
                   <Route path="/destinations" element={<Destinations />} />
                   <Route path="/map" element={<MapExplorer />} />
                   <Route path="/destinations/serengeti" element={<SerengetiDetail />} />
-                  <Route path="/destinations/zanzibar" element={<ZanzibarDetail />} />
+                  
                   <Route path="/destinations/lake-manyara" element={<LakeManyaraDetail />} />  
                   <Route path="/destinations/tarangire" element={<TarangireDetail />} />
-                  <Route path="/destinations/kilimanjaro" element={<KilimanjaroDetail />} />
+                 
                   <Route path="/destinations/ngorongoro" element={<NgorongoroDetail />} />
+                  <Route path="/destinations/mikumi" element={<MikumiDetail />} />
+                  <Route path="/destinations/udzungwa" element={<UdzungwaDetail />} />
+                  <Route path="/destinations/selous" element={<SelousDetail />} />
+                  <Route path="/destinations/saadani" element={<SaadaniDetail />} />
+                  <Route path="/destinations/mkomazi" element={<MkomaziDetail />} />
+                  <Route path="/destinations/arusha" element={<ArushaDetail />} />
                   <Route path="/experiences" element={<ExperiencesPage />} />
                   <Route path="/plan-your-trip" element={<PlanTrip />} />
                   <Route path="/impact" element={<CommunityImpact />} />

@@ -115,13 +115,30 @@ const LakeManyaraDetail: React.FC = () => {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Activities & Highlights</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {activities.map((activity, index) => (
-                  <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                  <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group relative cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50" tabIndex={0}>
+                    {/* Enhanced Destination Tooltip */}
+                    <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-all duration-300 whitespace-nowrap z-20 pointer-events-none px-4 py-3">
+                      <div className="text-center">
+                        <h4 className="font-semibold text-gray-900 text-sm mb-1">Lake Manyara National Park</h4>
+                        <div className="flex items-center justify-center space-x-1">
+                          <span className="text-orange-400 text-lg">4.5</span>
+                          <span className="text-orange-400">⭐</span>
+                        </div>
+                      </div>
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                    </div>
+                    
                     <div className="flex items-start space-x-4">
-                      <div className="text-emerald-600 mt-1">
+                      <div className="text-emerald-600 mt-1 relative group-hover:scale-110 group-hover:rotate-6 group-focus:scale-110 group-focus:rotate-6 transition-all duration-300 cursor-pointer">
                         {activity.icon}
+                        {/* Activity Tooltip */}
+                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10 pointer-events-none">
+                          {activity.name}
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                        </div>
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 mb-2">{activity.name}</h3>
+                        <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 group-focus:text-emerald-600 transition-colors duration-300">{activity.name}</h3>
                         <p className="text-gray-600">{activity.description}</p>
                       </div>
                     </div>

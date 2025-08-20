@@ -168,12 +168,29 @@ const NgorongoroDetail: React.FC = () => {
                 {activities.map((activity, index) => (
                   <div
                     key={index}
-                    className="card-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 p-6 group"
+                    className="card-classic hover:shadow-classic-xl transition-all duration-500 transform hover:-translate-y-2 p-6 group relative cursor-pointer"
                     style={{ animationDelay: `${index * 100 + 400}ms` }}
                   >
-                    <div className={`w-12 h-12 bg-gradient-to-r ${activity.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-classic`}>
-                      <div className="text-white">
+                    {/* Enhanced Destination Tooltip */}
+                    <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap z-20 pointer-events-none px-4 py-3">
+                      <div className="text-center">
+                        <h4 className="font-semibold text-gray-900 text-sm mb-1">Ngorongoro Crater</h4>
+                        <div className="flex items-center justify-center space-x-1">
+                          <span className="text-orange-400 text-lg">4.9</span>
+                          <span className="text-orange-400">⭐</span>
+                        </div>
+                      </div>
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                    </div>
+                    
+                    <div className={`w-12 h-12 bg-gradient-to-r ${activity.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-classic relative cursor-pointer`}>
+                      <div className="text-white transform group-hover:scale-110 transition-transform duration-300">
                         {activity.icon}
+                      </div>
+                      {/* Activity Tooltip */}
+                      <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10 pointer-events-none">
+                        {activity.name}
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                       </div>
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors duration-300">

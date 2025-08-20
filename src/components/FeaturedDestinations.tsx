@@ -45,31 +45,8 @@ const FeaturedDestinations: React.FC = () => {
       route: '/destinations/serengeti',
       featured: true
     },
-    {
-      id: 2,
-      name: 'Mount Kilimanjaro',
-      description: 'Conquer Africa\'s highest peak and roof of the continent on this once-in-a-lifetime adventure',
-      image: 'https://plus.unsplash.com/premium_photo-1664304370557-233bccc0ac85?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8a2lsaW1hbmphcm98ZW58MHx8MHx8fDA%3D',
-      duration: '5-9 days',
-      rating: 4.8,
-      priceUSD: 1200,
-      highlights: ['Uhuru Peak', 'Multiple Routes', 'Glaciers'],
-      route: '/destinations/kilimanjaro',
-      featured: false
-    },
-    {
-      id: 3,
-      name: 'Zanzibar Islands',
-      description: 'Pristine beaches, spice tours, and rich Swahili culture await on these enchanting islands',
-      image: 'https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=800',
-      duration: '3-10 days',
-      rating: 4.7,
-      priceUSD: 180,
-      priceUnit: '/day',
-      highlights: ['Stone Town', 'Spice Tours', 'Pristine Beaches'],
-      route: '/destinations/zanzibar',
-      featured: false
-    },
+
+
     {
       id: 4,
       name: 'Ngorongoro Crater',
@@ -82,6 +59,58 @@ const FeaturedDestinations: React.FC = () => {
       highlights: ['Crater Floor', 'Black Rhinos', 'Maasai Culture'],
       route: '/destinations/ngorongoro',
       featured: true
+    },
+    {
+      id: 5,
+      name: 'Mikumi National Park',
+      description: 'Tanzania\'s fourth largest national park, offering excellent wildlife viewing with diverse landscapes and abundant game',
+      image: 'https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=800',
+      duration: '2-4 days',
+      rating: 4.6,
+      priceUSD: 320,
+      priceUnit: '/day',
+      highlights: ['Elephants', 'Lions', 'Baobab Trees'],
+      route: '/destinations/mikumi',
+      featured: false
+    },
+    {
+      id: 6,
+      name: 'Udzungwa Mountains National Park',
+      description: 'A biodiversity hotspot with pristine rainforests, endemic species, and spectacular waterfalls perfect for hiking',
+      image: 'https://images.pexels.com/photos/1578662/pexels-photo-1578662.jpeg?auto=compress&cs=tinysrgb&w=800',
+      duration: '2-5 days',
+      rating: 4.7,
+      priceUSD: 280,
+      priceUnit: '/day',
+      highlights: ['Waterfalls', 'Endemic Primates', 'Hiking Trails'],
+      route: '/destinations/udzungwa',
+      featured: false
+    },
+    {
+      id: 7,
+      name: 'Selous Game Reserve',
+      description: 'Africa\'s largest game reserve offering pristine wilderness, boat safaris, and walking safaris in untouched nature',
+      image: 'https://images.pexels.com/photos/1670732/pexels-photo-1670732.jpeg?auto=compress&cs=tinysrgb&w=800',
+      duration: '3-6 days',
+      rating: 4.8,
+      priceUSD: 420,
+      priceUnit: '/day',
+      highlights: ['Boat Safaris', 'Walking Safaris', 'Wild Dogs'],
+      route: '/destinations/selous',
+      featured: true
+    },
+    {
+      id: 8,
+      name: 'Saadani National Park',
+      description: 'The only park where beach meets bush - unique coastal safari experience with elephants on pristine beaches',
+      image: 'https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=800',
+      duration: '2-4 days',
+      rating: 4.5,
+      priceUSD: 350,
+      priceUnit: '/day',
+      highlights: ['Beach Safari', 'Sea Turtles', 'Coastal Wildlife'],
+      route: '/destinations/saadani',
+      featured: false
     }
   ];
 
