@@ -339,15 +339,16 @@ const UdzungwaDetail: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-4 mb-8">
+              <div className="flex flex-col sm:flex-row gap-3 mb-8">
                 <button
                   onClick={handleBookNow}
-                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 rounded-xl transition-all duration-300 font-semibold shadow-classic hover:shadow-classic-lg transform hover:scale-105"
+                  className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-3 px-6 rounded-xl transition-all duration-300 font-semibold shadow-classic hover:shadow-classic-lg transform hover:scale-105 flex items-center justify-center space-x-2"
                 >
-                  Book Now
+                  <span>Book Now</span>
+                  <ArrowLeft className="w-4 h-4 rotate-180" />
                 </button>
-                <button className="w-full border-2 border-emerald-600 text-emerald-600 py-4 rounded-xl hover:bg-emerald-50 transition-all duration-300 font-semibold">
-                  Get Custom Quote
+                <button className="flex-1 border-2 border-emerald-600 text-emerald-600 py-3 px-6 rounded-xl hover:bg-emerald-50 transition-all duration-300 font-semibold flex items-center justify-center space-x-2">
+                  <span>Learn More</span>
                 </button>
               </div>
 

@@ -91,8 +91,7 @@ const Hero: FC = () => {
           aria-hidden="true"
         >
           {/* Prefer MP4 (H.264/AAC) for broad compatibility; add WebM as a modern alternative */}
-          <source src="/images/bgvideo.mp4" type="video/mp4" />
-          <source src="/images/bgvideo.webm" type="video/webm" />
+          <source src="https://www.asiliaafrica.com/wp-content/uploads/2024/04/30sec-Teaser-2-master-clean.mp4" type="video/mp4" />
           {/* Optional fallback text */}
           Your browser does not support the video tag.
         </video>
