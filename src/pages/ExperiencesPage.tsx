@@ -292,20 +292,8 @@ const ExperiencesPage: React.FC = () => {
           rating: 4.8, 
           image: 'https://images.unsplash.com/photo-1621414050946-1b936a78491f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8a2lsaW1hbmphcm98ZW58MHx8MHx8fDA%3D' 
         },
-        { 
-          name: 'Rock Climbing', 
-          duration: '2 days', 
-          price: '$280/day', 
-          rating: 4.6, 
-          image: 'https://images.unsplash.com/photo-1522163182402-834f871fd851?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y2xpbWJ8ZW58MHx8MHx8fDA%3D' 
-        },
-        { 
-          name: 'White Water Rafting', 
-          duration: '1 day', 
-          price: '$120/day', 
-          rating: 4.7, 
-          image: 'https://plus.unsplash.com/premium_photo-1661870730088-f9ab6784fc67?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHJhZnRpbmd8ZW58MHx8MHx8fDA%3D' 
-        },
+  
+   
         { 
           name: 'Paragliding', 
           duration: '1 day', 
@@ -323,13 +311,7 @@ const ExperiencesPage: React.FC = () => {
       image: 'https://images.unsplash.com/photo-1550399504-8953e1a6ac87?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHJlbGF4aW5nJTIwYnklMjB0aGUlMjBiZWFjaHxlbnwwfHwwfHx8MA%3D%3D',
       color: 'from-blue-500 to-blue-600',
       experiences: [
-        { 
-          name: 'Zanzibar Beach Resort', 
-          duration: '5 days', 
-          price: '$180/day', 
-          rating: 4.7, 
-          image: 'https://media.gettyimages.com/id/1299710059/photo/luxury-resort-zanzibar-island.jpg?s=612x612&w=0&k=20&c=7rZ_Fv9tVnwHbhQvS_-RSqrYonh8cU1pBHZUtYYQDA8=' 
-        },
+      
         { 
           name: 'Dhow Cruise', 
           duration: '1 day', 
@@ -344,13 +326,8 @@ const ExperiencesPage: React.FC = () => {
           rating: 4.8, 
           image: 'https://media.gettyimages.com/id/518408852/photo/snorkling-on-zanzibar.jpg?s=612x612&w=0&k=20&c=Xr9cwfnM_B94wntXKoN_GmddoUNMRrERcYlm0j8ZaYQ=' 
         },
-        { 
-          name: 'Spa & Wellness', 
-          duration: '3 days', 
-          price: '$220/day', 
-          rating: 4.9, 
-          image: 'https://media.gettyimages.com/id/1125653538/photo/smiling-young-woman-in-bathrobe-sitting-at-the-poolside-in-a-spa-with-man-in-background.jpg?s=612x612&w=0&k=20&c=H8043YGMcIOeS0JNwIDO3aj7q6OZS4zMYSJPOPAEpEU=' 
-        }
+       
+     
       ]
     },
     {
@@ -382,13 +359,7 @@ const ExperiencesPage: React.FC = () => {
           rating: 4.6, 
           image: 'https://media.gettyimages.com/id/1396461623/photo/high-angle-view-of-students-practicing-painting-at-table-in-art-class.jpg?s=612x612&w=0&k=20&c=B2tJy3hxkk7COGCWS7J8E07HvzppHRP5CYOfugUIJvM=' 
         },
-        { 
-          name: 'Cultural Immersion', 
-          duration: '4 days', 
-          price: '$150/day', 
-          rating: 4.9, 
-          image: 'https://media.gettyimages.com/id/2169289341/photo/aerial-view-of-rural-women-on-wooden-boat-in-moc-hoa-district-long-an-province-mekong-delta.jpg?s=612x612&w=0&k=20&c=9zV6MmtmI55OalG7Imm_GF9Sg8xnrOfCUuS_NbviUGc=' 
-        }
+  
       ]
     },
     {
@@ -399,13 +370,8 @@ const ExperiencesPage: React.FC = () => {
       image: 'https://media.istockphoto.com/id/2191376006/photo/traditional-tanzanian-meal-displaying-rice-beans-plantains-chapati-fresh-vegetables-colorful.jpg?s=612x612&w=0&k=20&c=AXlMCtwidFIN--Z9GK2hPeXZFxOjWlKFeapXT93oMds=',
       color: 'from-red-500 to-red-600',
       experiences: [
-        { 
-          name: 'Spice Tour Zanzibar', 
-          duration: '1 day', 
-          price: '$50/day', 
-          rating: 4.8, 
-          image: 'https://media.gettyimages.com/id/531118782/photo/zanzibar-fruits-and-spices.jpg?s=612x612&w=0&k=20&c=aMCJLnIjzNvkex5H7p_jaN-JXOIrswxgtTaBGBTbVf0=' 
-        },
+    
+ 
         { 
           name: 'Cooking Class', 
           duration: '1 day', 
@@ -420,13 +386,7 @@ const ExperiencesPage: React.FC = () => {
           rating: 4.6, 
           image: 'https://media.istockphoto.com/id/185599106/photo/street-food-in-stone-town-zanzibar.jpg?s=612x612&w=0&k=20&c=GhlzOTO8QwKNsX9fWlcnxn5l9Y_a8pj-1SPM6cLVf_8=' 
         },
-        { 
-          name: 'Farm to Table Experience', 
-          duration: '2 days', 
-          price: '$90/day', 
-          rating: 4.9, 
-          image: 'https://www.andbeyond.com/wp-content/uploads/sites/5/Kichwa-tembo-garden-farm-to-table-wildchild-experience-with-chef.jpg' 
-        }
+     
       ]
     }
   ];
